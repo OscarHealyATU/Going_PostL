@@ -289,7 +289,7 @@ MonoBehaviour:
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6887566131250045796, guid: dd85d4a1dee73a84b90c02e2c42727df, type: 3}
-  - {fileID: 8642313098951650224, guid: ab97c7bee1b14374c955154d24b90bdf, type: 3}
+  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
