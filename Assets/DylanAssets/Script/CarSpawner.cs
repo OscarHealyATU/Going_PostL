@@ -9,6 +9,7 @@ public class CarSpawner : MonoBehaviour
 
     private float timer = 0f;
     private GameObject lastCar;
+    
 
     private void Update()
     {
