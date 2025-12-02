@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.InputSystem;
 
-public class TerminalInteract : MonoBehaviour
+public class Interact : MonoBehaviour
 {
     [Header("Scene Settings")]
     public string sceneToLoad;
