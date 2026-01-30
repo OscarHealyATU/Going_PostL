@@ -4533,6 +4533,7 @@ MonoBehaviour:
   - {fileID: 4241163882545132699, guid: 27ea8664fb105524a841acdc607b2b4d, type: 3}
   - {fileID: 7852297291551526876, guid: 41e1ab5cacc50454fbd92a9be944d4e4, type: 3}
   - {fileID: 4578264842746002738, guid: 4ffc7f27b2be343498ee832f69d49e5a, type: 3}
+  - {fileID: 8819030964130705181, guid: 285dfac3781430646951e011c54a2eed, type: 3}
   waypoints:
   - {fileID: 1828873751}
   - {fileID: 493553468}
@@ -4572,6 +4573,7 @@ MonoBehaviour:
   - {fileID: 4241163882545132699, guid: 27ea8664fb105524a841acdc607b2b4d, type: 3}
   - {fileID: 7852297291551526876, guid: 41e1ab5cacc50454fbd92a9be944d4e4, type: 3}
   - {fileID: 4578264842746002738, guid: 4ffc7f27b2be343498ee832f69d49e5a, type: 3}
+  - {fileID: 8819030964130705181, guid: 285dfac3781430646951e011c54a2eed, type: 3}
   waypoints:
   - {fileID: 1116151548}
   - {fileID: 136400984}
@@ -4597,6 +4599,7 @@ MonoBehaviour:
   - {fileID: 4241163882545132699, guid: 27ea8664fb105524a841acdc607b2b4d, type: 3}
   - {fileID: 7852297291551526876, guid: 41e1ab5cacc50454fbd92a9be944d4e4, type: 3}
   - {fileID: 4578264842746002738, guid: 4ffc7f27b2be343498ee832f69d49e5a, type: 3}
+  - {fileID: 8819030964130705181, guid: 285dfac3781430646951e011c54a2eed, type: 3}
   waypoints:
   - {fileID: 1108285579}
   - {fileID: 1088616710}
@@ -4622,6 +4625,7 @@ MonoBehaviour:
   - {fileID: 4241163882545132699, guid: 27ea8664fb105524a841acdc607b2b4d, type: 3}
   - {fileID: 7852297291551526876, guid: 41e1ab5cacc50454fbd92a9be944d4e4, type: 3}
   - {fileID: 4578264842746002738, guid: 4ffc7f27b2be343498ee832f69d49e5a, type: 3}
+  - {fileID: 8819030964130705181, guid: 285dfac3781430646951e011c54a2eed, type: 3}
   waypoints:
   - {fileID: 739630560}
   - {fileID: 148032952}
