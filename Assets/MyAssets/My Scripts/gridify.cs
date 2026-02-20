@@ -8,24 +8,25 @@ public class gridify : MonoBehaviour
     public GameObject[] housePrefabs;
     public GameObject[] streetPropPrefabs;
     public GameObject groundSquare;
+
+    public float xStartPosition;
+    public float zStartPosition;
     
-    public int noOfHousesX = 25;
-    public int noOfHousesZ = 25;
-    public int distance = 22;
-    // public float scale = 5f;
+    public float noOfHousesX = 25f;
+    public float noOfHousesZ = 25f;
+    public float distance = 22f;
     public Vector3 houseScale = new Vector3(500f, 500f, 500f);
 
     void Start()
     {
         // tiles loop
-          for (int x = 0; x < noOfHousesX; x++)
+          for (float x = 0; x < noOfHousesX; x++)
         {
-            for (int z = 0; z < noOfHousesZ; z++)
+            for (float z = 0; z < noOfHousesZ; z++)
             {
-                Vector3 position = new Vector3(x * distance, 0, z * distance);
+                Vector3 position = new Vector3(xStartPosition + x * distance, 0, zStartPosition + z * distance);
                 // instanciates tiles
                 Instantiate(groundSquare, position, Quaternion.Euler(-90, 0, 0), transform);
-
 
                 GameObject streetPropPrefab = streetPropPrefabs[Random.Range(0, streetPropPrefabs.Length)];
                 GameObject housePrefab = housePrefabs[Random.Range(0, housePrefabs.Length)];
