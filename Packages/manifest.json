@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.gilzoide.sqlite-net": "https://github.com/gilzoide/unity-sqlite-net.git",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.cinemachine": "3.1.2",
     "com.unity.collab-proxy": "2.10.0",
