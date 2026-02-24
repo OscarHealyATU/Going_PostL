@@ -18,27 +18,30 @@ public class Interact : MonoBehaviour
 
     void Update()
     {
-        // ✅ New Input System only (no old Input.* calls)
         var kb = Keyboard.current;
         if (!playerInRange || kb == null || !kb.eKey.wasPressedThisFrame)
             return;
 
         Debug.Log($"✅ Interact: E pressed on '{gameObject.name}'. Loading scene: {sceneToLoad}");
 
+        // ✅ Save player position BEFORE switching scenes (only if enabled)
         if (saveReturnPointBeforeSceneLoad && playerTransform != null)
         {
             PlayerService.SaveReturnPoint(playerTransform.position, playerTransform.eulerAngles.y);
             Debug.Log($"📌 Saved return position: {playerTransform.position} yaw={playerTransform.eulerAngles.y}");
         }
 
-        if (Application.CanStreamedLevelBeLoaded(sceneToLoad))
-        {
-            SceneManager.LoadScene(sceneToLoad);
-        }
-        else
+        if (!Application.CanStreamedLevelBeLoaded(sceneToLoad))
         {
             Debug.LogError($"❌ Scene '{sceneToLoad}' cannot be loaded. Check spelling and Build Settings!");
+            return;
         }
+
+        // ✅ Smooth transition if SceneFader exists, otherwise fallback
+        if (SceneFader.Instance != null)
+            SceneFader.Instance.FadeToScene(sceneToLoad);
+        else
+            SceneManager.LoadScene(sceneToLoad);
     }
 
     void OnTriggerEnter(Collider other)
