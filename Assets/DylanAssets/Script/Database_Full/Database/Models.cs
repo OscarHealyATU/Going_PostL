@@ -6,6 +6,13 @@ public class Player
     [PrimaryKey, AutoIncrement] public int id { get; set; }
     public string name { get; set; }
     public double money { get; set; }
+
+    public int returnValid { get; set; }
+    public double returnX { get; set; }
+    public double returnY { get; set; }
+    public double returnZ { get; set; }
+    public double returnYaw { get; set; }
+
     public string createdAt { get; set; }
 }
 

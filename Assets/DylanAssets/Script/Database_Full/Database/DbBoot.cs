@@ -22,9 +22,10 @@ public class DbBoot : MonoBehaviour
         GameDb = new GameDb();
         Debug.Log("DB path: " + GameDb.DbPath);
 
-        Db.CreateTable<Player>();
-        Db.CreateTable<VehicleType>();
-        Db.CreateTable<Vehicle>();
+        // ❌ Remove CreateTable calls (they can conflict with ApplySchema/Migrations)
+        // Db.CreateTable<Player>();
+        // Db.CreateTable<VehicleType>();
+        // Db.CreateTable<Vehicle>();
 
         EnsurePlayerExists();
 
@@ -42,7 +43,14 @@ public class DbBoot : MonoBehaviour
             {
                 name = "Player",
                 money = 10000.0,
-                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+
+                // ✅ defaults for return point
+                returnValid = 0,
+                returnX = 0,
+                returnY = 0,
+                returnZ = 0,
+                returnYaw = 0
             });
 
             Debug.Log("Created Player row");

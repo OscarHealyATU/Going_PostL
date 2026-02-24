@@ -18,8 +18,9 @@ public sealed class GameDb : IDisposable
 
         ApplySchema();
 
-        // ✅ Ensure newer columns exist even after deleting/recreating the DB
+        // ✅ Ensure newer columns exist even after restarting the game
         EnsureVehicleSpawnColumns();
+        EnsurePlayerReturnColumns();
 
         Seed();
     }
@@ -42,7 +43,7 @@ CREATE TABLE IF NOT EXISTS VehicleType (
   baseHealth REAL NOT NULL DEFAULT 100.0
 );");
 
-        // Keep CREATE TABLE minimal (like you had). We add new columns via migration below.
+        // Keep CREATE TABLE minimal. New columns added via migrations below.
         Db.Execute(@"
 CREATE TABLE IF NOT EXISTS Vehicle (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,10 +73,18 @@ CREATE TABLE IF NOT EXISTS TransactionLog (
     // ----------------------------
     private void EnsureVehicleSpawnColumns()
     {
-        // Adds columns if missing. Safe to run every launch.
         AddColumnIfMissing("Vehicle", "spawnScene", "TEXT");
         AddColumnIfMissing("Vehicle", "spawnBay", "INTEGER");
         AddColumnIfMissing("Vehicle", "spawnPending", "INTEGER NOT NULL DEFAULT 1");
+    }
+
+    private void EnsurePlayerReturnColumns()
+    {
+        AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
     }
 
     private void AddColumnIfMissing(string table, string column, string columnSql)
@@ -94,7 +103,6 @@ CREATE TABLE IF NOT EXISTS TransactionLog (
 
     private void Seed()
     {
-        // Seed VehicleTypes (idempotent)
         Db.Execute(@"
 INSERT OR IGNORE INTO VehicleType (name, baseCost, baseHealth) VALUES
 ('Bicycle', 500.0, 80.0),

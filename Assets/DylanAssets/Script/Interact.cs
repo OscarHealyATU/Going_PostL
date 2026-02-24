@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 using UnityEngine.InputSystem;
 
 public class Interact : MonoBehaviour
@@ -8,49 +7,63 @@ public class Interact : MonoBehaviour
     [Header("Scene Settings")]
     public string sceneToLoad;
 
+    [Header("Save Return Point Before Loading?")]
+    public bool saveReturnPointBeforeSceneLoad = false;
+
     [Header("UI Prompt")]
     public GameObject interactPromptText;
 
     private bool playerInRange = false;
-    private Keyboard keyboard;
-
-    void Start()
-    {
-        keyboard = Keyboard.current;
-    }
+    private Transform playerTransform;
 
     void Update()
     {
-        if (playerInRange && keyboard.eKey.wasPressedThisFrame)
-        {
-            Debug.Log($"✅ E pressed! Attempting to load scene: {sceneToLoad}");
+        // ✅ New Input System only (no old Input.* calls)
+        var kb = Keyboard.current;
+        if (!playerInRange || kb == null || !kb.eKey.wasPressedThisFrame)
+            return;
 
-            if (Application.CanStreamedLevelBeLoaded(sceneToLoad))
-            {
-                SceneManager.LoadScene(sceneToLoad);
-            }
-            else
-            {
-                Debug.LogError($"❌ Scene '{sceneToLoad}' cannot be loaded. Check spelling and Build Settings!");
-            }
+        Debug.Log($"✅ Interact: E pressed on '{gameObject.name}'. Loading scene: {sceneToLoad}");
+
+        if (saveReturnPointBeforeSceneLoad && playerTransform != null)
+        {
+            PlayerService.SaveReturnPoint(playerTransform.position, playerTransform.eulerAngles.y);
+            Debug.Log($"📌 Saved return position: {playerTransform.position} yaw={playerTransform.eulerAngles.y}");
+        }
+
+        if (Application.CanStreamedLevelBeLoaded(sceneToLoad))
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            Debug.LogError($"❌ Scene '{sceneToLoad}' cannot be loaded. Check spelling and Build Settings!");
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = true;
+        if (!other.CompareTag("Player")) return;
+
+        playerInRange = true;
+        playerTransform = other.transform;
+
+        if (interactPromptText != null)
             interactPromptText.SetActive(true);
-        }
+
+        Debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerInRange = false;
+        if (!other.CompareTag("Player")) return;
+
+        playerInRange = false;
+        playerTransform = null;
+
+        if (interactPromptText != null)
             interactPromptText.SetActive(false);
-        }
+
+        Debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
     }
 }
