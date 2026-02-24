@@ -342,6 +342,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 0
+  previousSeed: 0
   housePrefabs:
   - {fileID: 4164324145979010048, guid: 553896a6d0b77ff4aaa73b239e557e6f, type: 3}
   - {fileID: 5016466158188880593, guid: b4995ac92ca1e1e4db1e61bb0db2eb57, type: 3}
@@ -783,6 +786,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 1
+  previousSeed: 0
   housePrefabs:
   - {fileID: 7622061916366588310, guid: c26985689f04d7a458abea9782847095, type: 3}
   - {fileID: 5016466158188880593, guid: b4995ac92ca1e1e4db1e61bb0db2eb57, type: 3}
@@ -3709,6 +3715,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 1
+  previousSeed: 0
   housePrefabs:
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}
@@ -3786,6 +3795,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 1
+  previousSeed: 0
   housePrefabs:
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}
@@ -4302,6 +4314,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 1
+  previousSeed: 0
   housePrefabs:
   - {fileID: 295466392691122099, guid: 24230834114058e4fbca608d2e2ff1b0, type: 3}
   - {fileID: 5776800090180113357, guid: bf47411ff0b31c744bc359c073728ac2, type: 3}
@@ -6386,6 +6401,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 170423a53fd7713428c1e2d87a1d500b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::gridify
+  seed: 42
+  randomizeSeed: 1
+  previousSeed: 0
   housePrefabs:
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}

@@ -5,20 +5,30 @@ public class gridify : MonoBehaviour
     // use an array of houses instead of just one house
     // instanciate ground tile for each house
     // for buildings
+    [Header("City Seed")]
+    public int seed = 42;
+    public bool randomizeSeed = false;
+    [SerializeField] private int previousSeed;
+    [Header("Buildings & Props")]
     public GameObject[] housePrefabs;
     public GameObject[] streetPropPrefabs;
     public GameObject groundSquare;
-
+    [Header("Grid Positioning")]
     public float xStartPosition;
     public float zStartPosition;
-    
+    [Header("Grid Size & Spacing")]
     public float noOfHousesX = 25f;
     public float noOfHousesZ = 25f;
     public float distance = 22f;
     public Vector3 houseScale = new Vector3(500f, 500f, 500f);
 
+
+
     void Start()
     {
+        previousSeed = randomizeSeed ? System.DateTime.Now.GetHashCode() : seed;
+       
+        Random.InitState(previousSeed);
         // tiles loop
           for (float x = 0; x < noOfHousesX; x++)
         {
