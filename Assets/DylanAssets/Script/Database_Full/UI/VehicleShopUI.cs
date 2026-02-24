@@ -23,6 +23,10 @@ public class VehicleShopUI : MonoBehaviour
     public TMP_Text selectedText;
     public TMP_Text errorText;
 
+    [Header("Affordable UI Styling")]
+    [Tooltip("Alpha applied to unaffordable vehicle row labels (0..1).")]
+    [Range(0f, 1f)] public float unaffordableLabelAlpha = 0.45f;
+
     private int? _selectedVehicleTypeId = null;
     private int? _selectedBayIndex = null;
 
@@ -83,18 +87,51 @@ public class VehicleShopUI : MonoBehaviour
         for (int i = vehicleListContent.childCount - 1; i >= 0; i--)
             Destroy(vehicleListContent.GetChild(i).gameObject);
 
+        var player = PlayerService.Get();
+        double money = player.money;
+
         foreach (var vt in VehicleTypeStore.All.OrderBy(v => v.baseCost))
         {
             var row = Instantiate(vehicleRowPrefab, vehicleListContent);
 
             var label = row.GetComponentInChildren<TMP_Text>(true);
+            bool canAfford = money >= vt.baseCost;
+
             if (label != null)
+            {
                 label.text = $"{vt.name}  (€{vt.baseCost:0})";
+
+                // Visual grey-out by lowering label alpha
+                var c = label.color;
+                c.a = canAfford ? 1f : unaffordableLabelAlpha;
+                label.color = c;
+            }
+
+            // Disable clicking if unaffordable
+            row.interactable = canAfford;
+
+            // Also make sure the button looks disabled in all states
+            if (!canAfford)
+            {
+                var colors = row.colors;
+                // Unity uses these for disabled tinting; if your prefab has custom colors, this still works.
+                colors.disabledColor = new Color(colors.disabledColor.r, colors.disabledColor.g, colors.disabledColor.b, 0.6f);
+                row.colors = colors;
+            }
 
             int idCopy = vt.id;
             row.onClick.RemoveAllListeners();
             row.onClick.AddListener(() =>
             {
+                // Safety: should never happen because row.interactable=false, but keep anyway
+                if (!CanAffordVehicleType(idCopy))
+                {
+                    SetError("Not enough money for that vehicle.");
+                    _selectedVehicleTypeId = null;
+                    RefreshUI();
+                    return;
+                }
+
                 _selectedVehicleTypeId = idCopy;
                 ClearError();
                 RefreshUI();
@@ -103,6 +140,15 @@ public class VehicleShopUI : MonoBehaviour
 
         if (VehicleTypeStore.All.Count == 0)
             SetError("No vehicle types found.");
+    }
+
+    private bool CanAffordVehicleType(int vehicleTypeId)
+    {
+        var vt = VehicleTypeStore.All.FirstOrDefault(v => v.id == vehicleTypeId);
+        if (vt == null) return false;
+
+        var player = PlayerService.Get();
+        return player.money >= vt.baseCost;
     }
 
     private void HookButtons()
@@ -175,6 +221,15 @@ public class VehicleShopUI : MonoBehaviour
             return;
         }
 
+        // ✅ Money check right before purchase
+        if (!CanAffordVehicleType(_selectedVehicleTypeId.Value))
+        {
+            SetError("Not enough money for the selected vehicle.");
+            _selectedVehicleTypeId = null;
+            RefreshUI();
+            return;
+        }
+
         try
         {
             VehicleService.BuyVehicleQueuedForWorld(
@@ -182,6 +237,9 @@ public class VehicleShopUI : MonoBehaviour
                 spawnScene: mainWorldSceneName.Trim(),
                 spawnBay0Based: _selectedBayIndex.Value
             );
+
+            // Rebuild so prices/affordability refresh immediately after money changes
+            Rebuild();
 
             SetError($"Purchased! Will spawn in {mainWorldSceneName}, Bay {_selectedBayIndex.Value + 1}.");
             RefreshUI();
@@ -197,16 +255,20 @@ public class VehicleShopUI : MonoBehaviour
         RefreshMoney();
         RefreshBayAvailability();
 
+        // If selected bay became occupied, clear selection
+        if (_selectedBayIndex != null && IsBayOccupied(_selectedBayIndex.Value))
+            _selectedBayIndex = null;
+
+        // If selected vehicle became unaffordable (money changed), clear selection
+        if (_selectedVehicleTypeId != null && !CanAffordVehicleType(_selectedVehicleTypeId.Value))
+            _selectedVehicleTypeId = null;
+
         string vehicleName = null;
         if (_selectedVehicleTypeId != null)
         {
             var vt = VehicleTypeStore.All.FirstOrDefault(v => v.id == _selectedVehicleTypeId.Value);
             vehicleName = vt?.name;
         }
-
-        // If selected bay became occupied, clear selection
-        if (_selectedBayIndex != null && IsBayOccupied(_selectedBayIndex.Value))
-            _selectedBayIndex = null;
 
         var bayText = _selectedBayIndex != null
             ? $"Bay {_selectedBayIndex.Value + 1}"
@@ -225,8 +287,9 @@ public class VehicleShopUI : MonoBehaviour
         bool hasVehicle = _selectedVehicleTypeId != null;
         bool hasBay = _selectedBayIndex != null;
         bool bayFree = hasBay && !IsBayOccupied(_selectedBayIndex.Value);
+        bool canAfford = hasVehicle && CanAffordVehicleType(_selectedVehicleTypeId.Value);
 
-        buyButton.interactable = hasVehicle && hasBay && bayFree;
+        buyButton.interactable = hasVehicle && hasBay && bayFree && canAfford;
     }
 
     private void RefreshBayAvailability()
