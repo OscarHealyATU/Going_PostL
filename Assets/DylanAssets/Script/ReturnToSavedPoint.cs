@@ -13,11 +13,14 @@ public class ReturnToSavedPoint : MonoBehaviour
         if (PlayerService.TryGetReturnPoint(out Vector3 position, out float yaw))
         {
             transform.position = position;
-            transform.rotation = Quaternion.Euler(0f, yaw, 0f);
+
+            // 🔁 Rotate 180 degrees from the original facing direction
+            float newYaw = yaw + 180f;
+            transform.rotation = Quaternion.Euler(0f, newYaw, 0f);
 
             PlayerService.ClearReturnPoint();
 
-            Debug.Log($"📍 Restored player return position in Main: {position} yaw={yaw}");
+            Debug.Log($"📍 Restored player return position (rotated 180°).");
         }
     }
 }
