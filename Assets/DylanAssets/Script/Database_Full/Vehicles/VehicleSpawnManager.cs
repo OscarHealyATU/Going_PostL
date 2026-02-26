@@ -100,7 +100,7 @@ public class VehicleSpawnManager : MonoBehaviour
     {
         // Simple check: any VehicleLink already at/under this bay position is “occupied”
         // If you parent vehicles under bays, this becomes even cleaner.
-        var links = FindObjectsOfType<VehicleLink>(true);
+        var links = FindObjectsByType<VehicleLink>(FindObjectsSortMode.None);
         foreach (var l in links)
         {
             // optional: if you parent, check transform.parent == bays[bayIndex]
