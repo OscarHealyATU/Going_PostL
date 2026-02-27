@@ -398,7 +398,6 @@ MonoBehaviour:
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6887566131250045796, guid: dd85d4a1dee73a84b90c02e2c42727df, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
@@ -842,7 +841,6 @@ MonoBehaviour:
   - {fileID: 6410993136532364704, guid: e35d57192ccebbf48acd69443206e66b, type: 3}
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
   - {fileID: 6887566131250045796, guid: dd85d4a1dee73a84b90c02e2c42727df, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
@@ -3747,7 +3745,6 @@ MonoBehaviour:
   - {fileID: 3085117237626815455, guid: 5a7874a79ce4cf047bcbc6b0aaec35d9, type: 3}
   - {fileID: 6832493709406860684, guid: bba49dbc010428c40a31df01a82184f3, type: 3}
   - {fileID: 8496614993689409069, guid: d450d85fb2c8bcb4e97fca037c2f7b20, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
@@ -3831,7 +3828,6 @@ MonoBehaviour:
   - {fileID: 950898866750094924, guid: 58337ef88e4dfff48bccfd7dcd2ca68d, type: 3}
   - {fileID: 5987166261224959275, guid: af7ca7ac2714a4c41b2a306449118ea3, type: 3}
   - {fileID: 6401907192453792766, guid: 56a389d33c4795649bfdf6043aed27d4, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
@@ -4388,7 +4384,6 @@ MonoBehaviour:
   - {fileID: 4046477864027721035, guid: 965d164f3128b7f48aa4c4e5a94dcb6d, type: 3}
   - {fileID: 7799028544417509246, guid: 9a6bbd19ce6278c499ea714e26990031, type: 3}
   - {fileID: 4116075703488269879, guid: 9175baff71055384ab0e9be3af13fd9b, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
@@ -6927,7 +6922,6 @@ MonoBehaviour:
   - {fileID: 3085117237626815455, guid: 5a7874a79ce4cf047bcbc6b0aaec35d9, type: 3}
   - {fileID: 1354749933446077617, guid: 8c236c850241e64439386958406df7ad, type: 3}
   - {fileID: 7912818613959614973, guid: 2a213e8a20b1bd443a45daf05fdeebb8, type: 3}
-  - {fileID: 7377502705224771481, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
   streetPropPrefabs:
   - {fileID: 1929622861845111735, guid: 1fbfd053cdd946f45bdd3d8b9bbd0088, type: 3}
   - {fileID: 2633230714253633456, guid: df378736fd30a914c9f7008bcb39c87f, type: 3}
