@@ -3,8 +3,8 @@ using UnityEngine;
 public class WayPointFollow : MonoBehaviour
 {
     public GameObject[] waypoints;
-    public float speed = 10.0f;
-    public float rotSpeed = 10.0f;
+    public float speed = 20.0f;
+    public float rotSpeed = 5.0f;
     public float lookAhead = 10.0f;
 
     private int currentWP = 0;
