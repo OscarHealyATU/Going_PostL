@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 9178608654373911859}
   - component: {fileID: 6353497777965066579}
   - component: {fileID: -6109074847104617174}
-  - component: {fileID: -1707244282359224083}
   - component: {fileID: -5146665199085822960}
   - component: {fileID: -4050310860749982460}
+  - component: {fileID: 8169399358460580086}
   m_Layer: 6
   m_Name: NPCcar2_purple
   m_TagString: Vehicle
@@ -213,29 +213,6 @@ MonoBehaviour:
   speed: 10
   rotSpeed: 10
   lookAhead: 10
---- !u!136 &-1707244282359224083
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6963930688529249653}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.24
-  m_Height: 1
-  m_Direction: 2
-  m_Center: {x: 0.0031035244, y: -0.13713042, z: -0.26066452}
 --- !u!54 &-5146665199085822960
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -262,7 +239,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!114 &-4050310860749982460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,3 +252,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832be1199891a054991a76f0b3e93ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleVel
+--- !u!65 &8169399358460580086
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6963930688529249653}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5539413, y: 0.48559067, z: 0.9556843}
+  m_Center: {x: 0.0031035244, y: -0.13713042, z: -0.26066452}

@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6777345339455343952}
   - component: {fileID: -2410615865704601986}
   - component: {fileID: 7448707951712381046}
-  - component: {fileID: 2368962052127515540}
   - component: {fileID: -1571816359726991791}
   - component: {fileID: -6467141415942806902}
+  - component: {fileID: -2309854982681783280}
   m_Layer: 6
   m_Name: NPCcar1_red
   m_TagString: Vehicle
@@ -211,29 +211,6 @@ MonoBehaviour:
   speed: 10
   rotSpeed: 10
   lookAhead: 10
---- !u!136 &2368962052127515540
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1489996559214736372}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.24
-  m_Height: 1.34
-  m_Direction: 2
-  m_Center: {x: 0.0000136345625, y: -0.1333788, z: -0.24973622}
 --- !u!54 &-1571816359726991791
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -260,7 +237,7 @@ Rigidbody:
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 0
 --- !u!114 &-6467141415942806902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,3 +250,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832be1199891a054991a76f0b3e93ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleVel
+--- !u!65 &-2309854982681783280
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489996559214736372}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5409168, y: 0.54889476, z: 1.1495368}
+  m_Center: {x: 0.0000136345625, y: -0.1333788, z: -0.24973622}

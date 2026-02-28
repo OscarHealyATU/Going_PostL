@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 2753017847448021811}
   - component: {fileID: 2949459462472980125}
   - component: {fileID: -7020556368063221562}
-  - component: {fileID: -3728467159481779418}
   - component: {fileID: 4479073645588499537}
   - component: {fileID: 2873002030090196033}
   - component: {fileID: -7389343800953128549}
+  - component: {fileID: 4088991392524416522}
   m_Layer: 6
   m_Name: ambulance
   m_TagString: Vehicle
@@ -124,29 +124,6 @@ MonoBehaviour:
   speed: 10
   rotSpeed: 10
   lookAhead: 10
---- !u!136 &-3728467159481779418
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5019861551608907864}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.31
-  m_Height: 1.74
-  m_Direction: 2
-  m_Center: {x: 0, y: -0.07195108, z: -0.53}
 --- !u!82 &4479073645588499537
 AudioSource:
   m_ObjectHideFlags: 0
@@ -283,3 +260,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 832be1199891a054991a76f0b3e93ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VehicleVel
+--- !u!65 &4088991392524416522
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5019861551608907864}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6615501, y: 0.6607903, z: 1.5539572}
+  m_Center: {x: 0, y: -0.07195108, z: -0.50480545}
