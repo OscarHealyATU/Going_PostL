@@ -1,6 +1,13 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Drives a vehicle along a waypoint list (road intersection nodes).
+/// Designed for "roads are between tiles" where waypoints are on intersections.
+/// - Lane offset is applied perpendicular to travel direction (grid-friendly).
+/// - Arrive check is XZ-only (ignores height differences).
+/// - Optional despawn when far from player for performance.
+/// </summary>
 public class WayPointFollow : MonoBehaviour
 {
     [Header("Waypoints")]
@@ -16,12 +23,16 @@ public class WayPointFollow : MonoBehaviour
     public float minArriveDistance = 0.2f;
 
     [Header("Lane")]
+    [Tooltip("Half-lane offset from road centerline.")]
     [SerializeField] private float laneWidth = 0.5f;
+
+    [Tooltip("Random per-car lane jitter added on top of laneWidth.")]
     [SerializeField] private float laneJitter = 0.25f;
 
-    private float laneSideSign = +1f; // +1 = right, -1 = left (relative to travel direction)
-    private float laneJitterValue;
+    [Tooltip("+1 = right, -1 = left (relative to travel direction).")]
+    private float laneSideSign = +1f;
 
+    private float laneJitterValue;
     private float speedMult = 1f;
 
     private int currentWP = 0;
@@ -76,7 +87,7 @@ public class WayPointFollow : MonoBehaviour
     // --- Unity ---
     void Start()
     {
-        tracker = new GameObject("Tracker");
+        tracker = new GameObject($"Tracker_{name}");
         tracker.transform.position = transform.position;
         tracker.transform.rotation = transform.rotation;
 
@@ -95,6 +106,47 @@ public class WayPointFollow : MonoBehaviour
         Destroy(gameObject);
     }
 
+    static float DistanceXZ(Vector3 a, Vector3 b)
+    {
+        Vector3 d = a - b;
+        d.y = 0f;
+        return d.magnitude;
+    }
+
+    static Vector3 NormalizeXZ(Vector3 v, Vector3 fallback)
+    {
+        v.y = 0f;
+        if (v.sqrMagnitude < 0.0001f)
+        {
+            fallback.y = 0f;
+            if (fallback.sqrMagnitude < 0.0001f) fallback = Vector3.forward;
+            return fallback.normalized;
+        }
+        return v.normalized;
+    }
+
+    /// <summary>
+    /// Returns a lane normal suited for axis-aligned (grid) road segments.
+    /// For a segment mainly along X => lanes offset along Z.
+    /// For a segment mainly along Z => lanes offset along X.
+    /// </summary>
+    static Vector3 ComputeGridLaneNormal(Vector3 forward)
+    {
+        forward = NormalizeXZ(forward, Vector3.forward);
+
+        // Decide whether this segment is "mostly X" or "mostly Z"
+        if (Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
+        {
+            // moving along X => right side is +/-Z depending on direction
+            return Vector3.forward * Mathf.Sign(forward.x);
+        }
+        else
+        {
+            // moving along Z => right side is -/+X depending on direction
+            return Vector3.right * -Mathf.Sign(forward.z);
+        }
+    }
+
     void ProgressTracker()
     {
         if (waypoints == null || waypoints.Length == 0) { Despawn(); return; }
@@ -103,35 +155,27 @@ public class WayPointFollow : MonoBehaviour
 
         Vector3 baseTarget = waypoints[currentWP].transform.position;
 
-        // Travel direction for this segment (ignore Y)
+        // Segment forward (XZ only) from current position to target
         Vector3 toTarget = baseTarget - transform.position;
-        toTarget.y = 0f;
+        Vector3 forward = NormalizeXZ(toTarget, transform.forward);
 
-        Vector3 forward = toTarget.sqrMagnitude > 0.001f ? toTarget.normalized : transform.forward;
-        forward.y = 0f;
-        if (forward.sqrMagnitude < 0.001f) forward = Vector3.forward;
+        // Lane offset perpendicular to segment direction (grid-friendly)
+        Vector3 laneNormal = ComputeGridLaneNormal(forward);
+        float laneOffset = laneSideSign * laneWidth + laneJitterValue;
 
-        // GRID lane normal:
-        Vector3 laneNormal;
-        if (Mathf.Abs(forward.x) > Mathf.Abs(forward.z))
-        {
-            // moving along X => lanes are +/-Z
-            laneNormal = Vector3.forward * Mathf.Sign(forward.x);
-        }
-        else
-        {
-            // moving along Z => lanes are +/-X
-            laneNormal = Vector3.right * -Mathf.Sign(forward.z);
-        }
+        Vector3 targetPos = baseTarget + laneNormal * laneOffset;
 
-        Vector3 targetPos = baseTarget + laneNormal * (laneSideSign * laneWidth + laneJitterValue);
+        // Keep our current Y (avoid bobbing if nodes differ in height)
         targetPos.y = transform.position.y;
 
-        float distToWP = Vector3.Distance(transform.position, targetPos);
+        // Arrive check (XZ only)
+        float distToWP = DistanceXZ(transform.position, targetPos);
 
-        tracker.transform.LookAt(targetPos);
+        // Move tracker ahead toward this target
+        tracker.transform.rotation = Quaternion.LookRotation(NormalizeXZ(targetPos - tracker.transform.position, forward));
         tracker.transform.position += tracker.transform.forward * lookAhead * Time.deltaTime;
 
+        // Advance waypoint when close enough
         if (distToWP < arriveDistance && distToWP > minArriveDistance)
         {
             currentWP++;
@@ -145,7 +189,9 @@ public class WayPointFollow : MonoBehaviour
         // Despawn if too far from player (perf)
         if (despawnRadiusSqr > 0f && despawnPlayer != null)
         {
-            if ((transform.position - despawnPlayer.position).sqrMagnitude > despawnRadiusSqr)
+            Vector3 d = transform.position - despawnPlayer.position;
+            d.y = 0f;
+            if (d.sqrMagnitude > despawnRadiusSqr)
             {
                 Despawn();
                 return;
@@ -159,18 +205,37 @@ public class WayPointFollow : MonoBehaviour
         if (currentWP >= waypoints.Length) return;
 
         Vector3 dir = tracker.transform.position - transform.position;
-        dir.y = 0f; // YAW ONLY
+        dir.y = 0f; // yaw only
         if (dir.sqrMagnitude < 0.0001f) return;
 
         Quaternion look = Quaternion.LookRotation(dir);
+
+        // Rotate faster when turning more sharply
         float angle = Quaternion.Angle(transform.rotation, look);
         float dynamicRotSpeed = Mathf.Lerp(rotSpeed * 0.5f, rotSpeed, angle / 45f);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, look, dynamicRotSpeed * Time.deltaTime);
 
+        // Slow down on sharp turns
         float turnSharpness = Mathf.InverseLerp(0f, 90f, angle);
         float currentSpeed = Mathf.Lerp(speed, speed * 0.4f, turnSharpness) * speedMult;
 
-        transform.Translate(0f, 0f, currentSpeed * Time.deltaTime);
+        transform.Translate(0f, 0f, currentSpeed * Time.deltaTime, Space.Self);
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        if (waypoints == null || waypoints.Length == 0) return;
+
+        Gizmos.color = new Color(0f, 1f, 1f, 0.35f);
+        for (int i = 0; i < waypoints.Length - 1; i++)
+        {
+            if (waypoints[i] == null || waypoints[i + 1] == null) continue;
+            Vector3 a = waypoints[i].transform.position;
+            Vector3 b = waypoints[i + 1].transform.position;
+            Gizmos.DrawLine(a, b);
+        }
+    }
+#endif
 }

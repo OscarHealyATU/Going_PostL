@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrafficGridGraph : MonoBehaviour
+public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
 {
-    [Header("Read from gridify (recommended)")]
-    public gridify city;
+    [Header("Adapter (reads gridify)")]
+    public GridifyRoadAdapter road;
 
     [Header("Traffic Nodes (Road Intersections)")]
     public Transform nodeParent;
@@ -17,8 +17,8 @@ public class TrafficGridGraph : MonoBehaviour
     [Header("Path Style")]
     [Range(0f, 1f)] public float preferStraight = 0.65f;
 
-    [Header("Node Height")]
-    public float nodeHeight = 10f;
+    [Header("Node Height Offset")]
+    public float nodeHeight = 0f;
 
     private Transform[,] nodes;
     private int nodeSizeX, nodeSizeZ;
@@ -26,10 +26,9 @@ public class TrafficGridGraph : MonoBehaviour
     private Vector3 originCorner;
 
     private bool ready;
-
     public bool IsReady => ready;
-    public int NodeCount { get; private set; }
 
+    public int NodeCount { get; private set; }
     public readonly List<Transform> allNodes = new List<Transform>();
 
     void Awake()
@@ -39,14 +38,20 @@ public class TrafficGridGraph : MonoBehaviour
 
     IEnumerator BuildWhenReady()
     {
-        if (city == null) city = FindFirstObjectByType<gridify>();
-        if (city == null)
+        if (road == null) road = FindFirstObjectByType<GridifyRoadAdapter>();
+        if (road == null)
         {
-            Debug.LogError("TrafficGridGraph: gridify not found.");
+            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: GridifyRoadAdapter not found.");
             yield break;
         }
 
         yield return null;
+
+        if (!road.IsReady)
+        {
+            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: Road adapter not ready.");
+            yield break;
+        }
 
         BuildGraph();
         ready = true;
@@ -54,12 +59,6 @@ public class TrafficGridGraph : MonoBehaviour
 
     public void BuildGraph()
     {
-        if (city == null)
-        {
-            Debug.LogError("TrafficGridGraph: city not assigned.");
-            return;
-        }
-
         if (nodeParent == null)
         {
             var go = new GameObject("TrafficNodes_RoadIntersections");
@@ -70,24 +69,21 @@ public class TrafficGridGraph : MonoBehaviour
         for (int i = nodeParent.childCount - 1; i >= 0; i--)
             Destroy(nodeParent.GetChild(i).gameObject);
 
-        int tilesX = Mathf.FloorToInt(city.noOfHousesX);
-        int tilesZ = Mathf.FloorToInt(city.noOfHousesZ);
-        dist = city.distance;
+        dist = road.Dist;
+        originCorner = road.OriginCorner + Vector3.up * nodeHeight;
 
-        nodeSizeX = tilesX + 1;
-        nodeSizeZ = tilesZ + 1;
-
-        originCorner = new Vector3(city.xStartPosition - dist * 0.5f, 0f, city.zStartPosition - dist * 0.5f);
+        nodeSizeX = road.TilesX + 1;
+        nodeSizeZ = road.TilesZ + 1;
 
         nodes = new Transform[nodeSizeX, nodeSizeZ];
-        NodeCount = 0;
         allNodes.Clear();
+        NodeCount = 0;
 
         for (int ix = 0; ix < nodeSizeX; ix += nodeEveryNIntersections)
         {
             for (int iz = 0; iz < nodeSizeZ; iz += nodeEveryNIntersections)
             {
-                Vector3 pos = originCorner + new Vector3(ix * dist, nodeHeight, iz * dist);
+                Vector3 pos = originCorner + new Vector3(ix * dist, 0f, iz * dist);
 
                 GameObject n = nodePrefab != null
                     ? Instantiate(nodePrefab, pos, Quaternion.identity, nodeParent)
@@ -102,19 +98,9 @@ public class TrafficGridGraph : MonoBehaviour
             }
         }
 
-        Vector3 min = originCorner;
-        Vector3 max = originCorner + new Vector3((nodeSizeX - 1) * dist, 0f, (nodeSizeZ - 1) * dist);
-
-        Debug.Log($"TrafficGridGraph: Built graph. NodeCount={NodeCount}, allNodes={allNodes.Count}, boundsXZ min={min} max={max}, nodeHeight={nodeHeight}");
+        Debug.Log($"TrafficGridGraph_RoadBetweenTiles: Built nodes={NodeCount} size=({nodeSizeX},{nodeSizeZ}) dist={dist}");
     }
 
-    public Transform GetRandomNode()
-    {
-        if (!ready || allNodes.Count == 0) return null;
-        return allNodes[Random.Range(0, allNodes.Count)];
-    }
-
-    // XZ-only near query
     public void GetNodesNear(Vector3 center, float radius, List<Transform> results)
     {
         results.Clear();
@@ -123,7 +109,7 @@ public class TrafficGridGraph : MonoBehaviour
         float r2 = radius * radius;
         for (int i = 0; i < allNodes.Count; i++)
         {
-            var n = allNodes[i];
+            Transform n = allNodes[i];
             if (n == null) continue;
 
             Vector3 d = n.position - center;
@@ -136,8 +122,7 @@ public class TrafficGridGraph : MonoBehaviour
 
     public Transform[] BuildPath(Transform start, Transform goal)
     {
-        if (!ready) return null;
-        if (start == null || goal == null) return null;
+        if (!ready || start == null || goal == null) return null;
 
         Vector2Int s = WorldToNodeGrid(start.position);
         Vector2Int g = WorldToNodeGrid(goal.position);
@@ -201,13 +186,17 @@ public class TrafficGridGraph : MonoBehaviour
 
     Vector2Int WorldToNodeGrid(Vector3 pos)
     {
-        int x = Mathf.RoundToInt((pos.x - originCorner.x) / dist);
-        int z = Mathf.RoundToInt((pos.z - originCorner.z) / dist);
+        int ix = Mathf.RoundToInt((pos.x - originCorner.x) / dist);
+        int iz = Mathf.RoundToInt((pos.z - originCorner.z) / dist);
 
-        x = Mathf.Clamp(x - (x % nodeEveryNIntersections), 0, nodeSizeX - 1);
-        z = Mathf.Clamp(z - (z % nodeEveryNIntersections), 0, nodeSizeZ - 1);
+        ix = Mathf.Clamp(ix, 0, nodeSizeX - 1);
+        iz = Mathf.Clamp(iz, 0, nodeSizeZ - 1);
 
-        return new Vector2Int(x, z);
+        // snap to our lattice step
+        ix = Mathf.Clamp(ix - (ix % nodeEveryNIntersections), 0, nodeSizeX - 1);
+        iz = Mathf.Clamp(iz - (iz % nodeEveryNIntersections), 0, nodeSizeZ - 1);
+
+        return new Vector2Int(ix, iz);
     }
 
     bool InBounds(Vector2Int p) => p.x >= 0 && p.y >= 0 && p.x < nodeSizeX && p.y < nodeSizeZ;
