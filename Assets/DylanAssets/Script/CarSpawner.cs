@@ -7,21 +7,20 @@ public class CarSpawner : MonoBehaviour
     public GameObject[] carPrefabs;
 
     [Header("Routing")]
-    public TrafficGridGraph graph;
+    public TrafficGridGraph_RoadBetweenTiles graph;
 
     [Header("Player")]
     public Transform player;
     public string playerTag = "Player";
 
     [Header("Spawn Range (around player)")]
-    public float startNodeRadius = 150f;
-    public float endNodeRadius = 600f;
+    public float startNodeRadius = 100f;
+    public float endNodeRadius = 200f;
 
     [Header("Spawn Timing")]
-    public float spawnInterval = 0.1f;
+    public float spawnInterval = 0.3f;
     public float spawnJitter = 0.75f;
-    public float minSpawnDistance = 8f;
-    public int maxAliveTotal = 50; // total from this spawner/manager
+    public int maxAliveTotal = 100;
 
     [Header("Trip Length")]
     public int minWaypoints = 10;
@@ -44,10 +43,8 @@ public class CarSpawner : MonoBehaviour
 
     private float timer;
     private float nextSpawnTime;
-
     private int aliveCount;
 
-    // force refresh on first Update
     private float nearCacheTimer = 999f;
     private bool hasBuiltNearCache = false;
 
@@ -65,7 +62,6 @@ public class CarSpawner : MonoBehaviour
     void ResolvePlayer()
     {
         if (player != null) return;
-
         var go = GameObject.FindGameObjectWithTag(playerTag);
         if (go != null) player = go.transform;
     }
@@ -93,7 +89,6 @@ public class CarSpawner : MonoBehaviour
             return;
         }
 
-        // Refresh near lists periodically (XZ handled inside graph.GetNodesNear)
         nearCacheTimer += Time.deltaTime;
         if (nearCacheTimer >= nearCacheRefresh)
         {
@@ -105,9 +100,7 @@ public class CarSpawner : MonoBehaviour
 
             if (!warnedNoNodes && (nearStartNodes.Count == 0 || nearEndNodes.Count == 0))
             {
-                Debug.LogWarning(
-                    $"CarSpawner: near node lists empty. startNear={nearStartNodes.Count} endNear={nearEndNodes.Count}. " +
-                    $"Try increasing radii or check graph bounds/logs.");
+                Debug.LogWarning($"CarSpawner: near node lists empty. startNear={nearStartNodes.Count} endNear={nearEndNodes.Count}.");
                 warnedNoNodes = true;
             }
         }
@@ -141,11 +134,9 @@ public class CarSpawner : MonoBehaviour
         if (!hasBuiltNearCache) return;
         if (nearStartNodes.Count == 0 || nearEndNodes.Count == 0) return;
 
-        // Pick start near player
         Transform start = nearStartNodes[Random.Range(0, nearStartNodes.Count)];
         if (start == null) return;
 
-        // Pick end near player-ish + build a valid path
         Transform[] path = null;
         for (int tries = 0; tries < 40; tries++)
         {
@@ -165,15 +156,13 @@ public class CarSpawner : MonoBehaviour
 
         Vector3 spawnPos = path[0].position;
 
-        // spacing check: avoid piling cars on the exact same node
-        // (simple scan over a few nearby cars would be better, but this is cheap)
-        // If you want this stronger, keep a small list of last N spawned positions.
-        // For now, just prevent spawns too close to player position (optional).
-        // if (DistanceXZ(spawnPos, player.position) < 5f) return;
+        // face toward next waypoint
+        Vector3 fwd = path[1].position - path[0].position;
+        fwd.y = 0f;
+        Quaternion spawnRot = fwd.sqrMagnitude > 0.001f ? Quaternion.LookRotation(fwd) : Quaternion.identity;
 
-        // Spawn
         var prefab = carPrefabs[Random.Range(0, carPrefabs.Length)];
-        var car = Instantiate(prefab, spawnPos, path[0].rotation);
+        var car = Instantiate(prefab, spawnPos, spawnRot);
 
         var follow = car.GetComponent<WayPointFollow>();
         if (follow == null)
