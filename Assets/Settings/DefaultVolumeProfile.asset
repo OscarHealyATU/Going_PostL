@@ -592,8 +592,8 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 1
-          outSlope: 1
+          inSlope: 0.86623436
+          outSlope: 0.86623436
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -601,8 +601,8 @@ MonoBehaviour:
         - serializedVersion: 3
           time: 1
           value: 1
-          inSlope: 1
-          outSlope: 1
+          inSlope: 0.5714749
+          outSlope: 0.5714749
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
@@ -793,7 +793,7 @@ MonoBehaviour:
     m_Value: 0
   gaussianStart:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 3
   gaussianEnd:
     m_OverrideState: 1
     m_Value: 30
@@ -805,7 +805,7 @@ MonoBehaviour:
     m_Value: 0
   focusDistance:
     m_OverrideState: 1
-    m_Value: 0.1
+    m_Value: 10
   aperture:
     m_OverrideState: 1
     m_Value: 1.4

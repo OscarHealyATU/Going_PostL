@@ -5,9 +5,9 @@ public class JaywalkerReaction : MonoBehaviour
 {
     // jaywalker reaction calculates the how far a player gets thrown back when hit by a car.
 
-    [Header("Impact Settings")]
-    [SerializeField] private float funMultiplier = 10f;
-    [SerializeField] private float upwardMotion = 0.5f;
+    [Header("Impact Setting")]
+    private float funMultiplier = 0.10f;
+    private float upwardMotion = 0.8f;
     [SerializeField] private float minVehicleSpeed = 4f;
 
     private Rigidbody playerRigidbody;
