@@ -64,7 +64,7 @@ public class RandomItemSpawnerWorld : MonoBehaviour
         }
 
         Transform point = spawnPoint != null ? spawnPoint : transform;
-        _currentSpawnedItem = Instantiate(chosenItem.worldPrefab, point.position, point.rotation);
+        _currentSpawnedItem = Instantiate(chosenItem.worldPrefab, point.position + Vector3.up * 0.12f, point.rotation);
 
         WorldItem worldItem = _currentSpawnedItem.GetComponent<WorldItem>();
         if (worldItem == null)
