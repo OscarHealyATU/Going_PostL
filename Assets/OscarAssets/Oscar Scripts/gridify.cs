@@ -42,10 +42,11 @@ public class gridify : MonoBehaviour
         GameObject[,] houses = new  GameObject[(int)noOfHousesX, (int)noOfHousesZ];
  
         // tiles loop
-          for (float x = 0; x < noOfHousesX; x++)
+        for (float x = 0; x < noOfHousesX; x++)
         {
             for (float z = 0; z < noOfHousesZ; z++)
             {
+                bool isWarehousePosition = hasWarehouse && (x == warehouseXPosition) && (z == warehouseZPosition);
                 Vector3 position = new Vector3(xStartPosition + x * distance, 0, zStartPosition + z * distance);
                 // instanciates tiles
                 Instantiate(groundSquare, position, Quaternion.Euler(-90, 0, 0), transform);
@@ -65,11 +66,11 @@ public class gridify : MonoBehaviour
                
                houses[(int)x, (int)z] = house;
             }
+
+
         }
-        if (hasWarehouse && warehousePrefab !=null)
+        if (hasWarehouse && warehousePrefab != null)
         {
-            Destroy(houses[warehouseXPosition, warehouseZPosition]);
-            Destroy(houses[warehouseXPosition, warehouseZPosition]);
             Vector3 warehousePos = new Vector3(
                 xStartPosition + warehouseXPosition * distance, 0,
                 zStartPosition + warehouseZPosition * distance);
