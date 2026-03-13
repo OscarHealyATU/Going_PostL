@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79eccf65308acf4fa37692a2fa4c6b9, type: 3}
+  m_Name: Headphones_White_Item
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Headphones White
+  itemKey: headphones_white
+  category: mediumItem
+  worldPrefab: {fileID: 258321099813997071, guid: c0ad8472d50ef3542a59d81aaf0ff816, type: 3}
+  icon: {fileID: 21300000, guid: 4affc01cf334bd64e8bf80c6dcfd9f3a, type: 3}
