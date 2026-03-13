@@ -10,6 +10,7 @@ public class DbBoot : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("DbBoot Awake ran on: " + gameObject.name);
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -22,10 +23,10 @@ public class DbBoot : MonoBehaviour
         GameDb = new GameDb();
         Debug.Log("DB path: " + GameDb.DbPath);
 
-        // ❌ Remove CreateTable calls (they can conflict with ApplySchema/Migrations)
-        // Db.CreateTable<Player>();
-        // Db.CreateTable<VehicleType>();
-        // Db.CreateTable<Vehicle>();
+        Db.CreateTable<Player>();
+        Db.CreateTable<VehicleType>();
+        Db.CreateTable<Vehicle>();
+        Db.CreateTable<InventorySlot>();
 
         EnsurePlayerExists();
 
@@ -43,14 +44,7 @@ public class DbBoot : MonoBehaviour
             {
                 name = "Player",
                 money = 10000.0,
-                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
-
-                // ✅ defaults for return point
-                returnValid = 0,
-                returnX = 0,
-                returnY = 0,
-                returnZ = 0,
-                returnYaw = 0
+                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
 
             Debug.Log("Created Player row");
