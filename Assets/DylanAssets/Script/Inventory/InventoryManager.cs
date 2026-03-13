@@ -180,6 +180,28 @@ public class InventoryManager : MonoBehaviour
                 items[row.slotIndex] = item;
         }
 
+        for (int i = 0; i < savedSlots.Count; i++)
+{
+    var row = savedSlots[i];
+
+    if (row.slotIndex < 0 || row.slotIndex >= items.Length)
+        continue;
+
+    Debug.Log($"Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
+
+    ItemData item = ItemCatalog.Instance.GetByKey(row.itemKey);
+
+    if (item == null)
+    {
+        Debug.LogWarning($"Load failed: no ItemData found for key '{row.itemKey}'");
+        continue;
+    }
+
+    Debug.Log($"Resolved item: {item.itemName}, icon null? {item.icon == null}");
+
+    items[row.slotIndex] = item;
+}
+
         Debug.Log("Inventory loaded from DB.");
     }
 }
