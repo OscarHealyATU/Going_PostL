@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79eccf65308acf4fa37692a2fa4c6b9, type: 3}
+  m_Name: Photo_Frame_Wood_Item
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Photo Frame Wood
+  itemKey: photo_frame_wood
+  category: mediumItem
+  worldPrefab: {fileID: 5358040929703333781, guid: 099d04e950484a14cb3f763eabf99817, type: 3}
+  icon: {fileID: 21300000, guid: 991ef15f7c989da4cb5982acd2064e56, type: 3}
