@@ -1,70 +1,70 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class PackingSlotUI : MonoBehaviour
+public class PackingSlotUI : MonoBehaviour, IPointerClickHandler
 {
-    [Header("Rules")]
-    public PackingSlotType slotType;
-
-    [Header("UI")]
-    public Image iconImage;
-
-    private ItemData _item;
-
-    public ItemData Item => _item;
-    public bool HasItem => _item != null;
-
-    public bool CanAccept(ItemData item)
+    public enum SlotType
     {
-        if (item == null) return false;
-
-        switch (slotType)
-        {
-            case PackingSlotType.ItemInput:
-                return item.itemKey != "open_box" && !item.itemKey.StartsWith("packed_");
-
-            case PackingSlotType.BoxInput:
-                return item.itemKey == "open_box";
-
-            case PackingSlotType.Result:
-                return false;
-        }
-
-        return false;
+        Item,
+        Box,
+        Result
     }
 
-    public void SetItem(ItemData item)
-    {
-        _item = item;
-        RefreshVisual();
-    }
+    [Header("Setup")]
+    public SlotType slotType;
+    public Image icon;
 
-    public void ClearSlot()
-    {
-        _item = null;
-        RefreshVisual();
-    }
+    public ItemData CurrentItem { get; private set; }
+    public int SourceInventorySlotIndex { get; private set; } = -1;
 
-    public void RefreshVisual()
+    public void SetHeldItem(ItemData item, int sourceSlotIndex)
     {
-        if (iconImage == null) return;
+        CurrentItem = item;
+        SourceInventorySlotIndex = sourceSlotIndex;
 
-        if (_item != null && _item.icon != null)
+        if (icon != null)
         {
-            iconImage.enabled = true;
-            iconImage.sprite = _item.icon;
-        }
-        else
-        {
-            iconImage.enabled = false;
-            iconImage.sprite = null;
+            icon.sprite = item != null ? item.icon : null;
+            icon.enabled = item != null && item.icon != null;
         }
     }
-}
 
-public enum PackingSlotType
-{
-    ItemInput,
-    BoxInput,
-    Result
+    public void SetResultItem(ItemData item)
+    {
+        CurrentItem = item;
+        SourceInventorySlotIndex = -1;
+
+        if (icon != null)
+        {
+            icon.sprite = item != null ? item.icon : null;
+            icon.enabled = item != null && item.icon != null;
+        }
+    }
+
+    public void ClearVisualOnly()
+    {
+        CurrentItem = null;
+        SourceInventorySlotIndex = -1;
+
+        if (icon != null)
+        {
+            icon.sprite = null;
+            icon.enabled = false;
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Right)
+            return;
+
+        if (CurrentItem == null)
+            return;
+
+        if (PackingTableUI.Instance == null)
+            return;
+
+        PackingTableUI.Instance.ReturnSlotToInventory(this);
+    }
 }
