@@ -4,109 +4,231 @@ using TMPro;
 
 public class PackingTableUI : MonoBehaviour
 {
+    public static PackingTableUI Instance { get; private set; }
+
     [Header("Slots")]
     public PackingSlotUI itemSlot;
     public PackingSlotUI boxSlot;
     public PackingSlotUI resultSlot;
 
-    [Header("Packing Result")]
+    [Header("Crafting Result")]
     public ItemData closedBoxItem;
 
     [Header("Buttons")]
     public Button packButton;
     public Button closeButton;
 
-    [Header("Text")]
+    [Header("Feedback")]
     public TMP_Text errorText;
 
-    void Start()
+    private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
+
         if (packButton != null)
             packButton.onClick.AddListener(OnPackClicked);
 
         if (closeButton != null)
             closeButton.onClick.AddListener(ClosePanel);
-
-        RefreshUI();
     }
 
-    void OnEnable()
+    private void OnDestroy()
     {
-        RefreshUI();
-    }
-
-    public void RefreshUI()
-    {
-        bool validItem = itemSlot != null && itemSlot.HasItem;
-        bool validBox = boxSlot != null && boxSlot.HasItem && boxSlot.Item != null && boxSlot.Item.itemKey == "open_box";
-        bool resultEmpty = resultSlot != null && !resultSlot.HasItem;
-
-        bool canPack = validItem && validBox && resultEmpty && closedBoxItem != null;
+        if (Instance == this)
+            Instance = null;
 
         if (packButton != null)
-            packButton.interactable = canPack;
+            packButton.onClick.RemoveListener(OnPackClicked);
 
-        if (errorText != null)
-            errorText.text = "";
+        if (closeButton != null)
+            closeButton.onClick.RemoveListener(ClosePanel);
+    }
+
+    public void OpenPanel()
+    {
+        gameObject.SetActive(true);
+        ClearError();
+    }
+
+   public void ClosePanel()
+    {
+        ReturnInputsToInventory();
+
+        if (resultSlot != null && resultSlot.CurrentItem != null)
+            ReturnSlotToInventory(resultSlot);
+
+        ClearAllSlots();
+        ClearError();
+        gameObject.SetActive(false);
+    }
+
+    public bool TryPlaceFromInventory(ItemData item, int inventorySlotIndex)
+    {
+        if (!gameObject.activeInHierarchy)
+            return false;
+
+        if (item == null || InventoryManager.Instance == null)
+            return false;
+
+        ClearError();
+
+        if (resultSlot != null && resultSlot.CurrentItem != null)
+        {
+            SetError("Take the packed box first.");
+            return false;
+        }
+
+        if (item.itemKey == "box_open")
+        {
+            if (boxSlot == null)
+            {
+                SetError("Box slot is not assigned.");
+                return false;
+            }
+
+            if (boxSlot.CurrentItem != null)
+            {
+                SetError("Box slot is already occupied.");
+                return false;
+            }
+
+            boxSlot.SetHeldItem(item, inventorySlotIndex);
+            InventoryManager.Instance.RemoveItem(inventorySlotIndex);
+            return true;
+        }
+
+        if (!IsPackable(item))
+        {
+            SetError("That item cannot be packed.");
+            return false;
+        }
+
+        if (itemSlot == null)
+        {
+            SetError("Item slot is not assigned.");
+            return false;
+        }
+
+        if (itemSlot.CurrentItem != null)
+        {
+            SetError("Item slot is already occupied.");
+            return false;
+        }
+
+        itemSlot.SetHeldItem(item, inventorySlotIndex);
+        InventoryManager.Instance.RemoveItem(inventorySlotIndex);
+        return true;
+    }
+
+    private bool IsPackable(ItemData item)
+    {
+        if (item == null)
+            return false;
+
+        if (item.itemKey == "box_open")
+            return false;
+
+        if (item.itemKey == "box_close")
+            return false;
+
+        return true;
+    }
+
+    public void ReturnSlotToInventory(PackingSlotUI slot)
+    {
+        if (slot == null || slot.CurrentItem == null || InventoryManager.Instance == null)
+            return;
+
+        bool added = InventoryManager.Instance.AddItem(slot.CurrentItem);
+        if (!added)
+        {
+            SetError("Inventory is full.");
+            return;
+        }
+
+        slot.ClearVisualOnly();
+        ClearError();
     }
 
     private void OnPackClicked()
     {
         if (itemSlot == null || boxSlot == null || resultSlot == null)
         {
-            SetError("Packing UI is not set up correctly.");
+            SetError("Packing slots not assigned.");
             return;
         }
 
-        if (!itemSlot.HasItem)
+        if (closedBoxItem == null)
         {
-            SetError("Place an item first.");
+            SetError("Closed box item not assigned.");
             return;
         }
 
-        if (!boxSlot.HasItem)
+        if (resultSlot.CurrentItem != null)
         {
-            SetError("Place a box first.");
+            SetError("Take the packed box first.");
             return;
         }
 
-        if (boxSlot.Item == null || boxSlot.Item.itemKey != "open_box")
+        if (itemSlot.CurrentItem == null)
         {
-            SetError("That is not a valid box.");
+            SetError("Place an item in the Item slot.");
             return;
         }
 
-        if (resultSlot.HasItem)
+        if (boxSlot.CurrentItem == null)
         {
-            SetError("Remove the result first.");
+            SetError("Place an open box in the Box slot.");
             return;
         }
 
-        ItemData packedResult = PackingService.TryPack(itemSlot.Item, boxSlot.Item, closedBoxItem);
-
-        if (packedResult == null)
+        if (boxSlot.CurrentItem.itemKey != "box_open")
         {
-            SetError("Packing failed.");
+            SetError("Box slot needs box_open.");
             return;
         }
 
-        itemSlot.ClearSlot();
-        boxSlot.ClearSlot();
-        resultSlot.SetItem(packedResult);
-
-        RefreshUI();
+        resultSlot.SetResultItem(closedBoxItem);
+        itemSlot.ClearVisualOnly();
+        boxSlot.ClearVisualOnly();
+        ClearError();
     }
 
-    private void ClosePanel()
+    private void ReturnInputsToInventory()
     {
-        gameObject.SetActive(false);
+        if (itemSlot != null && itemSlot.CurrentItem != null)
+            ReturnSlotToInventory(itemSlot);
+
+        if (boxSlot != null && boxSlot.CurrentItem != null)
+            ReturnSlotToInventory(boxSlot);
     }
 
-    private void SetError(string msg)
+    private void ClearAllSlots()
+    {
+        if (itemSlot != null)
+            itemSlot.ClearVisualOnly();
+
+        if (boxSlot != null)
+            boxSlot.ClearVisualOnly();
+
+        if (resultSlot != null)
+            resultSlot.ClearVisualOnly();
+    }
+
+    private void SetError(string message)
     {
         if (errorText != null)
-            errorText.text = msg;
+            errorText.text = message;
+    }
 
-        Debug.LogWarning("PackingTableUI: " + msg);
+    private void ClearError()
+    {
+        SetError(string.Empty);
     }
 }

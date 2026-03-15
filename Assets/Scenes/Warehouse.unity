@@ -480,6 +480,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9155188581112757612, guid: 39070921814100140aa140bc9b21403a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1926509498}
+    - targetCorrespondingSourceObject: {fileID: 9155188581112757612, guid: 39070921814100140aa140bc9b21403a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 93501274}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39070921814100140aa140bc9b21403a, type: 3}
 --- !u!224 &3289959 stripped
@@ -926,6 +929,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 59671956}
   m_CullTransparentMesh: 1
+--- !u!1 &93501273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 93501274}
+  - component: {fileID: 93501275}
+  m_Layer: 5
+  m_Name: DragItemUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &93501274
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93501273}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1008470706}
+  m_Father: {fileID: 3289959}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &93501275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93501273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7425b9a8f403bf43bfa80deebcfdd94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DragItemUI
+  icon: {fileID: 1008470707}
 --- !u!1 &152843978
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,7 +1145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PackingSlotUI
   slotType: 1
-  iconImage: {fileID: 1026707349}
+  icon: {fileID: 1026707349}
 --- !u!1 &210255139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1566,8 +1619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 1
-  itemIcon: {fileID: 877555845}
+  icon: {fileID: 877555845}
 --- !u!114 &333802630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2069,9 +2121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e10d9ed357c7f2f42a0046ff6b86452b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PackingTableUI
-  itemSlot: {fileID: 0}
-  boxSlot: {fileID: 0}
-  resultSlot: {fileID: 0}
+  itemSlot: {fileID: 788736735}
+  boxSlot: {fileID: 176350840}
+  resultSlot: {fileID: 1949453590}
   closedBoxItem: {fileID: 11400000, guid: d342578e45eaeca469d61f556428c011, type: 2}
   packButton: {fileID: 1486847667}
   closeButton: {fileID: 611222779}
@@ -2688,7 +2740,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 25}
+  m_AnchoredPosition: {x: 0, y: 793}
   m_SizeDelta: {x: -80, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &723474041
@@ -2721,7 +2773,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2744,8 +2796,8 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -2916,7 +2968,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PackingSlotUI
   slotType: 0
-  iconImage: {fileID: 745479331}
+  icon: {fileID: 745479331}
 --- !u!1001 &844681162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3680,8 +3732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 0
-  itemIcon: {fileID: 2138430853}
+  icon: {fileID: 2138430853}
 --- !u!114 &955805833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3719,6 +3770,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 955805830}
+  m_CullTransparentMesh: 1
+--- !u!1 &1008470705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1008470706}
+  - component: {fileID: 1008470708}
+  - component: {fileID: 1008470707}
+  m_Layer: 5
+  m_Name: Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1008470706
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008470705}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 93501274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1008470707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008470705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1008470708
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008470705}
   m_CullTransparentMesh: 1
 --- !u!1 &1017481168
 GameObject:
@@ -4710,8 +4836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 3
-  itemIcon: {fileID: 280362829}
+  icon: {fileID: 280362829}
 --- !u!114 &1377736240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4956,8 +5081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 9
-  itemIcon: {fileID: 3185856}
+  icon: {fileID: 3185856}
 --- !u!114 &1449134258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5516,8 +5640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 6
-  itemIcon: {fileID: 859418771}
+  icon: {fileID: 859418771}
 --- !u!114 &1543207517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5607,8 +5730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 4
-  itemIcon: {fileID: 922649316}
+  icon: {fileID: 922649316}
 --- !u!114 &1545683085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6424,8 +6546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 5
-  itemIcon: {fileID: 280973656}
+  icon: {fileID: 280973656}
 --- !u!114 &1862063851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6667,7 +6788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PackingSlotUI
   slotType: 2
-  iconImage: {fileID: 393197970}
+  icon: {fileID: 393197970}
 --- !u!1 &1983980316
 GameObject:
   m_ObjectHideFlags: 0
@@ -6719,8 +6840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 8
-  itemIcon: {fileID: 1913685134}
+  icon: {fileID: 1913685134}
 --- !u!114 &1983980319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7003,8 +7123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 2
-  itemIcon: {fileID: 1157393953}
+  icon: {fileID: 1157393953}
 --- !u!114 &2072813167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7230,8 +7349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef27d8f35c84949418bd9a8756da0b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventorySlotUI
-  slotIndex: 7
-  itemIcon: {fileID: 152843980}
+  icon: {fileID: 152843980}
 --- !u!114 &2136930180
 MonoBehaviour:
   m_ObjectHideFlags: 0

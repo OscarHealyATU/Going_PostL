@@ -1,26 +1,49 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class InventorySlotUI : MonoBehaviour
+public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
 {
-    public int slotIndex;
-    public Image itemIcon;
+    public Image icon;
 
-    public void SetEmpty()
+    public ItemData CurrentItem { get; private set; }
+    public int SlotIndex { get; private set; } = -1;
+
+    public void SetItem(ItemData item, int slotIndex)
     {
-        if (itemIcon != null)
+        CurrentItem = item;
+        SlotIndex = slotIndex;
+
+        if (icon != null)
         {
-            itemIcon.sprite = null;
-            itemIcon.enabled = false;
+            icon.sprite = item != null ? item.icon : null;
+            icon.enabled = item != null && item.icon != null;
         }
     }
 
-    public void SetItem(Sprite icon)
+    public void SetEmpty()
     {
-        if (itemIcon != null)
+        CurrentItem = null;
+        SlotIndex = -1;
+
+        if (icon != null)
         {
-            itemIcon.enabled = true;
-            itemIcon.sprite = icon;
+            icon.sprite = null;
+            icon.enabled = false;
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button != PointerEventData.InputButton.Left)
+            return;
+
+        if (CurrentItem == null)
+            return;
+
+        if (PackingTableUI.Instance == null)
+            return;
+
+        PackingTableUI.Instance.TryPlaceFromInventory(CurrentItem, SlotIndex);
     }
 }
