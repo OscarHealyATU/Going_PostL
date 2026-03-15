@@ -11,17 +11,16 @@ public class InventoryUI : MonoBehaviour
 
     private float nextRefresh;
 
-    void Update()
+    private void Update()
     {
         if (Time.time < nextRefresh)
             return;
 
         nextRefresh = Time.time + refreshInterval;
-
         RefreshUI();
     }
 
-    void RefreshUI()
+    private void RefreshUI()
     {
         if (InventoryManager.Instance == null)
             return;
@@ -33,8 +32,8 @@ public class InventoryUI : MonoBehaviour
 
             ItemData item = InventoryManager.Instance.GetItem(i);
 
-            if (item != null && item.icon != null)
-                slots[i].SetItem(item.icon);
+            if (item != null)
+                slots[i].SetItem(item, i);
             else
                 slots[i].SetEmpty();
         }
