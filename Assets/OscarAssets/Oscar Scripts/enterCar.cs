@@ -13,14 +13,14 @@ public class enterCar : MonoBehaviour
     private carController currentCar;
     private bool isInCar = false;
     private CharacterController playerController;
-    private PlayerMovement playerMovement;
+    private PlayerMovementOutside playerMovement;
     private PlayerLook playerLook;
 
 
     void Start()
     {
         playerController = GetComponent<CharacterController>();
-        playerMovement = GetComponent<PlayerMovement>();
+        playerMovement = GetComponent<PlayerMovementOutside>();
         playerLook = GetComponent<PlayerLook>();
     }
 

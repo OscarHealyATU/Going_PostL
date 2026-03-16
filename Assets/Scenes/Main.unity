@@ -672,6 +672,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 121103360}
+    - target: {fileID: 3819268905641228742, guid: c51d1fc06e825ba4b8fab40f3d4e71fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3876920094667080904, guid: c51d1fc06e825ba4b8fab40f3d4e71fd, type: 3}
       propertyPath: roadY
       value: 2
