@@ -17,11 +17,8 @@ public sealed class GameDb : IDisposable
         Db.Execute("PRAGMA foreign_keys = ON;");
 
         ApplySchema();
-
-        // ✅ Ensure newer columns exist even after restarting the game
+        EnsurePlayerColumns();
         EnsureVehicleSpawnColumns();
-        EnsurePlayerReturnColumns();
-
         Seed();
     }
 
@@ -43,7 +40,6 @@ CREATE TABLE IF NOT EXISTS VehicleType (
   baseHealth REAL NOT NULL DEFAULT 100.0
 );");
 
-        // Keep CREATE TABLE minimal. New columns added via migrations below.
         Db.Execute(@"
 CREATE TABLE IF NOT EXISTS Vehicle (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,25 +62,64 @@ CREATE TABLE IF NOT EXISTS TransactionLog (
   timestamp TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY(playerId) REFERENCES Player(id)
 );");
+
+        Db.Execute(@"
+CREATE TABLE IF NOT EXISTS ItemType (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  key TEXT NOT NULL UNIQUE,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL,
+  stackable INTEGER NOT NULL DEFAULT 1,
+  baseValue REAL NOT NULL DEFAULT 0.0
+);");
+
+        Db.Execute(@"
+CREATE TABLE IF NOT EXISTS InventorySlot (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  playerId INTEGER NOT NULL,
+  slotIndex INTEGER NOT NULL,
+  itemTypeId INTEGER,
+  quantity INTEGER NOT NULL DEFAULT 0,
+  metadataJson TEXT,
+  FOREIGN KEY(playerId) REFERENCES Player(id),
+  FOREIGN KEY(itemTypeId) REFERENCES ItemType(id)
+);");
+
+        Db.Execute(@"
+CREATE UNIQUE INDEX IF NOT EXISTS idx_inventoryslot_player_slot
+ON InventorySlot(playerId, slotIndex);");
+
+        Db.Execute(@"
+CREATE TABLE IF NOT EXISTS Deliverable (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  playerId INTEGER NOT NULL,
+  itemTypeId INTEGER NOT NULL,
+  sourceItemTypeId INTEGER NOT NULL,
+  assignedScene TEXT NOT NULL,
+  assignedGridKey TEXT NOT NULL,
+  status TEXT NOT NULL,
+  createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+  deliveredAt TEXT,
+  FOREIGN KEY(playerId) REFERENCES Player(id),
+  FOREIGN KEY(itemTypeId) REFERENCES ItemType(id),
+  FOREIGN KEY(sourceItemTypeId) REFERENCES ItemType(id)
+);");
     }
 
-    // ----------------------------
-    // MIGRATIONS (safe updates)
-    // ----------------------------
-    private void EnsureVehicleSpawnColumns()
-    {
-        AddColumnIfMissing("Vehicle", "spawnScene", "TEXT");
-        AddColumnIfMissing("Vehicle", "spawnBay", "INTEGER");
-        AddColumnIfMissing("Vehicle", "spawnPending", "INTEGER NOT NULL DEFAULT 1");
-    }
-
-    private void EnsurePlayerReturnColumns()
+    private void EnsurePlayerColumns()
     {
         AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
+    }
+
+    private void EnsureVehicleSpawnColumns()
+    {
+        AddColumnIfMissing("Vehicle", "spawnScene", "TEXT");
+        AddColumnIfMissing("Vehicle", "spawnBay", "INTEGER");
+        AddColumnIfMissing("Vehicle", "spawnPending", "INTEGER NOT NULL DEFAULT 1");
     }
 
     private void AddColumnIfMissing(string table, string column, string columnSql)
@@ -108,8 +143,27 @@ INSERT OR IGNORE INTO VehicleType (name, baseCost, baseHealth) VALUES
 ('Bicycle', 500.0, 80.0),
 ('3Wheeler', 2000.0, 120.0),
 ('eVan', 15000.0, 250.0),
-('Lorry', 50000.0, 400.0);
-");
+('Lorry', 50000.0, 400.0);");
+
+        Db.Execute(@"
+INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUES
+('open_box', 'Open Box', 'box', 0, 5.0),
+('closed_package', 'Closed Package', 'deliverable', 0, 25.0),
+('ball', 'Ball', 'mediumItem', 0, 10.0),
+('book_beige', 'Book Beige', 'mediumItem', 0, 12.0),
+('book_blue', 'Book Blue', 'mediumItem', 0, 12.0),
+('book_red', 'Book Red', 'mediumItem', 0, 12.0),
+('console', 'Console', 'mediumItem', 0, 40.0),
+('headphones_black', 'Headphones Black', 'mediumItem', 0, 25.0),
+('headphones_white', 'Headphones White', 'mediumItem', 0, 25.0),
+('headphones_green', 'Headphones Green', 'mediumItem', 0, 25.0),
+('headphones_pink', 'Headphones Pink', 'mediumItem', 0, 25.0),
+('lamp', 'Lamp', 'mediumItem', 0, 18.0),
+('laptop_grey', 'Laptop Grey', 'mediumItem', 0, 50.0),
+('laptop_navy', 'Laptop Navy', 'mediumItem', 0, 50.0),
+('photo_frame_metal', 'Photo Frame Metal', 'mediumItem', 0, 15.0),
+('photo_frame_wood', 'Photo Frame Wood', 'mediumItem', 0, 15.0),
+('toaster', 'Toaster', 'mediumItem', 0, 20.0);");
     }
 
     public void Dispose()

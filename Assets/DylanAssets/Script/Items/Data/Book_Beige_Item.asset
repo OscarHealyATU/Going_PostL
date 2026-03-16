@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79eccf65308acf4fa37692a2fa4c6b9, type: 3}
+  m_Name: Book_Beige_Item
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Book Beige
+  itemKey: book_beige
+  category: mediumItem
+  worldPrefab: {fileID: 8142721749886478775, guid: d8f8705bcfee241438b158a92e53ed68, type: 3}
+  icon: {fileID: 21300000, guid: 89208355a6a8ed1408ba4e9178371c5a, type: 3}
