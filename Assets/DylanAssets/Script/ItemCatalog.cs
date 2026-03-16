@@ -16,6 +16,7 @@ public class ItemCatalog : MonoBehaviour
         }
 
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public ItemData GetByKey(string key)
