@@ -123,6 +123,10 @@ MonoBehaviour:
   speed: 10
   rotSpeed: 10
   lookAhead: 10
+  arriveDistance: 3
+  minArriveDistance: 0.2
+  laneWidth: 0.5
+  laneJitter: 0.25
 --- !u!82 &681645770448982938
 AudioSource:
   m_ObjectHideFlags: 0
