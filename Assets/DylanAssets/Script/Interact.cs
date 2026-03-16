@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -13,8 +14,45 @@ public class Interact : MonoBehaviour
     [Header("UI Prompt")]
     public GameObject interactPromptText;
 
+    [Header("Trigger")]
+    public Collider triggerCollider;
+
     private bool playerInRange = false;
     private Transform playerTransform;
+
+    void Awake()
+    {
+        if (triggerCollider == null)
+            triggerCollider = GetComponent<Collider>();
+    }
+
+    void OnEnable()
+    {
+        HidePrompt();
+        playerInRange = false;
+        playerTransform = null;
+
+        StartCoroutine(RefreshTriggerStateAfterSceneLoad());
+    }
+
+    IEnumerator RefreshTriggerStateAfterSceneLoad()
+    {
+        // Let scene objects and player finish spawning first
+        yield return null;
+        yield return new WaitForFixedUpdate();
+
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null || triggerCollider == null)
+            yield break;
+
+        if (IsPlayerInsideTrigger(player.transform))
+        {
+            playerTransform = player.transform;
+            playerInRange = true;
+            ShowPrompt();
+            Debug.Log($"🟨 Interact: Player was already inside trigger '{gameObject.name}' after scene load.");
+        }
+    }
 
     void Update()
     {
@@ -24,7 +62,6 @@ public class Interact : MonoBehaviour
 
         Debug.Log($"✅ Interact: E pressed on '{gameObject.name}'. Loading scene: {sceneToLoad}");
 
-        // ✅ Save player position BEFORE switching scenes (only if enabled)
         if (saveReturnPointBeforeSceneLoad && playerTransform != null)
         {
             PlayerService.SaveReturnPoint(playerTransform.position, playerTransform.eulerAngles.y);
@@ -37,7 +74,9 @@ public class Interact : MonoBehaviour
             return;
         }
 
-        // ✅ Smooth transition if SceneFader exists, otherwise fallback
+        HidePrompt();
+        playerInRange = false;
+
         if (SceneFader.Instance != null)
             SceneFader.Instance.FadeToScene(sceneToLoad);
         else
@@ -50,9 +89,7 @@ public class Interact : MonoBehaviour
 
         playerInRange = true;
         playerTransform = other.transform;
-
-        if (interactPromptText != null)
-            interactPromptText.SetActive(true);
+        ShowPrompt();
 
         Debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
     }
@@ -63,10 +100,43 @@ public class Interact : MonoBehaviour
 
         playerInRange = false;
         playerTransform = null;
-
-        if (interactPromptText != null)
-            interactPromptText.SetActive(false);
+        HidePrompt();
 
         Debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
+    }
+
+    void OnDisable()
+    {
+        HidePrompt();
+    }
+
+    void OnDestroy()
+    {
+        HidePrompt();
+    }
+
+    private void ShowPrompt()
+    {
+        if (interactPromptText != null)
+            interactPromptText.SetActive(true);
+    }
+
+    private void HidePrompt()
+    {
+        if (interactPromptText != null)
+            interactPromptText.SetActive(false);
+    }
+
+    private bool IsPlayerInsideTrigger(Transform player)
+    {
+        if (triggerCollider == null || player == null)
+            return false;
+
+        Vector3 point = player.position;
+        Vector3 closest = triggerCollider.ClosestPoint(point);
+
+        // If closest point is basically the same as player position,
+        // the player is inside or intersecting the trigger.
+        return Vector3.SqrMagnitude(point - closest) < 0.0001f;
     }
 }
