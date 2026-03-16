@@ -20,7 +20,7 @@ public class InventoryUI : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    public void RefreshUI()
     {
         if (InventoryManager.Instance == null)
             return;

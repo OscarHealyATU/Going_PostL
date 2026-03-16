@@ -1,39 +1,54 @@
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SwitchSceneTrigger : MonoBehaviour
 {
     [SerializeField] private BoxCollider triggerCollider;
     [SerializeField] private string sceneName = "Warehouse";
 
+    private bool isLoading = false;
+
     private void Start()
     {
-        // If you didn't assign it in Inspector, find the trigger collider
         if (triggerCollider == null)
         {
             triggerCollider = GetComponents<BoxCollider>()
-                .First(bc => bc.isTrigger);
+                .FirstOrDefault(bc => bc.isTrigger);
+        }
+
+        if (triggerCollider == null)
+        {
+            Debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' could not find a trigger BoxCollider.");
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the object that triggered is the player
-        if (other.CompareTag("Player"))
-        {
-            LoadScene();
-        }
+        if (isLoading) return;
+        if (!other.CompareTag("Player")) return;
+
+        LoadScene();
     }
 
     private void LoadScene()
     {
-        // Load by scene name
-        SceneManager.LoadScene(sceneName);
+        if (string.IsNullOrWhiteSpace(sceneName))
+        {
+            Debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' has no scene name assigned.");
+            return;
+        }
 
+        if (!Application.CanStreamedLevelBeLoaded(sceneName))
+        {
+            Debug.LogError($"❌ Scene '{sceneName}' cannot be loaded. Check Build Settings.");
+            return;
+        }
 
-        
-        // Or load by scene index:
-         SceneManager.LoadScene(sceneName);
+        isLoading = true;
+
+        if (SceneFader.Instance != null)
+            SceneFader.Instance.FadeToScene(sceneName);
+        else
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
     }
 }

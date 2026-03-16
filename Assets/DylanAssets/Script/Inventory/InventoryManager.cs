@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class InventoryManager : MonoBehaviour
     [Header("Current Items")]
     public ItemData[] items;
 
+    private bool hasLoadedFromDatabase = false;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -20,15 +23,31 @@ public class InventoryManager : MonoBehaviour
         }
 
         Instance = this;
-        items = new ItemData[maxSlots];
+        DontDestroyOnLoad(gameObject);
+
+        if (items == null || items.Length != maxSlots)
+            items = new ItemData[maxSlots];
     }
 
-    private System.Collections.IEnumerator Start()
+    private IEnumerator Start()
     {
-        while (DbBoot.Instance == null || ItemCatalog.Instance == null)
+        yield return StartCoroutine(WaitForSystemsAndLoad());
+    }
+
+    private IEnumerator WaitForSystemsAndLoad()
+    {
+        while (DbBoot.Instance == null)
             yield return null;
 
-        LoadFromDatabase();
+        while (ItemCatalog.Instance == null)
+            yield return null;
+
+        if (!hasLoadedFromDatabase)
+        {
+            LoadFromDatabase();
+            hasLoadedFromDatabase = true;
+            RefreshUI();
+        }
     }
 
     public bool AddItem(ItemData item)
@@ -41,6 +60,7 @@ public class InventoryManager : MonoBehaviour
             {
                 items[i] = item;
                 SaveToDatabase();
+                RefreshUI();
                 return true;
             }
         }
@@ -54,6 +74,7 @@ public class InventoryManager : MonoBehaviour
 
         items[slotIndex] = null;
         SaveToDatabase();
+        RefreshUI();
     }
 
     public ItemData GetItem(int slotIndex)
@@ -85,62 +106,55 @@ public class InventoryManager : MonoBehaviour
     }
 
     public void SaveToDatabase()
-{
-    if (DbBoot.Instance == null)
     {
-        Debug.LogWarning("InventoryManager: DbBoot not found.");
-        return;
-    }
-
-    var player = PlayerService.Get();
-    if (player == null)
-    {
-        Debug.LogWarning("InventoryManager: PlayerService.Get() returned null.");
-        return;
-    }
-
-    var db = DbBoot.Instance.Db;
-
-    var existingRows = db.Table<InventorySlot>()
-        .Where(s => s.playerId == player.id)
-        .ToList();
-
-    Debug.Log("Existing inventory rows before delete: " + existingRows.Count);
-
-    for (int i = 0; i < existingRows.Count; i++)
-        db.Delete(existingRows[i]);
-
-    int insertedCount = 0;
-
-    for (int i = 0; i < items.Length; i++)
-    {
-        if (items[i] == null)
+        if (DbBoot.Instance == null)
         {
-            Debug.Log($"Slot {i}: empty");
-            continue;
+            Debug.LogWarning("InventoryManager: DbBoot not found.");
+            return;
         }
 
-        Debug.Log($"Slot {i}: itemName={items[i].itemName}, itemKey={items[i].itemKey}");
-
-        if (string.IsNullOrWhiteSpace(items[i].itemKey))
+        var player = PlayerService.Get();
+        if (player == null)
         {
-            Debug.LogWarning($"Slot {i}: itemKey is blank, skipping DB insert.");
-            continue;
+            Debug.LogWarning("InventoryManager: PlayerService.Get() returned null.");
+            return;
         }
 
-        db.Insert(new InventorySlot
+        var db = DbBoot.Instance.Db;
+
+        var existingRows = db.Table<InventorySlot>()
+            .Where(s => s.playerId == player.id)
+            .ToList();
+
+        for (int i = 0; i < existingRows.Count; i++)
+            db.Delete(existingRows[i]);
+
+        int insertedCount = 0;
+
+        for (int i = 0; i < items.Length; i++)
         {
-            playerId = player.id,
-            slotIndex = i,
-            itemKey = items[i].itemKey,
-            itemName = items[i].itemName
-        });
+            if (items[i] == null)
+                continue;
 
-        insertedCount++;
+            if (string.IsNullOrWhiteSpace(items[i].itemKey))
+            {
+                Debug.LogWarning($"Slot {i}: itemKey is blank, skipping DB insert.");
+                continue;
+            }
+
+            db.Insert(new InventorySlot
+            {
+                playerId = player.id,
+                slotIndex = i,
+                itemKey = items[i].itemKey,
+                itemName = items[i].itemName
+            });
+
+            insertedCount++;
+        }
+
+        Debug.Log("Inventory saved to DB. Inserted rows: " + insertedCount);
     }
-
-    Debug.Log("Inventory saved to DB. Inserted rows: " + insertedCount);
-}
 
     public void LoadFromDatabase()
     {
@@ -157,9 +171,14 @@ public class InventoryManager : MonoBehaviour
         }
 
         var player = PlayerService.Get();
+        if (player == null)
+        {
+            Debug.LogWarning("InventoryManager: PlayerService.Get() returned null.");
+            return;
+        }
+
         var db = DbBoot.Instance.Db;
 
-        // Clear runtime inventory first
         for (int i = 0; i < items.Length; i++)
             items[i] = null;
 
@@ -168,40 +187,31 @@ public class InventoryManager : MonoBehaviour
             .OrderBy(s => s.slotIndex)
             .ToList();
 
-        for (int i = 0; i < savedSlots.Count; i++)
+        foreach (var row in savedSlots)
         {
-            var row = savedSlots[i];
-
             if (row.slotIndex < 0 || row.slotIndex >= items.Length)
                 continue;
 
+            Debug.Log($"Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
+
             ItemData item = ItemCatalog.Instance.GetByKey(row.itemKey);
-            if (item != null)
-                items[row.slotIndex] = item;
+
+            if (item == null)
+            {
+                Debug.LogWarning($"Load failed: no ItemData found for key '{row.itemKey}'");
+                continue;
+            }
+
+            items[row.slotIndex] = item;
         }
 
-        for (int i = 0; i < savedSlots.Count; i++)
-{
-    var row = savedSlots[i];
-
-    if (row.slotIndex < 0 || row.slotIndex >= items.Length)
-        continue;
-
-    Debug.Log($"Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
-
-    ItemData item = ItemCatalog.Instance.GetByKey(row.itemKey);
-
-    if (item == null)
-    {
-        Debug.LogWarning($"Load failed: no ItemData found for key '{row.itemKey}'");
-        continue;
+        Debug.Log("Inventory loaded from DB.");
     }
 
-    Debug.Log($"Resolved item: {item.itemName}, icon null? {item.icon == null}");
-
-    items[row.slotIndex] = item;
-}
-
-        Debug.Log("Inventory loaded from DB.");
+    public void RefreshUI()
+    {
+        InventoryUI ui = FindFirstObjectByType<InventoryUI>();
+        if (ui != null)
+            ui.RefreshUI();
     }
 }
