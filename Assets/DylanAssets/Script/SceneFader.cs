@@ -9,7 +9,7 @@ public class SceneFader : MonoBehaviour
     public static SceneFader Instance { get; private set; }
 
     [Header("Fade UI")]
-    public Image fadeImage; // Assign in Inspector (Main scene)
+    public Image fadeImage;
 
     [Header("Timing")]
     public float fadeOutDuration = 0.3f;
@@ -30,11 +30,9 @@ public class SceneFader : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // Ensure fully transparent at start
         EnsureFadeImage();
         SetAlphaImmediate(0f);
     }
@@ -42,9 +40,11 @@ public class SceneFader : MonoBehaviour
     void OnDestroy()
     {
         if (Instance == this)
+        {
             SceneManager.sceneLoaded -= OnSceneLoaded;
+            Instance = null;
+        }
     }
-
 
     public void FadeToScene(string sceneName)
     {
@@ -63,7 +63,6 @@ public class SceneFader : MonoBehaviour
         while (!op.isDone)
             yield return null;
 
-        // OnSceneLoaded will rebind fadeImage if needed
         EnsureFadeImage();
         yield return Fade(1f, 0f, fadeInDuration);
 
@@ -72,7 +71,6 @@ public class SceneFader : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // ✅ After scene changes, re-find FadeImage if the old one was destroyed
         EnsureFadeImage();
         SetAlphaImmediate(0f);
     }
@@ -81,7 +79,6 @@ public class SceneFader : MonoBehaviour
     {
         if (fadeImage != null) return;
 
-        // Looks for an Image named "FadeImage" anywhere in the scene hierarchy
         var go = GameObject.Find("FadeImage");
         if (go != null)
             fadeImage = go.GetComponent<Image>();
@@ -90,6 +87,7 @@ public class SceneFader : MonoBehaviour
     private void SetAlphaImmediate(float a)
     {
         if (fadeImage == null) return;
+
         var c = fadeImage.color;
         c.a = a;
         fadeImage.color = c;
