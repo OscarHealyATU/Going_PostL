@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "PostL - merge backup paddys day.sln"
+    "dotnet.defaultSolution": "Going_PostL.sln"
 }
