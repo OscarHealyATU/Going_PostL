@@ -200,7 +200,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1923076699}
     m_Modifications:
     - target: {fileID: 1101953651334410690, guid: 39070921814100140aa140bc9b21403a, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.25
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3207,7 +3207,10 @@ PrefabInstance:
     - {fileID: 0}
     - {fileID: 0}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8816425336331141116, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3289959}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
 --- !u!1 &850381736
@@ -3764,6 +3767,7 @@ MonoBehaviour:
   sceneToLoad: Main
   saveReturnPointBeforeSceneLoad: 0
   interactPromptText: {fileID: 1619222245}
+  triggerCollider: {fileID: 924671597}
 --- !u!65 &924671597
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4317,7 +4321,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.25
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5885,7 +5889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1619222246
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6497,6 +6501,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1913685132}
   m_CullTransparentMesh: 1
+--- !u!4 &1923076699 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8816425336331141116, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+  m_PrefabInstance: {fileID: 844681162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1926509497
 GameObject:
   m_ObjectHideFlags: 0
@@ -6800,7 +6809,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.25
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7526,7 +7535,6 @@ SceneRoots:
   - {fileID: 703230789}
   - {fileID: 924671600}
   - {fileID: 883688611}
-  - {fileID: 3289958}
   - {fileID: 8244835473539443252}
   - {fileID: 2271282892268687346}
   - {fileID: 4140260420569797758}
