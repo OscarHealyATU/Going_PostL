@@ -214,4 +214,26 @@ public class InventoryManager : MonoBehaviour
         if (ui != null)
             ui.RefreshUI();
     }
+
+    public bool RemoveFirstMatchingItem(string itemKey)
+    {
+        if (string.IsNullOrEmpty(itemKey) || items == null)
+            return false;
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i] == null)
+                continue;
+
+            if (items[i].itemKey != itemKey)
+                continue;
+
+            items[i] = null;
+            SaveToDatabase();
+            RefreshUI();
+            return true;
+        }
+
+        return false;
+    }
 }

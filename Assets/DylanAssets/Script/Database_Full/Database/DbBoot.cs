@@ -27,6 +27,7 @@ public class DbBoot : MonoBehaviour
         Db.CreateTable<VehicleType>();
         Db.CreateTable<Vehicle>();
         Db.CreateTable<InventorySlot>();
+        Db.CreateTable<DeliveryJob>();
 
         EnsurePlayerExists();
 
