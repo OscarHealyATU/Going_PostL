@@ -2,38 +2,44 @@ using UnityEngine;
 
 public class WarehousesGridify : MonoBehaviour
 {
-     [Header("Warehouse Handling")]
+    [Header("Warehouse Handling")]
     public bool hasWarehouse = false;
-    public GameObject warehousePrefab;
+    public WarehouseLocations warehouseLocations;
+    public GameObject warehouseWallPrefab;
     public int warehouseXPosition = 0;
     public int warehouseZPosition = 0;
 
     [Header("Grid Positioning")]
-    public float xStartPosition;
-    public float zStartPosition;
+    public int xStartPosition, zStartPosition;
 
     [Header("Grid Size & Spacing")]
-    public float noOfHousesX = 25f;
-    public float noOfHousesZ = 25f;
-    public float distance = 22f;
+    public int noOfHousesX = 25, noOfHousesZ = 25, distance = 22;
     public Vector3 houseScale = new Vector3(500f, 500f, 500f);
     void Start()
     {
-        for (float x = 0; x < noOfHousesX; x++)
+        for (int x = 0; x < noOfHousesX; x++)
         {
-            for (float z = 0; z < noOfHousesZ; z++)
+            for (int z = 0; z < noOfHousesZ; z++)
             {
-                bool isWarehousePosition = hasWarehouse && (x == warehouseXPosition) && (z == warehouseZPosition);
-                Vector3 position = new Vector3(xStartPosition + x * distance, 0, zStartPosition + z * distance);
+                if (!warehouseLocations.hasWarehouseAtLocation(x, z)) continue;
 
-                if (isWarehousePosition)
-                {
-                    GameObject warehouse = Instantiate(warehousePrefab, position, Quaternion.Euler(-90, 0, 0), transform);
-                    warehouse.transform.localScale = houseScale;
-                }
+                Vector3 position = new Vector3(
+                    xStartPosition + x * distance,
+                    0,
+                    zStartPosition + z * distance);
+
+                if (!warehouseLocations.hasWarehouseAtLocation(x - 1, z)) PlaceWall(position, 270f);
+                if (!warehouseLocations.hasWarehouseAtLocation(x + 1, z)) PlaceWall(position,  90f);
+                if (!warehouseLocations.hasWarehouseAtLocation(x, z - 1)) PlaceWall(position, 180f);
+                if (!warehouseLocations.hasWarehouseAtLocation(x, z + 1)) PlaceWall(position,   0f);
             }
         }
     }
+    public void PlaceWall(Vector3 position, float rotationY)
+    {
+        GameObject wall = Instantiate(warehouseWallPrefab, position, Quaternion.Euler(-90, rotationY, 0), transform);
+        wall.transform.localScale = houseScale;
+    }
 
-    
+
 }
