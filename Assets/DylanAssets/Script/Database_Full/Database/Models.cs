@@ -90,3 +90,19 @@ public class Deliverable
     public string createdAt { get; set; }
     public string deliveredAt { get; set; }
 }
+
+[Table("DeliveryJob")]
+public class DeliveryJob
+{
+    [PrimaryKey, AutoIncrement] public int id { get; set; }
+
+    public string itemId { get; set; }          // packed item identifier
+    public string itemName { get; set; }        // optional, for UI
+    public int status { get; set; }             // 0 = queued, 1 = active, 2 = complete
+
+    public float targetX { get; set; }
+    public float targetY { get; set; }
+    public float targetZ { get; set; }
+
+    public string createdAt { get; set; }
+}
