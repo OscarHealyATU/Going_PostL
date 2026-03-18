@@ -145,11 +145,20 @@ public class PackingTableUI : MonoBehaviour
         if (slot == null || slot.CurrentItem == null || InventoryManager.Instance == null)
             return;
 
-        bool added = InventoryManager.Instance.AddItem(slot.CurrentItem);
+        ItemData itemToReturn = slot.CurrentItem;
+
+        bool added = InventoryManager.Instance.AddItem(itemToReturn);
         if (!added)
         {
             SetError("Inventory is full.");
             return;
+        }
+
+        // Only create a delivery job when taking the packed result box
+        if (slot == resultSlot && DeliveryManager.Instance != null)
+        {
+            Debug.Log("RESULT SLOT TAKEN -> creating delivery job for " + itemToReturn.itemName);
+            DeliveryManager.Instance.AddDelivery(itemToReturn.itemKey, itemToReturn.itemName);
         }
 
         slot.ClearVisualOnly();
