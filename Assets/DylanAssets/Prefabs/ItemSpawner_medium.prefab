@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 2877306632965501372}
   - component: {fileID: 337207554567807353}
   - component: {fileID: 1210146516967067622}
+  - component: {fileID: 5766507536841109148}
   m_Layer: 0
   m_Name: ItemSpawner_medium
   m_TagString: Untagged
@@ -60,7 +61,7 @@ Transform:
   m_GameObject: {fileID: 4390661449616658537}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 20.06, y: 0.30904686, z: 0.16}
+  m_LocalPosition: {x: 11.03, y: 0.30904686, z: 0.2}
   m_LocalScale: {x: 3, y: 1.8, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -179,3 +180,24 @@ MonoBehaviour:
   spawnPoint: {fileID: 1121714220805132175}
   cooldownSeconds: 0.5
   feedbackText: {fileID: 0}
+--- !u!65 &5766507536841109148
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4390661449616658537}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 1.2167134, z: 0.2}
+  m_Center: {x: -1.92, y: 0.578338, z: 0.11}
