@@ -27,6 +27,8 @@ public static class DeliveryService
 
     public static DeliveryJob Create(string itemId, string itemName, Vector3 targetPosition)
     {
+        Debug.Log($"DeliveryService.Create called: itemId={itemId}, itemName={itemName}, target={targetPosition}");
+
         var db = DbBoot.Instance.Db;
 
         var job = new DeliveryJob
@@ -41,6 +43,8 @@ public static class DeliveryService
         };
 
         db.Insert(job);
+
+        Debug.Log("DeliveryService.Create inserted row with id=" + job.id);
         return job;
     }
 
@@ -57,11 +61,7 @@ public static class DeliveryService
     public static void Complete(int id)
     {
         var db = DbBoot.Instance.Db;
-        var job = db.Table<DeliveryJob>().FirstOrDefault(j => j.id == id);
-        if (job == null) return;
-
-        job.status = 2;
-        db.Update(job);
+        db.Delete<DeliveryJob>(id);
     }
 
     public static Vector3 GetTargetPosition(DeliveryJob job)

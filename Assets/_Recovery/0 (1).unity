@@ -2260,7 +2260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.5, g: 0.4976415, b: 0.4976415, a: 0.8862745}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5159,6 +5159,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488576055}
   m_CullTransparentMesh: 1
+--- !u!4 &1505960850 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9084711763802344167, guid: d7f5e9af9fcb78143b12c7442eb8aac5, type: 3}
+  m_PrefabInstance: {fileID: 7418109017113357997}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1522889849
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,7 +5523,7 @@ PrefabInstance:
     - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 2026711233}
+      objectReference: {fileID: 1505960850}
     - target: {fileID: 1197904319680628577, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: m_Name
       value: PersistentSystems
@@ -7156,11 +7161,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2002724436}
   m_CullTransparentMesh: 1
---- !u!4 &2026711233 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9084711763802344167, guid: d7f5e9af9fcb78143b12c7442eb8aac5, type: 3}
-  m_PrefabInstance: {fileID: 7418109017113357997}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2065553285
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,9 +8,10 @@ public class DbBoot : MonoBehaviour
 
     public SQLite.SQLiteConnection Db => GameDb.Db;
 
-    void Awake()
+    private void Awake()
     {
         Debug.Log("DbBoot Awake ran on: " + gameObject.name);
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -56,7 +57,7 @@ public class DbBoot : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         GameDb?.Dispose();
         GameDb = null;
