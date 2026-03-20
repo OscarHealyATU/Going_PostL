@@ -142,23 +142,51 @@ public class PackingTableUI : MonoBehaviour
 
     public void ReturnSlotToInventory(PackingSlotUI slot)
     {
-        if (slot == null || slot.CurrentItem == null || InventoryManager.Instance == null)
+        if (slot == null)
+        {
+            Debug.LogWarning("ReturnSlotToInventory: slot was null");
             return;
+        }
+
+        if (slot.CurrentItem == null)
+        {
+            Debug.LogWarning("ReturnSlotToInventory: slot.CurrentItem was null");
+            return;
+        }
+
+        if (InventoryManager.Instance == null)
+        {
+            Debug.LogWarning("ReturnSlotToInventory: InventoryManager.Instance was null");
+            return;
+        }
 
         ItemData itemToReturn = slot.CurrentItem;
+
+        Debug.Log($"ReturnSlotToInventory: returning {itemToReturn.itemName} ({itemToReturn.itemKey}) from slot {slot.name}");
 
         bool added = InventoryManager.Instance.AddItem(itemToReturn);
         if (!added)
         {
+            Debug.LogWarning("ReturnSlotToInventory: failed to add item back to inventory");
             SetError("Inventory is full.");
             return;
         }
 
-        // Only create a delivery job when taking the packed result box
-        if (slot == resultSlot && DeliveryManager.Instance != null)
+        Debug.Log("ReturnSlotToInventory: item added to inventory successfully");
+
+        if (slot == resultSlot)
         {
-            Debug.Log("RESULT SLOT TAKEN -> creating delivery job for " + itemToReturn.itemName);
-            DeliveryManager.Instance.AddDelivery(itemToReturn.itemKey, itemToReturn.itemName);
+            Debug.Log("ReturnSlotToInventory: this is the RESULT SLOT");
+
+            if (DeliveryManager.Instance == null)
+            {
+                Debug.LogWarning("ReturnSlotToInventory: DeliveryManager.Instance is NULL");
+            }
+            else
+            {
+                Debug.Log("ReturnSlotToInventory: calling DeliveryManager.AddDelivery()");
+                DeliveryManager.Instance.AddDelivery(itemToReturn.itemKey, itemToReturn.itemName);
+            }
         }
 
         slot.ClearVisualOnly();

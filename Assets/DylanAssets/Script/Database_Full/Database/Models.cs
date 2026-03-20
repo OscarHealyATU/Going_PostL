@@ -8,14 +8,12 @@ public class Player
     public double money { get; set; }
     public string createdAt { get; set; }
 
-    // existing project fields
     public int returnValid { get; set; }
     public float returnX { get; set; }
     public float returnY { get; set; }
     public float returnZ { get; set; }
     public float returnYaw { get; set; }
 }
-
 
 [Table("VehicleType")]
 public class VehicleType
@@ -61,34 +59,19 @@ public class ItemType
     [PrimaryKey, AutoIncrement] public int id { get; set; }
     [Unique] public string key { get; set; }
     public string name { get; set; }
-    public string category { get; set; } 
-    public int stackable { get; set; }   
+    public string category { get; set; }
+    public int stackable { get; set; }
     public double baseValue { get; set; }
 }
 
 [Table("InventorySlot")]
 public class InventorySlot
 {
-    [PrimaryKey, AutoIncrement]
-    public int id { get; set; }
+    [PrimaryKey, AutoIncrement] public int id { get; set; }
     public int playerId { get; set; }
     public int slotIndex { get; set; }
     public string itemKey { get; set; }
     public string itemName { get; set; }
-}
-
-[Table("Deliverable")]
-public class Deliverable
-{
-    [PrimaryKey, AutoIncrement] public int id { get; set; }
-    public int playerId { get; set; }
-    public int itemTypeId { get; set; }       
-    public int sourceItemTypeId { get; set; } 
-    public string assignedScene { get; set; }
-    public string assignedGridKey { get; set; }
-    public string status { get; set; }        
-    public string createdAt { get; set; }
-    public string deliveredAt { get; set; }
 }
 
 [Table("DeliveryJob")]
@@ -96,9 +79,9 @@ public class DeliveryJob
 {
     [PrimaryKey, AutoIncrement] public int id { get; set; }
 
-    public string itemId { get; set; }          // packed item identifier
-    public string itemName { get; set; }        // optional, for UI
-    public int status { get; set; }             // 0 = queued, 1 = active, 2 = complete
+    public string itemId { get; set; }      
+    public string itemName { get; set; }
+    public int status { get; set; }         
 
     public float targetX { get; set; }
     public float targetY { get; set; }
