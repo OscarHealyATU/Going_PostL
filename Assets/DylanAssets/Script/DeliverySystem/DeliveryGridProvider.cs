@@ -37,10 +37,13 @@ public class DeliveryGridProvider : MonoBehaviour
         {
             for (int z = 0; z < noOfHousesZ; z++)
             {
+                float baseX = xStartPosition + x * distance;
+                float baseZ = zStartPosition + z * distance;
+
                 Vector3 point = new Vector3(
-                    xStartPosition + x * distance,
+                    baseX + Random.Range(-edgePadding, edgePadding),
                     pointYOffset,
-                    zStartPosition + z * distance
+                    baseZ + Random.Range(-edgePadding, edgePadding)
                 );
 
                 if (avoidCenterArea && Vector3.Distance(point, center) < avoidRadius)
@@ -49,6 +52,8 @@ public class DeliveryGridProvider : MonoBehaviour
                 cachedPoints.Add(point);
             }
         }
+
+        Debug.Log($"DeliveryGridProvider built {cachedPoints.Count} delivery points.");
     }
 
     public Vector3 GetRandomPoint()

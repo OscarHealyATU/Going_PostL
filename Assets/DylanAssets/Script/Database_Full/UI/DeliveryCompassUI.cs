@@ -1,11 +1,13 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DeliveryCompassUI : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
+    public string playerTag = "Player";
     public RectTransform compassStrip;
     public RectTransform deliveryMarker;
     public CanvasGroup canvasGroup;
@@ -16,17 +18,45 @@ public class DeliveryCompassUI : MonoBehaviour
 
     [Header("Compass Strip")]
     public float pixelsPerDegree = 8f;
-    public float stripLoopWidth = 2880f;
     public float headingOffset = 0f;
 
     [Header("Delivery Marker")]
     public float markerMaxOffset = 250f;
     public float markerSmoothSpeed = 10f;
 
+    [Header("Scene Control")]
+    public string mainSceneName = "Main";
+
     private float currentMarkerX;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        player = null;
+        TryFindPlayer();
+    }
 
     private void Update()
     {
+        TryFindPlayer();
+
+        if (SceneManager.GetActiveScene().name != mainSceneName)
+        {
+            SetCompassVisible(false);
+            SetMarkerVisible(false);
+            SetDistanceVisible(false);
+            return;
+        }
+
         if (player == null)
         {
             SetCompassVisible(false);
@@ -35,11 +65,19 @@ public class DeliveryCompassUI : MonoBehaviour
             return;
         }
 
-        // Compass always visible while player exists
         SetCompassVisible(true);
-
         UpdateCompassStrip();
         UpdateDeliveryMarker();
+    }
+
+    private void TryFindPlayer()
+    {
+        if (player != null)
+            return;
+
+        GameObject go = GameObject.FindGameObjectWithTag(playerTag);
+        if (go != null)
+            player = go.transform;
     }
 
     private void UpdateCompassStrip()
@@ -117,10 +155,6 @@ public class DeliveryCompassUI : MonoBehaviour
             canvasGroup.alpha = visible ? 1f : 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
-        }
-        else
-        {
-            gameObject.SetActive(visible);
         }
     }
 
