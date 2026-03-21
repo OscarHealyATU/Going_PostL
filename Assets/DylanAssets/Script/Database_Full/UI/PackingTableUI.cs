@@ -12,7 +12,7 @@ public class PackingTableUI : MonoBehaviour
     public PackingSlotUI resultSlot;
 
     [Header("Crafting Result")]
-    public ItemData closedBoxItem;
+    public ItemData closedBoxItem; // must use itemKey = "box_close"
 
     [Header("Buttons")]
     public Button packButton;
@@ -20,6 +20,9 @@ public class PackingTableUI : MonoBehaviour
 
     [Header("Feedback")]
     public TMP_Text errorText;
+
+    private const string OpenBoxKey = "open_box";
+    private const string ClosedPackageKey = "box_close";
 
     private void Awake()
     {
@@ -56,7 +59,7 @@ public class PackingTableUI : MonoBehaviour
         ClearError();
     }
 
-   public void ClosePanel()
+    public void ClosePanel()
     {
         ReturnInputsToInventory();
 
@@ -131,10 +134,10 @@ public class PackingTableUI : MonoBehaviour
         if (item == null)
             return false;
 
-        if (item.itemKey == "box_open")
+        if (item.itemKey == OpenBoxKey)
             return false;
 
-        if (item.itemKey == "box_close")
+        if (item.itemKey == ClosedPackageKey)
             return false;
 
         return true;
@@ -207,6 +210,12 @@ public class PackingTableUI : MonoBehaviour
             return;
         }
 
+        if (closedBoxItem.itemKey != ClosedPackageKey)
+        {
+            SetError("Closed box item must use itemKey 'box_close'.");
+            return;
+        }
+
         if (resultSlot.CurrentItem != null)
         {
             SetError("Take the packed box first.");
@@ -227,7 +236,7 @@ public class PackingTableUI : MonoBehaviour
 
         if (boxSlot.CurrentItem.itemKey != "box_open")
         {
-            SetError("Box slot needs box_open.");
+            SetError("Box slot needs open_box.");
             return;
         }
 
