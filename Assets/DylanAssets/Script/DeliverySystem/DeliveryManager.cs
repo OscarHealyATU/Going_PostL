@@ -16,7 +16,12 @@ public class DeliveryManager : MonoBehaviour
     [Header("Optional world marker")]
     public Transform activeMarker;
 
+    [Header("Delivery Point Prefab")]
+    public DeliveryPointInteractable deliveryPointPrefab;
+    public float deliveryPointHeightOffset = 0f;
+
     private DeliveryJob currentJob;
+    private DeliveryPointInteractable activeDeliveryPoint;
 
     public DeliveryJob CurrentJob => currentJob;
 
@@ -36,6 +41,7 @@ public class DeliveryManager : MonoBehaviour
     {
         TryFindPlayer();
         RefreshCurrentJob();
+        RefreshDeliveryPoint();
     }
 
     private void OnEnable()
@@ -50,21 +56,35 @@ public class DeliveryManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        player = null;
         TryFindPlayer();
         RefreshCurrentJob();
+        RefreshDeliveryPoint();
     }
 
     private void Update()
     {
         TryFindPlayer();
 
-        if (currentJob == null || player == null)
-            return;
-
         if (SceneManager.GetActiveScene().name != mainSceneName)
         {
             if (activeMarker != null)
                 activeMarker.gameObject.SetActive(false);
+
+            if (activeDeliveryPoint != null)
+                activeDeliveryPoint.gameObject.SetActive(false);
+
+            return;
+        }
+
+        if (currentJob == null || player == null)
+        {
+            if (activeMarker != null)
+                activeMarker.gameObject.SetActive(false);
+
+            if (activeDeliveryPoint != null)
+                activeDeliveryPoint.gameObject.SetActive(false);
+
             return;
         }
 
@@ -76,9 +96,7 @@ public class DeliveryManager : MonoBehaviour
             activeMarker.position = target;
         }
 
-        float dist = Vector3.Distance(player.position, target);
-        if (dist <= completeRadius)
-            CompleteCurrentDelivery();
+        RefreshDeliveryPoint();
     }
 
     private void TryFindPlayer()
@@ -110,6 +128,8 @@ public class DeliveryManager : MonoBehaviour
 
         if (currentJob == null)
             RefreshCurrentJob();
+
+        RefreshDeliveryPoint();
     }
 
     public void RefreshCurrentJob()
@@ -123,10 +143,79 @@ public class DeliveryManager : MonoBehaviour
         }
     }
 
-    private void CompleteCurrentDelivery()
+    public Vector3? GetCurrentTarget()
     {
         if (currentJob == null)
+            return null;
+
+        return DeliveryService.GetTargetPosition(currentJob);
+    }
+
+    private void RefreshDeliveryPoint()
+    {
+        if (SceneManager.GetActiveScene().name != mainSceneName)
             return;
+
+        if (currentJob == null)
+        {
+            DestroyDeliveryPoint();
+            return;
+        }
+
+        if (deliveryPointPrefab == null)
+        {
+            Debug.LogWarning("DeliveryManager: deliveryPointPrefab is not assigned.");
+            return;
+        }
+
+        Vector3 target = DeliveryService.GetTargetPosition(currentJob) + Vector3.up * deliveryPointHeightOffset;
+
+        if (activeDeliveryPoint == null)
+        {
+            activeDeliveryPoint = Instantiate(deliveryPointPrefab, target, Quaternion.identity);
+            activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
+            Debug.Log($"Spawned delivery point for job #{currentJob.id} at {target}");
+            return;
+        }
+
+        DeliveryJob boundJob = activeDeliveryPoint.GetBoundJob();
+        if (boundJob == null || boundJob.id != currentJob.id)
+        {
+            Destroy(activeDeliveryPoint.gameObject);
+            activeDeliveryPoint = Instantiate(deliveryPointPrefab, target, Quaternion.identity);
+            activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
+            Debug.Log($"Respawned delivery point for job #{currentJob.id} at {target}");
+            return;
+        }
+
+        if (!activeDeliveryPoint.gameObject.activeSelf)
+            activeDeliveryPoint.gameObject.SetActive(true);
+
+        activeDeliveryPoint.transform.position = target;
+    }
+
+    private void DestroyDeliveryPoint()
+    {
+        if (activeDeliveryPoint != null)
+        {
+            Destroy(activeDeliveryPoint.gameObject);
+            activeDeliveryPoint = null;
+        }
+    }
+
+    public bool TryCompleteDeliveryFromPoint(DeliveryPointInteractable point, DeliveryJob job)
+    {
+        if (currentJob == null)
+            return false;
+
+        if (job == null || point == null)
+            return false;
+
+        if (currentJob.id != job.id)
+        {
+            Debug.LogWarning("DeliveryManager: attempted to complete the wrong delivery job.");
+            return false;
+        }
 
         Debug.Log($"Completed delivery #{currentJob.id} ({currentJob.itemName})");
 
@@ -142,15 +231,15 @@ public class DeliveryManager : MonoBehaviour
 
         DeliveryService.Complete(currentJob.id);
 
+        if (activeDeliveryPoint != null)
+        {
+            Destroy(activeDeliveryPoint.gameObject);
+            activeDeliveryPoint = null;
+        }
+
         currentJob = null;
         RefreshCurrentJob();
-    }
-
-    public Vector3? GetCurrentTarget()
-    {
-        if (currentJob == null)
-            return null;
-
-        return DeliveryService.GetTargetPosition(currentJob);
+        RefreshDeliveryPoint();
+        return true;
     }
 }
