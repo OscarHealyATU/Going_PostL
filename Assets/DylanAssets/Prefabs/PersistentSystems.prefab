@@ -131,3 +131,5 @@ MonoBehaviour:
   completeRadius: 4
   mainSceneName: Main
   activeMarker: {fileID: 0}
+  deliveryPointPrefab: {fileID: 6094018597685185640, guid: 3795662b50d72ba4aadeb1f939f4f2dd, type: 3}
+  deliveryPointHeightOffset: 1.5
