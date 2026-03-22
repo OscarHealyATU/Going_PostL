@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class PlayerService
 {
+    public static event Action<double> OnMoneyChanged;
+
     public static Player Get()
     {
         var db = DbBoot.Instance.Db;
@@ -16,8 +18,16 @@ public static class PlayerService
     {
         var db = DbBoot.Instance.Db;
         var player = Get();
-        player.money = newMoney;
+        player.money = Math.Round(newMoney);
         db.Update(player);
+
+        OnMoneyChanged?.Invoke(newMoney);
+    }
+
+    public static void AddMoney(double amount)
+    {
+        var player = Get();
+        SetMoney(Math.Round(player.money + amount));
     }
 
     // ----------------------------
