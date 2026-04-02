@@ -6,6 +6,7 @@ public class Player
     [PrimaryKey, AutoIncrement] public int id { get; set; }
     public string name { get; set; }
     public double money { get; set; }
+    public int totalExperience {get; set; }
     public string createdAt { get; set; }
 
     

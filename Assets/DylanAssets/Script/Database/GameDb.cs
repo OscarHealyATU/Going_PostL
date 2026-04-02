@@ -25,89 +25,91 @@ public sealed class GameDb : IDisposable
 
     private void ApplySchema()
     {
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS Player (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  money REAL NOT NULL DEFAULT 0.0,
-  createdAt TEXT NOT NULL DEFAULT (datetime('now'))
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS Player (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        money REAL NOT NULL DEFAULT 0.0,
+        totalExperience INTEGER NOT NULL DEFAULT 0,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+      );");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS VehicleType (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  baseCost REAL NOT NULL,
-  baseHealth REAL NOT NULL DEFAULT 100.0
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS VehicleType (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        baseCost REAL NOT NULL,
+        baseHealth REAL NOT NULL DEFAULT 100.0
+      );");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS Vehicle (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  vehicleTypeId INTEGER NOT NULL,
-  ownedByPlayerId INTEGER NOT NULL,
-  maxHealth REAL NOT NULL,
-  currentHealth REAL NOT NULL,
-  purchasedAt TEXT NOT NULL DEFAULT (datetime('now')),
-  FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
-  FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS Vehicle (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        vehicleTypeId INTEGER NOT NULL,
+        ownedByPlayerId INTEGER NOT NULL,
+        maxHealth REAL NOT NULL,
+        currentHealth REAL NOT NULL,
+        purchasedAt TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
+        FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
+      );");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS TransactionLog (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  playerId INTEGER NOT NULL,
-  type TEXT NOT NULL,
-  amount REAL NOT NULL,
-  description TEXT,
-  timestamp TEXT NOT NULL DEFAULT (datetime('now')),
-  FOREIGN KEY(playerId) REFERENCES Player(id)
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS TransactionLog (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        playerId INTEGER NOT NULL,
+        type TEXT NOT NULL,
+        amount REAL NOT NULL,
+        description TEXT,
+        timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY(playerId) REFERENCES Player(id)
+      );");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS ItemType (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  key TEXT NOT NULL UNIQUE,
-  name TEXT NOT NULL,
-  category TEXT NOT NULL,
-  stackable INTEGER NOT NULL DEFAULT 1,
-  baseValue REAL NOT NULL DEFAULT 0.0
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS ItemType (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        key TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL,
+        category TEXT NOT NULL,
+        stackable INTEGER NOT NULL DEFAULT 1,
+        baseValue REAL NOT NULL DEFAULT 0.0
+      );");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS InventorySlot (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  playerId INTEGER NOT NULL,
-  slotIndex INTEGER NOT NULL,
-  itemKey TEXT,
-  itemName TEXT,
-  FOREIGN KEY(playerId) REFERENCES Player(id)
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS InventorySlot (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        playerId INTEGER NOT NULL,
+        slotIndex INTEGER NOT NULL,
+        itemKey TEXT,
+        itemName TEXT,
+        FOREIGN KEY(playerId) REFERENCES Player(id)
+      );");
 
-        Db.Execute(@"
-CREATE UNIQUE INDEX IF NOT EXISTS idx_inventoryslot_player_slot
-ON InventorySlot(playerId, slotIndex);");
+      Db.Execute(@"
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_inventoryslot_player_slot
+      ON InventorySlot(playerId, slotIndex);");
 
-        Db.Execute(@"
-CREATE TABLE IF NOT EXISTS DeliveryJob (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  itemId TEXT NOT NULL,
-  itemName TEXT,
-  status INTEGER NOT NULL DEFAULT 0,
-  targetX REAL NOT NULL,
-  targetY REAL NOT NULL,
-  targetZ REAL NOT NULL,
-  createdAt TEXT NOT NULL DEFAULT (datetime('now'))
-);");
+      Db.Execute(@"
+      CREATE TABLE IF NOT EXISTS DeliveryJob (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        itemId TEXT NOT NULL,
+        itemName TEXT,
+        status INTEGER NOT NULL DEFAULT 0,
+        targetX REAL NOT NULL,
+        targetY REAL NOT NULL,
+        targetZ REAL NOT NULL,
+        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+      );");
     }
 
     private void EnsurePlayerColumns()
     {
-        AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
-        AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
-        AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
-        AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
-        AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "totalExperience", "INTERGER NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
     }
 
     private void EnsurePlayerResumeColumns()
