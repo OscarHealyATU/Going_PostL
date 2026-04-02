@@ -45,7 +45,7 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 10000.0,
+                money = 0.0,
                 createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
 
