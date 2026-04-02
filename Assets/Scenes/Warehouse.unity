@@ -782,7 +782,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.35
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1287,7 +1287,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.35
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1975,7 +1975,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.35
+  m_fontSize: 35.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3691,6 +3691,7 @@ GameObject:
   - component: {fileID: 883688611}
   - component: {fileID: 883688610}
   - component: {fileID: 883688612}
+  - component: {fileID: 883688613}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -3738,6 +3739,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19650af36b8e7d4eb0133148a123ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ForceCursorVisible
+--- !u!114 &883688613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883688609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33f0a834546a2449aad3c356ea18be8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResumeSpawnApplier
+  playerTag: Player
+  delay: 0.1
 --- !u!1 &890730246
 GameObject:
   m_ObjectHideFlags: 0

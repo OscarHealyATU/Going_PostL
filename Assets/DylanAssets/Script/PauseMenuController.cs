@@ -60,6 +60,15 @@ public class PauseMenuController : MonoBehaviour
 
     public void QuitToMainMenu()
     {
+        if (playerObject != null)
+        {
+            Vector3 pos = playerObject.transform.position;
+            float yaw = playerObject.transform.eulerAngles.y;
+            string currentScene = SceneManager.GetActiveScene().name;
+
+            PlayerService.SaveResumePoint(currentScene, pos, yaw);
+        }
+
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
     }
