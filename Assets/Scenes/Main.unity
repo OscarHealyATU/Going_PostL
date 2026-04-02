@@ -6216,7 +6216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2823967475574098949}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fed72e45e560b147bffdbbf3db1566d, type: 3}
   m_Name: 
@@ -8659,8 +8659,9 @@ GameObject:
   - component: {fileID: 8367327232738326266}
   - component: {fileID: 4251501237735710586}
   - component: {fileID: 9040405878670708864}
-  - component: {fileID: 8635745623770732199}
   - component: {fileID: 7255875252543536}
+  - component: {fileID: 9040405878670708865}
+  - component: {fileID: 9040405878670708866}
   m_Layer: 0
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -9308,7 +9309,7 @@ Transform:
   m_GameObject: {fileID: 2823967475574098949}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -40.08, y: 0, z: 0}
+  m_LocalPosition: {x: -50.2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13007,18 +13008,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8554731400100850350}
   m_CullTransparentMesh: 1
---- !u!114 &8635745623770732199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2823967475574098949}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 754a9880498f68c47b2f1db1a112dfeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ReturnToSavedPoint
 --- !u!222 &8647593563718765809
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13229,6 +13218,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JaywalkerReaction
   minVehicleSpeed: 4
+--- !u!114 &9040405878670708865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823967475574098949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e71a3f57b62db447b5d1b2f0a7e7674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReturnToSavedPointWithLookSync
+  mainSceneName: Main
+  rotate180OnReturn: 1
+  restoredCameraPitch: 0
+  clearReturnPointAfterUse: 1
+--- !u!114 &9040405878670708866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823967475574098949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f00a9008dd2bde439081fa73dbfb5af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLookOutside
+  cameraPivot: {fileID: 0}
+  mouseSensitivity: 150
+  minPitch: -80
+  maxPitch: 80
+  lockCursorOnStart: 1
 --- !u!146 &9069266730002842863
 WheelCollider:
   m_ObjectHideFlags: 0
