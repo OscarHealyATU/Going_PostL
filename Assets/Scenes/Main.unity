@@ -11507,6 +11507,7 @@ GameObject:
   - component: {fileID: 1750990411148949088}
   - component: {fileID: 6091740495711100050}
   - component: {fileID: 4153461084947423158}
+  - component: {fileID: 6091740495711100051}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -11961,6 +11962,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a376930f952590640944a31a9f80dc5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChangeScene
+--- !u!114 &6091740495711100051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5546064523343649275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a33f0a834546a2449aad3c356ea18be8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResumeSpawnApplier
+  playerTag: Player
+  delay: 0.1
 --- !u!1 &6114709840981548815
 GameObject:
   m_ObjectHideFlags: 0

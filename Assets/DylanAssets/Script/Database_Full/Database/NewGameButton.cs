@@ -23,6 +23,12 @@ public class NewGameButton : MonoBehaviour
     {
         isBusy = true;
 
+        // Clear any pending resume handoff in memory
+        ResumeSpawnData.HasPendingSpawn = false;
+        ResumeSpawnData.SceneName = null;
+        ResumeSpawnData.Position = Vector3.zero;
+        ResumeSpawnData.Yaw = 0f;
+
         // Close and remove the live DB connection if it exists
         if (DbBoot.Instance != null)
         {
@@ -60,8 +66,6 @@ public class NewGameButton : MonoBehaviour
             Debug.Log("[NewGameButton] Cleared PlayerPrefs.");
         }
 
-        // Load the first gameplay scene.
-        // DbBoot should recreate the DB there with default values.
         SceneManager.LoadScene(firstSceneName);
     }
 }
