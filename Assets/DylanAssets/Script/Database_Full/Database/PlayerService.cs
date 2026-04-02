@@ -18,16 +18,19 @@ public static class PlayerService
     {
         var db = DbBoot.Instance.Db;
         var player = Get();
-        player.money = Math.Round(newMoney);
+
+        double roundedMoney = Math.Round(newMoney);
+        player.money = roundedMoney;
+
         db.Update(player);
 
-        OnMoneyChanged?.Invoke(newMoney);
+        OnMoneyChanged?.Invoke(roundedMoney);
     }
 
     public static void AddMoney(double amount)
     {
         var player = Get();
-        SetMoney(Math.Round(player.money + amount));
+        SetMoney(player.money + amount);
     }
 
     // ----------------------------
@@ -45,6 +48,8 @@ public static class PlayerService
         player.returnYaw = yaw;
 
         db.Update(player);
+
+        Debug.Log($"[ReturnPoint] Saved: pos={position}, yaw={yaw}");
     }
 
     public static bool TryGetReturnPoint(out Vector3 position, out float yaw)
@@ -59,12 +64,15 @@ public static class PlayerService
         }
 
         position = new Vector3(
-            (float)player.returnX,
-            (float)player.returnY,
-            (float)player.returnZ
+            player.returnX,
+            player.returnY,
+            player.returnZ
         );
 
-        yaw = (float)player.returnYaw;
+        yaw = player.returnYaw;
+
+        Debug.Log($"[ReturnPoint] Loaded: pos={position}, yaw={yaw}");
+
         return true;
     }
 
@@ -72,7 +80,15 @@ public static class PlayerService
     {
         var db = DbBoot.Instance.Db;
         var player = Get();
+
         player.returnValid = 0;
+        player.returnX = 0f;
+        player.returnY = 0f;
+        player.returnZ = 0f;
+        player.returnYaw = 0f;
+
         db.Update(player);
+
+        Debug.Log("[ReturnPoint] Cleared");
     }
 }

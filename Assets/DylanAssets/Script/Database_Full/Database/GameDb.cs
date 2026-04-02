@@ -123,6 +123,7 @@ CREATE TABLE IF NOT EXISTS DeliveryJob (
         if (exists) return;
 
         Db.Execute($"ALTER TABLE {table} ADD COLUMN {column} {columnSql};");
+        Debug.Log($"[GameDb] Added missing column {table}.{column}");
     }
 
     private class PragmaColumn
