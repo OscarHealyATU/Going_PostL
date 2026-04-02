@@ -19,6 +19,7 @@ public sealed class GameDb : IDisposable
         ApplySchema();
         EnsurePlayerColumns();
         EnsureVehicleSpawnColumns();
+        EnsurePlayerResumeColumns();
         Seed();
     }
 
@@ -108,6 +109,16 @@ CREATE TABLE IF NOT EXISTS DeliveryJob (
         AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
     }
+
+    private void EnsurePlayerResumeColumns()
+  {
+      AddColumnIfMissing("Player", "hasResumePoint", "INTEGER NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "savedScene", "TEXT");
+      AddColumnIfMissing("Player", "savedX", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "savedY", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "savedZ", "REAL NOT NULL DEFAULT 0");
+      AddColumnIfMissing("Player", "savedYaw", "REAL NOT NULL DEFAULT 0");
+  }
 
     private void EnsureVehicleSpawnColumns()
     {

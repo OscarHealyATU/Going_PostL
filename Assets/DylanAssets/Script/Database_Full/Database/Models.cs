@@ -8,11 +8,20 @@ public class Player
     public double money { get; set; }
     public string createdAt { get; set; }
 
+    
     public int returnValid { get; set; }
     public float returnX { get; set; }
     public float returnY { get; set; }
     public float returnZ { get; set; }
     public float returnYaw { get; set; }
+
+
+    public int hasResumePoint { get; set; }
+    public string savedScene { get; set; }
+    public float savedX { get; set; }
+    public float savedY { get; set; }
+    public float savedZ { get; set; }
+    public float savedYaw { get; set; }
 }
 
 [Table("VehicleType")]
