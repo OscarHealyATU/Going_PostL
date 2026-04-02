@@ -2084,9 +2084,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'LClick = add items
+  m_text: 'Inventory -> Packing Table : L.Click
 
-    RClick = remove items'
+    Packing Table -> Inventory:
+    L.Click'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2113,7 +2114,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22.05
+  m_fontSize: 19.5
   m_fontSizeBase: 22.9
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2396,6 +2397,7 @@ MonoBehaviour:
   packButton: {fileID: 1455410535}
   closeButton: {fileID: 1622419391}
   errorText: {fileID: 179012923}
+  tableInteract: {fileID: 1425439796}
 --- !u!114 &480995055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5782,6 +5784,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PackingTableInteract
   packingPanel: {fileID: 480995052}
   promptText: {fileID: 1155145540}
+  playerMovement: {fileID: 7418109017113358001}
+  playerLook: {fileID: 7418109017113358000}
 --- !u!65 &1425439801
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8745,6 +8749,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8961830759655836187, guid: d7f5e9af9fcb78143b12c7442eb8aac5, type: 3}
   m_PrefabInstance: {fileID: 7418109017113357997}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7418109017113358000 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3208861065108923932, guid: d7f5e9af9fcb78143b12c7442eb8aac5, type: 3}
+  m_PrefabInstance: {fileID: 7418109017113357997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7418109017113357998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca68e10870a53a47a3a292e6d8abbe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLook
+--- !u!114 &7418109017113358001 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7654505550140861637, guid: d7f5e9af9fcb78143b12c7442eb8aac5, type: 3}
+  m_PrefabInstance: {fileID: 7418109017113357997}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7418109017113357998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8450022c67fc644db8ac6301d207093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovementInside
 --- !u!1001 &8244835473539443252
 PrefabInstance:
   m_ObjectHideFlags: 0
