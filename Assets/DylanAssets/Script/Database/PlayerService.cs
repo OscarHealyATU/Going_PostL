@@ -4,7 +4,12 @@ using UnityEngine;
 
 public static class PlayerService
 {
+    public const int ExpPerDelivery = 100;
+    public const int ExpPerLevel = 1000;
+
     public static event Action<double> OnMoneyChanged;
+    public static event Action<int, int, int> OnExperienceChanged;
+    // level, currentExpIntoLevel, expNeededThisLevel
 
     public static Player Get()
     {
@@ -52,6 +57,65 @@ public static class PlayerService
     public static double GetMoney()
     {
         return Get().money;
+    }
+
+    // ----------------------------
+    // Experience / Level
+    // ----------------------------
+    public static int GetTotalExperience()
+    {
+        return Get().totalExperience;
+    }
+
+    public static int GetLevel()
+    {
+        return (GetTotalExperience() / ExpPerLevel) + 1;
+    }
+
+    public static int GetExperienceIntoCurrentLevel()
+    {
+        return GetTotalExperience() % ExpPerLevel;
+    }
+
+    public static int GetExperienceNeededForNextLevel()
+    {
+        return ExpPerLevel;
+    }
+
+    public static float GetLevelProgress01()
+    {
+        return GetExperienceIntoCurrentLevel() / (float)ExpPerLevel;
+    }
+
+    public static void AddExperience(int amount)
+    {
+        if (amount <= 0) return;
+
+        var db = DbBoot.Instance.Db;
+        var player = Get();
+
+        int oldLevel = (player.totalExperience / ExpPerLevel) + 1;
+
+        player.totalExperience += amount;
+        db.Update(player);
+
+        int newLevel = (player.totalExperience / ExpPerLevel) + 1;
+
+        if (newLevel > oldLevel)
+        {
+            Debug.Log($"[PlayerService] Level Up! {oldLevel} -> {newLevel}");
+        }
+
+        OnExperienceChanged?.Invoke(
+            newLevel,
+            player.totalExperience % ExpPerLevel,
+            ExpPerLevel
+        );
+    }
+
+    public static void RewardDeliveryExperience()
+    {
+        AddExperience(ExpPerDelivery);
     }
 
     // ----------------------------
@@ -164,6 +228,7 @@ public static class PlayerService
         var player = Get();
 
         player.money = startingMoney;
+        player.totalExperience = 0;
 
         // clear return point
         player.returnValid = 0;
@@ -183,5 +248,22 @@ public static class PlayerService
         db.Update(player);
 
         OnMoneyChanged?.Invoke(player.money);
+        OnExperienceChanged?.Invoke(
+            GetLevel(),
+            player.totalExperience % ExpPerLevel,
+            ExpPerLevel
+        );
+    }
+
+    public static void RefreshAllUI()
+    {
+        var player = Get();
+
+        OnMoneyChanged?.Invoke(player.money);
+        OnExperienceChanged?.Invoke(
+            GetLevel(),
+            player.totalExperience % ExpPerLevel,
+            ExpPerLevel
+        );
     }
 }

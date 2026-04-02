@@ -21,6 +21,9 @@ public class PackingTableUI : MonoBehaviour
     [Header("Feedback")]
     public TMP_Text errorText;
 
+    [Header("Controller")]
+    [SerializeField] private PackingTableInteract tableInteract;
+
     private const string OpenBoxKey = "open_box";
     private const string ClosedPackageKey = "box_close";
 
@@ -68,7 +71,11 @@ public class PackingTableUI : MonoBehaviour
 
         ClearAllSlots();
         ClearError();
-        gameObject.SetActive(false);
+
+        if (tableInteract != null)
+            tableInteract.CloseUI();
+        else
+            gameObject.SetActive(false);
     }
 
     public bool TryPlaceFromInventory(ItemData item, int inventorySlotIndex)

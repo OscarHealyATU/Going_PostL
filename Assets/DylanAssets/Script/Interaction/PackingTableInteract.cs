@@ -5,69 +5,105 @@ using UnityEngine.InputSystem;
 public class PackingTableInteract : MonoBehaviour
 {
     [Header("UI")]
-    public GameObject packingPanel;
-    public TMP_Text promptText;
+    [SerializeField] private GameObject packingPanel;
+    [SerializeField] private TMP_Text promptText;
 
-    private bool _playerInRange;
+    [Header("Player")]
+    [SerializeField] private PlayerMovementInside playerMovement;
+    [SerializeField] private PlayerLook playerLook;
 
-    void Start()
+    private bool playerInRange;
+    private bool uiOpen;
+
+    private void Start()
     {
         if (packingPanel != null)
             packingPanel.SetActive(false);
 
         if (promptText != null)
             promptText.gameObject.SetActive(false);
+
+        SetGameplayLocked(false);
     }
 
-    void Update()
+    private void Update()
     {
-        if (!_playerInRange) return;
+        if (!playerInRange) return;
+        if (Keyboard.current == null) return;
 
-        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-            TogglePackingUI();
+        if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            if (uiOpen)
+                CloseUI();
+            else
+                OpenUI();
+        }
     }
 
-    private void TogglePackingUI()
+    public void OpenUI()
     {
-        if (packingPanel == null) return;
+        uiOpen = true;
 
-        bool newState = !packingPanel.activeSelf;
-        packingPanel.SetActive(newState);
+        if (packingPanel != null)
+            packingPanel.SetActive(true);
 
         if (promptText != null)
-            promptText.gameObject.SetActive(!newState);
+            promptText.gameObject.SetActive(false);
+
+        SetGameplayLocked(true);
     }
 
-    private void CloseUI()
+    public void CloseUI()
     {
+        uiOpen = false;
+
         if (packingPanel != null)
             packingPanel.SetActive(false);
 
         if (promptText != null)
-            promptText.gameObject.SetActive(false);
+            promptText.gameObject.SetActive(playerInRange);
+
+        SetGameplayLocked(false);
     }
 
-    private void ShowPrompt()
+    private void SetGameplayLocked(bool locked)
     {
-        if (promptText != null)
+        if (playerMovement != null)
+            playerMovement.enabled = !locked;
+
+        if (playerLook != null)
+            playerLook.enabled = !locked;
+
+        if (locked)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+
+        playerInRange = true;
+
+        if (!uiOpen && promptText != null)
             promptText.gameObject.SetActive(true);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        _playerInRange = true;
-
-        if (packingPanel == null || !packingPanel.activeSelf)
-            ShowPrompt();
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (!other.CompareTag("Player")) return;
-
-        _playerInRange = false;
+        playerInRange = false;
         CloseUI();
+
+        if (promptText != null)
+            promptText.gameObject.SetActive(false);
     }
 }
