@@ -66,6 +66,9 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
+<<<<<<< Updated upstream
     "Going_PostL.sln=======dotnet.defaultSolution": "PostL.sln>>>>>>>Stashedchanges",
+=======
+>>>>>>> Stashed changes
     "dotnet.defaultSolution": "PostL.sln"
 }
