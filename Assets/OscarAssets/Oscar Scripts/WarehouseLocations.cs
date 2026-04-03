@@ -8,6 +8,11 @@ public class WarehouseLocations : MonoBehaviour
 
     public void Awake()
     {
+        initWarehouseLocations();
+    }
+    // allows for testing in unity editor without needing to run the game
+    public void initWarehouseLocations()
+    {
         warehouseLocations = new bool[gridX, gridZ];
 
     /*
@@ -29,6 +34,7 @@ public class WarehouseLocations : MonoBehaviour
     // Single standalone warehouse
     SetWarehouseLocation(20, 20, true);
     }
+
 
     public void SetWarehouseLocation(int x, int z, bool hasWarehouse)
     {
