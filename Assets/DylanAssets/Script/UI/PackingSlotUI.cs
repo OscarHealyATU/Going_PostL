@@ -63,7 +63,7 @@ public class PackingSlotUI : MonoBehaviour, IPointerClickHandler, IPointerDownHa
     {
         Debug.Log("POINTER CLICK on " + name + " button: " + eventData.button);
 
-        if (eventData.button != PointerEventData.InputButton.Right)
+        if (eventData.button != PointerEventData.InputButton.Left)
             return;
 
         if (CurrentItem == null)

@@ -20,6 +20,8 @@ public class DeliveryManager : MonoBehaviour
     public DeliveryPointInteractable deliveryPointPrefab;
     public float deliveryPointHeightOffset = 0f;
 
+    [SerializeField] private double basePay = 100.0;
+
     private DeliveryJob currentJob;
     private DeliveryPointInteractable activeDeliveryPoint;
 
@@ -230,6 +232,12 @@ public class DeliveryManager : MonoBehaviour
         }
 
         DeliveryService.Complete(currentJob.id);
+
+        PlayerService.AddMoney(basePay);
+        PlayerService.RewardDeliveryExperience();
+
+        Debug.Log($"+€{basePay} earned from delivery");
+        Debug.Log($"+{PlayerService.ExpPerDelivery} XP earned from delivery");
 
         if (activeDeliveryPoint != null)
         {
