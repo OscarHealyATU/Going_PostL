@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class ResumeGameButton : MonoBehaviour
 {
     [SerializeField] private string fallbackScene = "Main";
-    [SerializeField] private string playerTag = "Player";
+    //[SerializeField] private string playerTag = "Player";
 
     public void ResumeGame()
     {
