@@ -24,6 +24,10 @@ public class DaySceneUI : MonoBehaviour
     [SerializeField] private TMP_Text totalRevenueText;
     [SerializeField] private TMP_Text experienceEarnedText;
 
+    [Header("Transition")]
+    [SerializeField] private CanvasGroup dayTransitionFadeGroup;
+    [SerializeField] private TMP_Text dayTransitionText;
+
     public GameObject ClockRoot => clockRoot;
     public TMP_Text ClockText => clockText;
     public TMP_Text DayText => dayText;
@@ -40,6 +44,9 @@ public class DaySceneUI : MonoBehaviour
     public TMP_Text MoneySpentText => moneySpentText;
     public TMP_Text TotalRevenueText => totalRevenueText;
     public TMP_Text ExperienceEarnedText => experienceEarnedText;
+
+    public CanvasGroup DayTransitionFadeGroup => dayTransitionFadeGroup;
+    public TMP_Text DayTransitionText => dayTransitionText;
 
     private void Start()
     {
