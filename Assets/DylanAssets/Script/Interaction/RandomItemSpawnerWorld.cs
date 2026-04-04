@@ -37,6 +37,17 @@ public class RandomItemSpawnerWorld : MonoBehaviour
         if (InteractionPromptUI.Instance != null)
             InteractionPromptUI.Instance.Hide();
 
+        // Only new addition: block spawning after 5 PM
+        if (DayManager.Instance != null && !DayManager.Instance.CanSpawnItems)
+        {
+            SetFeedback("The work day has ended. No more items can be spawned.");
+
+            if (InteractionPromptUI.Instance != null)
+                InteractionPromptUI.Instance.Show("Work day ended");
+
+            return;
+        }
+
         if (_currentSpawnedItem != null)
         {
             SetFeedback("An item is already waiting.");
@@ -105,7 +116,12 @@ public class RandomItemSpawnerWorld : MonoBehaviour
         _playerInRange = true;
 
         if (InteractionPromptUI.Instance != null)
-            InteractionPromptUI.Instance.Show("Press E to spawn item");
+        {
+            if (DayManager.Instance != null && !DayManager.Instance.CanSpawnItems)
+                InteractionPromptUI.Instance.Show("Work day ended");
+            else
+                InteractionPromptUI.Instance.Show("Press E to spawn item");
+        }
     }
 
     private void OnTriggerExit(Collider other)
