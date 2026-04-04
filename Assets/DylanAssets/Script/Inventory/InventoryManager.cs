@@ -7,12 +7,15 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance { get; private set; }
 
     [Header("Inventory Settings")]
-    public int maxSlots = 10;
+    [SerializeField] private int maxSlots = 3;
 
     [Header("Current Items")]
-    public ItemData[] items;
+    [SerializeField] private ItemData[] items;
 
     private bool hasLoadedFromDatabase = false;
+
+    public int MaxSlots => maxSlots;
+    public ItemData[] Items => items;
 
     private void Awake()
     {
@@ -25,8 +28,13 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        // Hard lock inventory size to 3
+        maxSlots = 3;
+
         if (items == null || items.Length != maxSlots)
             items = new ItemData[maxSlots];
+
+        Debug.Log($"[InventoryManager] Awake maxSlots={maxSlots}, items.Length={items.Length}");
     }
 
     private IEnumerator Start()
@@ -52,25 +60,35 @@ public class InventoryManager : MonoBehaviour
 
     public bool AddItem(ItemData item)
     {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
-        for (int i = 0; i < items.Length; i++)
+        maxSlots = 3;
+
+        if (items == null || items.Length != maxSlots)
+            items = new ItemData[maxSlots];
+
+        for (int i = 0; i < maxSlots; i++)
         {
-            if (items[i] == null)
-            {
-                items[i] = item;
-                SaveToDatabase();
-                RefreshUI();
-                return true;
-            }
+            if (items[i] != null)
+                continue;
+
+            items[i] = item;
+            SaveToDatabase();
+            RefreshUI();
+
+            Debug.Log($"[InventoryManager] Added '{item.itemName}' to slot {i}");
+            return true;
         }
 
+        Debug.Log($"[InventoryManager] Inventory full, could not add '{item.itemName}'");
         return false;
     }
 
     public void RemoveItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= items.Length) return;
+        if (items == null || slotIndex < 0 || slotIndex >= maxSlots)
+            return;
 
         items[slotIndex] = null;
         SaveToDatabase();
@@ -79,13 +97,18 @@ public class InventoryManager : MonoBehaviour
 
     public ItemData GetItem(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= items.Length) return null;
+        if (items == null || slotIndex < 0 || slotIndex >= maxSlots)
+            return null;
+
         return items[slotIndex];
     }
 
     public int GetFirstSlotByCategory(string category)
     {
-        for (int i = 0; i < items.Length; i++)
+        if (items == null)
+            return -1;
+
+        for (int i = 0; i < maxSlots; i++)
         {
             if (items[i] != null && items[i].category == category)
                 return i;
@@ -96,7 +119,10 @@ public class InventoryManager : MonoBehaviour
 
     public int GetFirstSlotByKey(string itemKey)
     {
-        for (int i = 0; i < items.Length; i++)
+        if (items == null)
+            return -1;
+
+        for (int i = 0; i < maxSlots; i++)
         {
             if (items[i] != null && items[i].itemKey == itemKey)
                 return i;
@@ -120,6 +146,11 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
+        maxSlots = 3;
+
+        if (items == null || items.Length != maxSlots)
+            items = new ItemData[maxSlots];
+
         var db = DbBoot.Instance.Db;
 
         var existingRows = db.Table<InventorySlot>()
@@ -131,7 +162,7 @@ public class InventoryManager : MonoBehaviour
 
         int insertedCount = 0;
 
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < maxSlots; i++)
         {
             if (items[i] == null)
                 continue;
@@ -153,7 +184,7 @@ public class InventoryManager : MonoBehaviour
             insertedCount++;
         }
 
-        Debug.Log("Inventory saved to DB. Inserted rows: " + insertedCount);
+        Debug.Log($"[InventoryManager] Inventory saved to DB. Inserted rows: {insertedCount}");
     }
 
     public void LoadFromDatabase()
@@ -177,22 +208,24 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
+        maxSlots = 3;
+
+        if (items == null || items.Length != maxSlots)
+            items = new ItemData[maxSlots];
+
         var db = DbBoot.Instance.Db;
 
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < maxSlots; i++)
             items[i] = null;
 
         var savedSlots = db.Table<InventorySlot>()
-            .Where(s => s.playerId == player.id)
+            .Where(s => s.playerId == player.id && s.slotIndex >= 0 && s.slotIndex < maxSlots)
             .OrderBy(s => s.slotIndex)
             .ToList();
 
         foreach (var row in savedSlots)
         {
-            if (row.slotIndex < 0 || row.slotIndex >= items.Length)
-                continue;
-
-            Debug.Log($"Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
+            Debug.Log($"[InventoryManager] Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
 
             ItemData item = ItemCatalog.Instance.GetByKey(row.itemKey);
 
@@ -205,7 +238,10 @@ public class InventoryManager : MonoBehaviour
             items[row.slotIndex] = item;
         }
 
-        Debug.Log("Inventory loaded from DB.");
+        // Rewrite DB so old slotIndex values above 2 are removed
+        SaveToDatabase();
+
+        Debug.Log("[InventoryManager] Inventory loaded from DB.");
     }
 
     public void RefreshUI()
@@ -220,7 +256,7 @@ public class InventoryManager : MonoBehaviour
         if (string.IsNullOrEmpty(itemKey) || items == null)
             return false;
 
-        for (int i = 0; i < items.Length; i++)
+        for (int i = 0; i < maxSlots; i++)
         {
             if (items[i] == null)
                 continue;
