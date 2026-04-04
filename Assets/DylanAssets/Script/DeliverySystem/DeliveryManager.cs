@@ -18,7 +18,13 @@ public class DeliveryManager : MonoBehaviour
 
     [Header("Delivery Point Prefab")]
     public DeliveryPointInteractable deliveryPointPrefab;
-    public float deliveryPointHeightOffset = 0f;
+
+    [Header("Delivery Point Placement")]
+    [Tooltip("How far from the center of the grid space to place the delivery point.")]
+    [SerializeField] private float borderOffsetDistance = 1.25f;
+
+    [Tooltip("Extra vertical offset for the spawned delivery point.")]
+    [SerializeField] private float deliveryPointHeightOffset = 0f;
 
     [SerializeField] private double basePay = 100.0;
 
@@ -170,13 +176,14 @@ public class DeliveryManager : MonoBehaviour
             return;
         }
 
-        Vector3 target = DeliveryService.GetTargetPosition(currentJob) + Vector3.up * deliveryPointHeightOffset;
+        Vector3 gridCenter = DeliveryService.GetTargetPosition(currentJob);
+        GetDeliveryPointPose(currentJob, gridCenter, out Vector3 spawnPosition, out Quaternion spawnRotation);
 
         if (activeDeliveryPoint == null)
         {
-            activeDeliveryPoint = Instantiate(deliveryPointPrefab, target, Quaternion.identity);
+            activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            Debug.Log($"Spawned delivery point for job #{currentJob.id} at {target}");
+            Debug.Log($"Spawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
@@ -184,16 +191,38 @@ public class DeliveryManager : MonoBehaviour
         if (boundJob == null || boundJob.id != currentJob.id)
         {
             Destroy(activeDeliveryPoint.gameObject);
-            activeDeliveryPoint = Instantiate(deliveryPointPrefab, target, Quaternion.identity);
+            activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            Debug.Log($"Respawned delivery point for job #{currentJob.id} at {target}");
+            Debug.Log($"Respawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
         if (!activeDeliveryPoint.gameObject.activeSelf)
             activeDeliveryPoint.gameObject.SetActive(true);
 
-        activeDeliveryPoint.transform.position = target;
+        activeDeliveryPoint.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+    }
+
+    private void GetDeliveryPointPose(DeliveryJob job, Vector3 gridCenter, out Vector3 position, out Quaternion rotation)
+    {
+        Vector3 outward = GetOutwardBorderDirection(job);
+        position = gridCenter + outward * borderOffsetDistance + Vector3.up * deliveryPointHeightOffset;
+        rotation = Quaternion.LookRotation(outward, Vector3.up);
+    }
+
+    private Vector3 GetOutwardBorderDirection(DeliveryJob job)
+    {
+        // Deterministic side selection so the same job always uses the same edge.
+        int seed = job != null ? job.id : 0;
+        int side = Mathf.Abs(seed) % 4;
+
+        switch (side)
+        {
+            case 0: return Vector3.forward; // north edge
+            case 1: return Vector3.right;   // east edge
+            case 2: return Vector3.back;    // south edge
+            default: return Vector3.left;   // west edge
+        }
     }
 
     private void DestroyDeliveryPoint()
