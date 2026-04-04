@@ -29,6 +29,7 @@ public class DbBoot : MonoBehaviour
         Db.CreateTable<Vehicle>();
         Db.CreateTable<InventorySlot>();
         Db.CreateTable<DeliveryJob>();
+        Db.CreateTable<DayState>();
 
         EnsurePlayerExists();
 
@@ -46,6 +47,7 @@ public class DbBoot : MonoBehaviour
             {
                 name = "Player",
                 money = 0.0,
+                totalExperience = 0,
                 createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
 

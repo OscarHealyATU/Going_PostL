@@ -232,9 +232,7 @@ public class DeliveryManager : MonoBehaviour
         }
 
         DeliveryService.Complete(currentJob.id);
-
-        PlayerService.AddMoney(basePay);
-        PlayerService.RewardDeliveryExperience();
+        PlayerService.RewardDelivery(basePay);
 
         Debug.Log($"+€{basePay} earned from delivery");
         Debug.Log($"+{PlayerService.ExpPerDelivery} XP earned from delivery");

@@ -6,16 +6,14 @@ public class Player
     [PrimaryKey, AutoIncrement] public int id { get; set; }
     public string name { get; set; }
     public double money { get; set; }
-    public int totalExperience {get; set; }
+    public int totalExperience { get; set; }
     public string createdAt { get; set; }
 
-    
     public int returnValid { get; set; }
     public float returnX { get; set; }
     public float returnY { get; set; }
     public float returnZ { get; set; }
     public float returnYaw { get; set; }
-
 
     public int hasResumePoint { get; set; }
     public string savedScene { get; set; }
@@ -98,4 +96,23 @@ public class DeliveryJob
     public float targetZ { get; set; }
 
     public string createdAt { get; set; }
+}
+
+[Table("DayState")]
+public class DayState
+{
+    [PrimaryKey] public int id { get; set; } = 1;
+
+    public int dayNumber { get; set; } = 1;
+
+    // minutes since 00:00
+    public int currentMinuteOfDay { get; set; } = 9 * 60;
+
+    public int isDayEnded { get; set; } = 0;
+
+    public int packagesDeliveredToday { get; set; } = 0;
+    public double moneyEarnedToday { get; set; } = 0;
+    public double moneySpentToday { get; set; } = 0;
+    public double totalRevenueToday { get; set; } = 0;
+    public int experienceEarnedToday { get; set; } = 0;
 }

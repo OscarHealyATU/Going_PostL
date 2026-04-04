@@ -1607,7 +1607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 645363b11678a084481d2118188fb007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResumeButtonVisibility
-  target: {fileID: 0}
+  target: {fileID: 1606104881}
 --- !u!1 &1811520943
 GameObject:
   m_ObjectHideFlags: 0
