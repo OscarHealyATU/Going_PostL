@@ -9212,13 +9212,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3664108872227137299}
     - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+      propertyPath: completeRadius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: deliveryPointPrefab
       value: 
       objectReference: {fileID: -327694671175547709, guid: ec7df25596985ea458045190742c9fc0, type: 3}
-    - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
-      propertyPath: borderOffsetDistance
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: deliveryPointHeightOffset
       value: 0.07
