@@ -4043,6 +4043,11 @@ RectTransform:
   m_AnchoredPosition: {x: 323.1, y: -227.29999}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &986281218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3395051205859444514, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+  m_PrefabInstance: {fileID: 2086600130540069211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &987087185
 GameObject:
   m_ObjectHideFlags: 0
@@ -7854,6 +7859,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1791677152}
   m_CullTransparentMesh: 1
+--- !u!114 &1793886850 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -327694671175547709, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+  m_PrefabInstance: {fileID: 2086600130540069211}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 137f567e57ac22a47823869210ac5522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeliveryPointInteractable
+--- !u!4 &1793886853 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1821273256554748202, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+  m_PrefabInstance: {fileID: 2086600130540069211}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1794317385
 GameObject:
   m_ObjectHideFlags: 0
@@ -8278,7 +8299,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1180.9387, y: 445.1006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1879072265
@@ -9214,7 +9235,11 @@ PrefabInstance:
     - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: deliveryPointPrefab
       value: 
-      objectReference: {fileID: 6094018597685185640, guid: 3795662b50d72ba4aadeb1f939f4f2dd, type: 3}
+      objectReference: {fileID: 1793886850}
+    - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+      propertyPath: deliveryPointHeightOffset
+      value: 0.07
+      objectReference: {fileID: 0}
     - target: {fileID: 1197904319680628577, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: m_Name
       value: PersistentSystems
@@ -11687,6 +11712,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -327694671175547709, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+      propertyPath: rotate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -327694671175547709, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+      propertyPath: visualRoot
+      value: 
+      objectReference: {fileID: 1793886853}
+    - target: {fileID: -327694671175547709, guid: ec7df25596985ea458045190742c9fc0, type: 3}
+      propertyPath: promptObject
+      value: 
+      objectReference: {fileID: 986281218}
     - target: {fileID: 1821273256554748202, guid: ec7df25596985ea458045190742c9fc0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 50.013683
