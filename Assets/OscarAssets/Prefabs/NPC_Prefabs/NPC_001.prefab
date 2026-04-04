@@ -1828,7 +1828,7 @@ Transform:
   m_GameObject: {fileID: 7825492270189721355}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 50.013683, y: 0.07, z: 684.18414}
+  m_LocalPosition: {x: 49.63875, y: 0.41202, z: 683.8749}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1895,13 +1895,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DeliveryPointInteractable
   interactKey: 101
-  promptRadius: 10
+  promptRadius: 5
   promptObject: {fileID: 3395051205859444514}
-  visualRoot: {fileID: 7963812300245371339}
+  visualRoot: {fileID: 1821273256554748202}
   bob: 0
   bobAmount: 0.35
   bobSpeed: 2.5
-  rotate: 1
+  rotate: 0
   rotateSpeed: 90
 --- !u!1 &7944029509177214653
 GameObject:
