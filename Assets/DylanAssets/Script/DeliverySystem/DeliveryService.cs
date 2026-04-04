@@ -64,6 +64,17 @@ public static class DeliveryService
         db.Delete<DeliveryJob>(id);
     }
 
+    public static void Complete(int id, double moneyEarned, int experienceEarned)
+    {
+        var db = DbBoot.Instance.Db;
+        db.Delete<DeliveryJob>(id);
+
+        if (DayManager.Instance != null)
+        {
+            DayManager.Instance.RegisterDelivery(moneyEarned, experienceEarned);
+        }
+    }
+
     public static Vector3 GetTargetPosition(DeliveryJob job)
     {
         return new Vector3(job.targetX, job.targetY, job.targetZ);

@@ -20,113 +20,141 @@ public sealed class GameDb : IDisposable
         EnsurePlayerColumns();
         EnsureVehicleSpawnColumns();
         EnsurePlayerResumeColumns();
+        EnsureDayStateColumns();
         Seed();
+        EnsureDayStateRow();
     }
 
     private void ApplySchema()
     {
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS Player (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        money REAL NOT NULL DEFAULT 0.0,
-        totalExperience INTEGER NOT NULL DEFAULT 0,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS Player (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL,
+          money REAL NOT NULL DEFAULT 0.0,
+          totalExperience INTEGER NOT NULL DEFAULT 0,
+          createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+        );");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS VehicleType (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE,
-        baseCost REAL NOT NULL,
-        baseHealth REAL NOT NULL DEFAULT 100.0
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS VehicleType (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL UNIQUE,
+          baseCost REAL NOT NULL,
+          baseHealth REAL NOT NULL DEFAULT 100.0
+        );");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS Vehicle (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        vehicleTypeId INTEGER NOT NULL,
-        ownedByPlayerId INTEGER NOT NULL,
-        maxHealth REAL NOT NULL,
-        currentHealth REAL NOT NULL,
-        purchasedAt TEXT NOT NULL DEFAULT (datetime('now')),
-        FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
-        FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS Vehicle (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          vehicleTypeId INTEGER NOT NULL,
+          ownedByPlayerId INTEGER NOT NULL,
+          maxHealth REAL NOT NULL,
+          currentHealth REAL NOT NULL,
+          purchasedAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
+          FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
+        );");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS TransactionLog (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        playerId INTEGER NOT NULL,
-        type TEXT NOT NULL,
-        amount REAL NOT NULL,
-        description TEXT,
-        timestamp TEXT NOT NULL DEFAULT (datetime('now')),
-        FOREIGN KEY(playerId) REFERENCES Player(id)
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS TransactionLog (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playerId INTEGER NOT NULL,
+          type TEXT NOT NULL,
+          amount REAL NOT NULL,
+          description TEXT,
+          timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(playerId) REFERENCES Player(id)
+        );");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS ItemType (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        key TEXT NOT NULL UNIQUE,
-        name TEXT NOT NULL,
-        category TEXT NOT NULL,
-        stackable INTEGER NOT NULL DEFAULT 1,
-        baseValue REAL NOT NULL DEFAULT 0.0
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS ItemType (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          key TEXT NOT NULL UNIQUE,
+          name TEXT NOT NULL,
+          category TEXT NOT NULL,
+          stackable INTEGER NOT NULL DEFAULT 1,
+          baseValue REAL NOT NULL DEFAULT 0.0
+        );");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS InventorySlot (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        playerId INTEGER NOT NULL,
-        slotIndex INTEGER NOT NULL,
-        itemKey TEXT,
-        itemName TEXT,
-        FOREIGN KEY(playerId) REFERENCES Player(id)
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS InventorySlot (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playerId INTEGER NOT NULL,
+          slotIndex INTEGER NOT NULL,
+          itemKey TEXT,
+          itemName TEXT,
+          FOREIGN KEY(playerId) REFERENCES Player(id)
+        );");
 
-      Db.Execute(@"
-      CREATE UNIQUE INDEX IF NOT EXISTS idx_inventoryslot_player_slot
-      ON InventorySlot(playerId, slotIndex);");
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_inventoryslot_player_slot
+        ON InventorySlot(playerId, slotIndex);");
 
-      Db.Execute(@"
-      CREATE TABLE IF NOT EXISTS DeliveryJob (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        itemId TEXT NOT NULL,
-        itemName TEXT,
-        status INTEGER NOT NULL DEFAULT 0,
-        targetX REAL NOT NULL,
-        targetY REAL NOT NULL,
-        targetZ REAL NOT NULL,
-        createdAt TEXT NOT NULL DEFAULT (datetime('now'))
-      );");
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS DeliveryJob (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          itemId TEXT NOT NULL,
+          itemName TEXT,
+          status INTEGER NOT NULL DEFAULT 0,
+          targetX REAL NOT NULL,
+          targetY REAL NOT NULL,
+          targetZ REAL NOT NULL,
+          createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+        );");
+
+        // New table for day / time management
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS DayState (
+          id INTEGER PRIMARY KEY,
+          dayNumber INTEGER NOT NULL DEFAULT 1,
+          currentMinuteOfDay INTEGER NOT NULL DEFAULT 540,
+          isDayEnded INTEGER NOT NULL DEFAULT 0,
+          packagesDeliveredToday INTEGER NOT NULL DEFAULT 0,
+          moneyEarnedToday REAL NOT NULL DEFAULT 0.0,
+          moneySpentToday REAL NOT NULL DEFAULT 0.0,
+          totalRevenueToday REAL NOT NULL DEFAULT 0.0,
+          experienceEarnedToday INTEGER NOT NULL DEFAULT 0
+        );");
     }
 
     private void EnsurePlayerColumns()
     {
-      AddColumnIfMissing("Player", "totalExperience", "INTERGER NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "totalExperience", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
     }
 
     private void EnsurePlayerResumeColumns()
-  {
-      AddColumnIfMissing("Player", "hasResumePoint", "INTEGER NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "savedScene", "TEXT");
-      AddColumnIfMissing("Player", "savedX", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "savedY", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "savedZ", "REAL NOT NULL DEFAULT 0");
-      AddColumnIfMissing("Player", "savedYaw", "REAL NOT NULL DEFAULT 0");
-  }
+    {
+        AddColumnIfMissing("Player", "hasResumePoint", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "savedScene", "TEXT");
+        AddColumnIfMissing("Player", "savedX", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "savedY", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "savedZ", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "savedYaw", "REAL NOT NULL DEFAULT 0");
+    }
 
     private void EnsureVehicleSpawnColumns()
     {
         AddColumnIfMissing("Vehicle", "spawnScene", "TEXT");
         AddColumnIfMissing("Vehicle", "spawnBay", "INTEGER");
         AddColumnIfMissing("Vehicle", "spawnPending", "INTEGER NOT NULL DEFAULT 1");
+    }
+
+    private void EnsureDayStateColumns()
+    {
+        AddColumnIfMissing("DayState", "dayNumber", "INTEGER NOT NULL DEFAULT 1");
+        AddColumnIfMissing("DayState", "currentMinuteOfDay", "INTEGER NOT NULL DEFAULT 540");
+        AddColumnIfMissing("DayState", "isDayEnded", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("DayState", "packagesDeliveredToday", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("DayState", "moneyEarnedToday", "REAL NOT NULL DEFAULT 0.0");
+        AddColumnIfMissing("DayState", "moneySpentToday", "REAL NOT NULL DEFAULT 0.0");
+        AddColumnIfMissing("DayState", "totalRevenueToday", "REAL NOT NULL DEFAULT 0.0");
+        AddColumnIfMissing("DayState", "experienceEarnedToday", "INTEGER NOT NULL DEFAULT 0");
     }
 
     private void AddColumnIfMissing(string table, string column, string columnSql)
@@ -172,6 +200,27 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
 ('photo_frame_metal', 'Photo Frame Metal', 'mediumItem', 0, 15.0),
 ('photo_frame_wood', 'Photo Frame Wood', 'mediumItem', 0, 15.0),
 ('toaster', 'Toaster', 'mediumItem', 0, 20.0);");
+    }
+
+    private void EnsureDayStateRow()
+    {
+        var existing = Db.Table<DayState>().FirstOrDefault();
+        if (existing != null) return;
+
+        Db.Insert(new DayState
+        {
+            id = 1,
+            dayNumber = 1,
+            currentMinuteOfDay = 16 * 60 + 55, // 9:00 AM
+            isDayEnded = 0,
+            packagesDeliveredToday = 0,
+            moneyEarnedToday = 0.0,
+            moneySpentToday = 0.0,
+            totalRevenueToday = 0.0,
+            experienceEarnedToday = 0
+        });
+
+        Debug.Log("[GameDb] Created default DayState row");
     }
 
     public void Dispose()
