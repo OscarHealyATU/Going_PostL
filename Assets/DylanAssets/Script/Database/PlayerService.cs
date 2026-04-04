@@ -8,8 +8,14 @@ public static class PlayerService
     public const int ExpPerLevel = 1000;
 
     public static event Action<double> OnMoneyChanged;
+
+    // Existing event kept for compatibility
     public static event Action<int, int, int> OnExperienceChanged;
     // level, currentExpIntoLevel, expNeededThisLevel
+
+    // New detailed event for better animation
+    public static event Action<int, int, int, int, int, int> OnExperienceChangedDetailed;
+    // oldLevel, oldExpIntoLevel, oldExpNeeded, newLevel, newExpIntoLevel, newExpNeeded
 
     public static Player Get()
     {
@@ -35,7 +41,8 @@ public static class PlayerService
 
     public static void AddMoney(double amount)
     {
-        if (amount == 0) return;
+        if (amount == 0)
+            return;
 
         var player = Get();
         SetMoney(player.money + amount);
@@ -51,6 +58,17 @@ public static class PlayerService
             return false;
 
         SetMoney(player.money - amount);
+        return true;
+    }
+
+    public static bool SpendMoney(double amount, bool trackAsDayExpense)
+    {
+        if (!TrySpendMoney(amount))
+            return false;
+
+        if (trackAsDayExpense && DayManager.Instance != null)
+            DayManager.Instance.RegisterMoneySpent(amount);
+
         return true;
     }
 
@@ -89,27 +107,53 @@ public static class PlayerService
 
     public static void AddExperience(int amount)
     {
-        if (amount <= 0) return;
+        AddExperience(amount, notifyDayManager: false);
+    }
+
+    public static void AddExperience(int amount, bool notifyDayManager)
+    {
+        if (amount <= 0)
+            return;
 
         var db = DbBoot.Instance.Db;
         var player = Get();
 
-        int oldLevel = (player.totalExperience / ExpPerLevel) + 1;
+        int oldTotalExp = player.totalExperience;
+        int oldLevel = (oldTotalExp / ExpPerLevel) + 1;
+        int oldExpIntoLevel = oldTotalExp % ExpPerLevel;
+        int oldExpNeeded = ExpPerLevel;
 
         player.totalExperience += amount;
         db.Update(player);
 
-        int newLevel = (player.totalExperience / ExpPerLevel) + 1;
+        int newTotalExp = player.totalExperience;
+        int newLevel = (newTotalExp / ExpPerLevel) + 1;
+        int newExpIntoLevel = newTotalExp % ExpPerLevel;
+        int newExpNeeded = ExpPerLevel;
 
         if (newLevel > oldLevel)
         {
             Debug.Log($"[PlayerService] Level Up! {oldLevel} -> {newLevel}");
         }
 
+        if (notifyDayManager && DayManager.Instance != null)
+        {
+            // Reserved for future non-delivery XP sources if needed.
+        }
+
+        OnExperienceChangedDetailed?.Invoke(
+            oldLevel,
+            oldExpIntoLevel,
+            oldExpNeeded,
+            newLevel,
+            newExpIntoLevel,
+            newExpNeeded
+        );
+
         OnExperienceChanged?.Invoke(
             newLevel,
-            player.totalExperience % ExpPerLevel,
-            ExpPerLevel
+            newExpIntoLevel,
+            newExpNeeded
         );
     }
 
@@ -118,8 +162,17 @@ public static class PlayerService
         AddExperience(ExpPerDelivery);
     }
 
+    public static void RewardDelivery(double moneyAmount)
+    {
+        AddMoney(moneyAmount);
+        AddExperience(ExpPerDelivery);
+
+        if (DayManager.Instance != null)
+            DayManager.Instance.RegisterDelivery(moneyAmount, ExpPerDelivery);
+    }
+
     // ----------------------------
-    // Return Point (used by your existing return scripts)
+    // Return Point
     // ----------------------------
     public static void SaveReturnPoint(Vector3 position, float yaw)
     {
@@ -227,17 +280,18 @@ public static class PlayerService
         var db = DbBoot.Instance.Db;
         var player = Get();
 
+        int oldLevel = GetLevel();
+        int oldExpIntoLevel = player.totalExperience % ExpPerLevel;
+
         player.money = startingMoney;
         player.totalExperience = 0;
 
-        // clear return point
         player.returnValid = 0;
         player.returnX = 0f;
         player.returnY = 0f;
         player.returnZ = 0f;
         player.returnYaw = 0f;
 
-        // clear resume point
         player.hasResumePoint = 0;
         player.savedScene = null;
         player.savedX = 0f;
@@ -248,9 +302,19 @@ public static class PlayerService
         db.Update(player);
 
         OnMoneyChanged?.Invoke(player.money);
+
+        OnExperienceChangedDetailed?.Invoke(
+            oldLevel,
+            oldExpIntoLevel,
+            ExpPerLevel,
+            1,
+            0,
+            ExpPerLevel
+        );
+
         OnExperienceChanged?.Invoke(
-            GetLevel(),
-            player.totalExperience % ExpPerLevel,
+            1,
+            0,
             ExpPerLevel
         );
     }
@@ -258,11 +322,23 @@ public static class PlayerService
     public static void RefreshAllUI()
     {
         var player = Get();
+        int level = (player.totalExperience / ExpPerLevel) + 1;
+        int expIntoLevel = player.totalExperience % ExpPerLevel;
 
         OnMoneyChanged?.Invoke(player.money);
+
+        OnExperienceChangedDetailed?.Invoke(
+            level,
+            expIntoLevel,
+            ExpPerLevel,
+            level,
+            expIntoLevel,
+            ExpPerLevel
+        );
+
         OnExperienceChanged?.Invoke(
-            GetLevel(),
-            player.totalExperience % ExpPerLevel,
+            level,
+            expIntoLevel,
             ExpPerLevel
         );
     }
