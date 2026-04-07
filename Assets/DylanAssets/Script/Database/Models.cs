@@ -29,6 +29,7 @@ public class VehicleType
     [PrimaryKey, AutoIncrement] public int id { get; set; }
     public string name { get; set; }
     public double baseCost { get; set; }
+    public int storageCapacity { get; set; }
     public double baseHealth { get; set; }
 }
 
@@ -105,7 +106,6 @@ public class DayState
 
     public int dayNumber { get; set; } = 1;
 
-    // minutes since 00:00
     public int currentMinuteOfDay { get; set; } = 9 * 60;
 
     public int isDayEnded { get; set; } = 0;

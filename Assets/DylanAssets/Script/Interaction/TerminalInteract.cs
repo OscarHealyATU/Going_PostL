@@ -1,81 +1,164 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class TerminalInteract : MonoBehaviour
 {
     [Header("UI")]
-    public GameObject vehicleShopPanel; // the panel to open/close
-    public TMP_Text promptText;         // "Press E..." text
+    [SerializeField] private GameObject managerPanel;
+    [SerializeField] private TMP_Text promptText;
 
-    private bool _playerInRange;
+    [Header("Player Object")]
+    [SerializeField] private GameObject playerCapsule;
 
-    void Start()
+    [Header("Detected Scripts (read only at runtime)")]
+    [SerializeField] private MonoBehaviour playerMovementScript;
+    [SerializeField] private MonoBehaviour playerLookScript;
+
+    private bool playerInRange;
+
+    private void Awake()
     {
-        if (vehicleShopPanel != null)
-            vehicleShopPanel.SetActive(false);
+        CachePlayerScripts();
+    }
+
+    private void OnValidate()
+    {
+        CachePlayerScripts();
+    }
+
+    private void Start()
+    {
+        if (managerPanel != null)
+            managerPanel.SetActive(false);
 
         if (promptText != null)
             promptText.gameObject.SetActive(false);
+
+        LockPlayer(false);
     }
 
-    void Update()
+    private void Update()
     {
-        if (!_playerInRange) return;
+        if (!playerInRange)
+            return;
+
+        if (managerPanel != null && managerPanel.activeSelf)
+            return;
 
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
-            ToggleShop();
+            OpenPanel();
     }
 
-    private void ToggleShop()
+    public void OpenPanel()
     {
-        if (vehicleShopPanel == null) return;
+        if (managerPanel == null)
+            return;
 
-        bool newState = !vehicleShopPanel.activeSelf;
-        vehicleShopPanel.SetActive(newState);
+        CachePlayerScripts();
 
-        // ✅ When opening, rebuild list from DB
-        if (newState)
-        {
-            var shop = vehicleShopPanel.GetComponentInChildren<VehicleShopUI>(true);
-            if (shop != null)
-                shop.Rebuild();
-        }
-
-        if (promptText != null)
-            promptText.gameObject.SetActive(!newState);
-    }
-
-    private void CloseShop()
-    {
-        if (vehicleShopPanel != null)
-            vehicleShopPanel.SetActive(false);
+        managerPanel.SetActive(true);
 
         if (promptText != null)
             promptText.gameObject.SetActive(false);
+
+        LockPlayer(true);
     }
 
-    private void ShowPrompt()
+    public void ClosePanel()
     {
+        if (managerPanel != null)
+            managerPanel.SetActive(false);
+
         if (promptText != null)
+            promptText.gameObject.SetActive(playerInRange);
+
+        LockPlayer(false);
+
+        RefreshPlayerUi();
+    }
+
+    private void LockPlayer(bool locked)
+    {
+        if (playerMovementScript != null)
+            playerMovementScript.enabled = !locked;
+
+        if (playerLookScript != null)
+            playerLookScript.enabled = !locked;
+
+        Cursor.visible = locked;
+        Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    private void CachePlayerScripts()
+    {
+        playerMovementScript = null;
+        playerLookScript = null;
+
+        if (playerCapsule == null)
+            return;
+
+        MonoBehaviour[] behaviours = playerCapsule.GetComponents<MonoBehaviour>();
+
+        for (int i = 0; i < behaviours.Length; i++)
+        {
+            MonoBehaviour behaviour = behaviours[i];
+            if (behaviour == null)
+                continue;
+
+            string typeName = behaviour.GetType().Name;
+
+            if (playerMovementScript == null &&
+                (typeName == "PlayerMovementInside" || typeName == "PlayerMovementOutside"))
+            {
+                playerMovementScript = behaviour;
+                continue;
+            }
+
+            if (playerLookScript == null &&
+                (typeName == "PlayerLook" || typeName == "FlyoverController"))
+            {
+                playerLookScript = behaviour;
+                continue;
+            }
+        }
+    }
+
+    private void RefreshPlayerUi()
+    {
+        if (DbBoot.Instance == null)
+            return;
+
+        PlayerService.RefreshAllUI();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player"))
+            return;
+
+        playerInRange = true;
+
+        if (promptText != null && (managerPanel == null || !managerPanel.activeSelf))
             promptText.gameObject.SetActive(true);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player"))
+            return;
 
-        _playerInRange = true;
+        playerInRange = false;
 
-        if (vehicleShopPanel == null || !vehicleShopPanel.activeSelf)
-            ShowPrompt();
+        if (promptText != null)
+            promptText.gameObject.SetActive(false);
+
+        ClosePanel();
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnDisable()
     {
-        if (!other.CompareTag("Player")) return;
-
-        _playerInRange = false;
-        CloseShop();
+        LockPlayer(false);
+        RefreshPlayerUi();
     }
 }
