@@ -18,8 +18,9 @@ public sealed class GameDb : IDisposable
 
         ApplySchema();
         EnsurePlayerColumns();
-        EnsureVehicleSpawnColumns();
         EnsurePlayerResumeColumns();
+        EnsureVehicleTypeColumns();
+        EnsureVehicleSpawnColumns();
         EnsureDayStateColumns();
         Seed();
         EnsureDayStateRow();
@@ -41,6 +42,7 @@ public sealed class GameDb : IDisposable
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL UNIQUE,
           baseCost REAL NOT NULL,
+          storageCapacity INTEGER NOT NULL DEFAULT 0,
           baseHealth REAL NOT NULL DEFAULT 100.0
         );");
 
@@ -52,6 +54,9 @@ public sealed class GameDb : IDisposable
           maxHealth REAL NOT NULL,
           currentHealth REAL NOT NULL,
           purchasedAt TEXT NOT NULL DEFAULT (datetime('now')),
+          spawnScene TEXT,
+          spawnBay INTEGER,
+          spawnPending INTEGER NOT NULL DEFAULT 1,
           FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
           FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
         );");
@@ -103,7 +108,6 @@ public sealed class GameDb : IDisposable
           createdAt TEXT NOT NULL DEFAULT (datetime('now'))
         );");
 
-        // New table for day / time management
         Db.Execute(@"
         CREATE TABLE IF NOT EXISTS DayState (
           id INTEGER PRIMARY KEY,
@@ -136,6 +140,12 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("Player", "savedY", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "savedZ", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "savedYaw", "REAL NOT NULL DEFAULT 0");
+    }
+
+    private void EnsureVehicleTypeColumns()
+    {
+        AddColumnIfMissing("VehicleType", "storageCapacity", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("VehicleType", "baseHealth", "REAL NOT NULL DEFAULT 100.0");
     }
 
     private void EnsureVehicleSpawnColumns()
@@ -174,13 +184,79 @@ public sealed class GameDb : IDisposable
 
     private void Seed()
     {
-        Db.Execute(@"
-INSERT OR IGNORE INTO VehicleType (name, baseCost, baseHealth) VALUES
-('Bicycle', 500.0, 80.0),
-('3Wheeler', 2000.0, 120.0),
-('eVan', 15000.0, 250.0),
-('Lorry', 50000.0, 400.0);");
+        SeedVehicleTypes();
+        SeedItemTypes();
+    }
 
+    private void SeedVehicleTypes()
+    {
+        UpsertVehicleType("Bicycle", 500.0, 5, 80.0);
+        UpsertVehicleType("3Wheeler", 2000.0, 20, 120.0);
+        UpsertVehicleType("eVan", 15000.0, 60, 250.0);
+        UpsertVehicleType("Lorry", 50000.0, 150, 400.0);
+
+        DeleteVehicleTypeIfExists("Zone 1");
+        DeleteVehicleTypeIfExists("Zone 2");
+        DeleteVehicleTypeIfExists("Zone 3");
+        DeleteVehicleTypeIfExists("Zone 4");
+    }
+
+    private void UpsertVehicleType(string name, double baseCost, int storageCapacity, double baseHealth)
+    {
+        var existing = Db.Table<VehicleType>().FirstOrDefault(v => v.name == name);
+
+        if (existing == null)
+        {
+            Db.Insert(new VehicleType
+            {
+                name = name,
+                baseCost = baseCost,
+                storageCapacity = storageCapacity,
+                baseHealth = baseHealth
+            });
+
+            Debug.Log($"[GameDb] Seeded VehicleType '{name}'");
+            return;
+        }
+
+        bool changed = false;
+
+        if (Math.Abs(existing.baseCost - baseCost) > 0.001)
+        {
+            existing.baseCost = baseCost;
+            changed = true;
+        }
+
+        if (existing.storageCapacity != storageCapacity)
+        {
+            existing.storageCapacity = storageCapacity;
+            changed = true;
+        }
+
+        if (Math.Abs(existing.baseHealth - baseHealth) > 0.001)
+        {
+            existing.baseHealth = baseHealth;
+            changed = true;
+        }
+
+        if (changed)
+        {
+            Db.Update(existing);
+            Debug.Log($"[GameDb] Updated VehicleType '{name}'");
+        }
+    }
+
+    private void DeleteVehicleTypeIfExists(string name)
+    {
+        var existing = Db.Table<VehicleType>().FirstOrDefault(v => v.name == name);
+        if (existing == null) return;
+
+        Db.Delete(existing);
+        Debug.Log($"[GameDb] Removed old VehicleType '{name}'");
+    }
+
+    private void SeedItemTypes()
+    {
         Db.Execute(@"
 INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUES
 ('box_open', 'Box Open', 'packingItem', 0, 5.0),
