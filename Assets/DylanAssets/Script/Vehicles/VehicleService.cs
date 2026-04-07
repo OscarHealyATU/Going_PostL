@@ -3,93 +3,144 @@ using System.Linq;
 
 public static class VehicleService
 {
-    /// <summary>
-    /// Returns true if a bay already has a vehicle assigned to it for that scene.
-    /// This counts BOTH pending and already-spawned vehicles (so the bay stays occupied permanently).
-    /// </summary>
-    public static bool IsBayOccupied(string sceneName, int bay0Based)
+    public struct PurchaseResult
     {
-        if (DbBoot.Instance == null) return false;
-
-        var db = DbBoot.Instance.Db;
-
-        return db.Table<Vehicle>()
-            .Any(v =>
-                v.spawnScene == sceneName &&
-                v.spawnBay == bay0Based &&
-                // if you want per-player bays later, include: v.ownedByPlayerId == PlayerService.Get().id
-                true
-            );
+        public bool success;
+        public string message;
+        public Vehicle purchasedVehicle;
+        public int usedSpawnPointIndex;
     }
 
-    public static Vehicle BuyVehicleQueuedForWorld(
-        int vehicleTypeId,
-        string spawnScene,
-        int spawnBay0Based)
+    public static PurchaseResult TryPurchaseVehicleAndSpawn(int vehicleTypeId)
     {
-        if (string.IsNullOrWhiteSpace(spawnScene))
-            throw new Exception("spawnScene is missing.");
+        return TryPurchaseVehicleForScene(vehicleTypeId, "Main");
+    }
 
-        if (spawnBay0Based < 0 || spawnBay0Based > 3)
-            throw new Exception("Invalid bay selected (must be 1–4).");
+    public static PurchaseResult TryPurchaseVehicleForScene(int vehicleTypeId, string targetSpawnScene)
+    {
+        PurchaseResult result = new PurchaseResult
+        {
+            success = false,
+            message = "Purchase failed.",
+            purchasedVehicle = null,
+            usedSpawnPointIndex = -1
+        };
+
+        if (DbBoot.Instance == null)
+        {
+            result.message = "Database not available.";
+            return result;
+        }
+
+        if (string.IsNullOrWhiteSpace(targetSpawnScene))
+        {
+            result.message = "Target spawn scene is invalid.";
+            return result;
+        }
 
         var db = DbBoot.Instance.Db;
         var player = PlayerService.Get();
+        var vehicleType = db.Find<VehicleType>(vehicleTypeId);
 
-        // ✅ Block purchase if bay already occupied
-        if (IsBayOccupied(spawnScene, spawnBay0Based))
-            throw new Exception($"Bay {spawnBay0Based + 1} is already occupied.");
+        if (vehicleType == null)
+        {
+            result.message = "Vehicle type not found.";
+            return result;
+        }
 
-        var type = db.Find<VehicleType>(vehicleTypeId);
-        if (type == null)
-            throw new Exception("VehicleType not found");
+        int reservedBay = GetFirstAvailableBayForScene(targetSpawnScene);
+        if (reservedBay < 0)
+        {
+            result.message = "All vehicle spawn points are currently occupied.";
+            return result;
+        }
 
-        if (player.money < type.baseCost)
-            throw new Exception($"Not enough money. Need €{type.baseCost:0}, have €{player.money:0}");
+        if (player.money < vehicleType.baseCost)
+        {
+            result.message = $"Not enough money. Need €{vehicleType.baseCost:0}.";
+            return result;
+        }
 
-        Vehicle created = null;
+        Vehicle createdVehicle = null;
+        bool purchaseCommitted = false;
 
         db.RunInTransaction(() =>
         {
-            // Re-check in transaction to avoid edge cases (double-click / two UI calls)
-            bool stillFree = !db.Table<Vehicle>()
-                .Any(v => v.spawnScene == spawnScene && v.spawnBay == spawnBay0Based);
-
-            if (!stillFree)
-                throw new Exception($"Bay {spawnBay0Based + 1} is already occupied.");
-
-            // 1) Deduct money
-            player.money -= type.baseCost;
+            player.money -= vehicleType.baseCost;
             db.Update(player);
 
-            // 2) Create vehicle instance (queued for spawn)
-            created = new Vehicle
+            createdVehicle = new Vehicle
             {
-                vehicleTypeId = type.id,
+                vehicleTypeId = vehicleType.id,
                 ownedByPlayerId = player.id,
-
-                maxHealth = type.baseHealth,
-                currentHealth = type.baseHealth,
+                maxHealth = vehicleType.baseHealth,
+                currentHealth = vehicleType.baseHealth,
                 purchasedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
-
-                spawnScene = spawnScene,
-                spawnBay = spawnBay0Based,
+                spawnScene = targetSpawnScene,
+                spawnBay = reservedBay,
                 spawnPending = 1
             };
 
-            db.Insert(created);
+            db.Insert(createdVehicle);
 
-            // 3) Log transaction
             db.Insert(new TransactionLog
             {
                 playerId = player.id,
                 type = "vehicle_buy",
-                amount = -type.baseCost,
-                description = $"Bought {type.name} (queued for {spawnScene}, bay {spawnBay0Based + 1})",
+                amount = -vehicleType.baseCost,
+                description = $"Bought {vehicleType.name} reserved for bay {reservedBay + 1} in scene {targetSpawnScene}",
                 timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
+
+            purchaseCommitted = true;
         });
 
-        return created;
+        if (!purchaseCommitted || createdVehicle == null)
+        {
+            result.message = "Purchase failed.";
+            return result;
+        }
+
+        if (DayManager.Instance != null)
+            DayManager.Instance.RegisterMoneySpent(vehicleType.baseCost);
+
+        PlayerService.RefreshAllUI();
+
+        result.success = true;
+        result.message = $"{vehicleType.name} purchased. Reserved for spawn point {reservedBay + 1}.";
+        result.purchasedVehicle = createdVehicle;
+        result.usedSpawnPointIndex = reservedBay;
+        return result;
+    }
+
+    public static int GetFirstAvailableBayForScene(string targetSpawnScene)
+    {
+        if (DbBoot.Instance == null || string.IsNullOrWhiteSpace(targetSpawnScene))
+            return -1;
+
+        var db = DbBoot.Instance.Db;
+
+        var reservedBays = db.Table<Vehicle>()
+            .Where(v => v.spawnScene == targetSpawnScene && v.spawnBay >= 0)
+            .Select(v => v.spawnBay)
+            .ToList();
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (!reservedBays.Contains(i))
+                return i;
+        }
+
+        return -1;
+    }
+
+    public static VehicleType[] GetAllVehicleTypes()
+    {
+        if (DbBoot.Instance == null)
+            return Array.Empty<VehicleType>();
+
+        return DbBoot.Instance.Db.Table<VehicleType>()
+            .OrderBy(v => v.baseCost)
+            .ToArray();
     }
 }

@@ -1,112 +1,101 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class VehicleSpawnManager : MonoBehaviour
 {
-    [Header("Scene Name (auto-detected if empty)")]
-    public string sceneName = "";
+    public static VehicleSpawnManager Instance { get; private set; }
 
-    [Header("Spawn Bays (0-based)")]
-    public Transform[] bays;
+    [Header("Scene")]
+    [SerializeField] private string sceneNameOverride = "";
 
-    [Header("Catalog maps VehicleType.name -> prefab")]
-    public VehicleCatalog catalog;
+    [Header("Spawn Points")]
+    [SerializeField] private VehicleSpawnPoint[] spawnPoints = new VehicleSpawnPoint[4];
 
-    // Track what we have spawned this session so we don't duplicate
-    private readonly HashSet<int> _spawnedVehicleIds = new HashSet<int>();
+    [Header("Vehicle Catalog")]
+    [SerializeField] private VehicleCatalog catalog;
 
-    void Start()
+    private string SceneName =>
+        string.IsNullOrWhiteSpace(sceneNameOverride)
+            ? SceneManager.GetActiveScene().name
+            : sceneNameOverride.Trim();
+
+    private void Awake()
     {
-        if (string.IsNullOrWhiteSpace(sceneName))
-            sceneName = SceneManager.GetActiveScene().name;
-
-        SpawnAllForScene();
+        Instance = this;
     }
 
-    public void SpawnAllForScene()
+    private void Start()
     {
-        if (DbBoot.Instance == null) { Debug.LogError("[VehicleSpawnManager] DbBoot.Instance is null"); return; }
-        if (catalog == null) { Debug.LogError("[VehicleSpawnManager] VehicleCatalog not assigned"); return; }
-        if (bays == null || bays.Length == 0) { Debug.LogError("[VehicleSpawnManager] No bays assigned."); return; }
+        SpawnVehiclesForThisScene();
+    }
+
+    public bool TrySpawnVehicle(int vehicleId)
+    {
+        if (DbBoot.Instance == null || catalog == null)
+            return false;
+
+        var db = DbBoot.Instance.Db;
+        var vehicle = db.Find<Vehicle>(vehicleId);
+        if (vehicle == null)
+            return false;
+
+        if (!string.Equals(vehicle.spawnScene, SceneName, StringComparison.Ordinal))
+            return false;
+
+        if (vehicle.spawnBay < 0 || vehicle.spawnBay >= spawnPoints.Length)
+            return false;
+
+        var point = spawnPoints[vehicle.spawnBay];
+        if (point == null || point.IsOccupied())
+            return false;
+
+        var type = db.Find<VehicleType>(vehicle.vehicleTypeId);
+        if (type == null)
+            return false;
+
+        if (!catalog.TryGetPrefab(type.name, out GameObject prefab) || prefab == null)
+            return false;
+
+        GameObject spawned = Instantiate(prefab, point.transform.position, point.transform.rotation);
+        spawned.name = $"Vehicle_{vehicle.id}_{type.name}";
+
+        VehicleLink link = spawned.GetComponent<VehicleLink>();
+        if (link == null)
+            link = spawned.AddComponent<VehicleLink>();
+
+        link.vehicleId = vehicle.id;
+        link.spawnPointIndex = vehicle.spawnBay;
+
+        vehicle.spawnPending = 0;
+        db.Update(vehicle);
+
+        return true;
+    }
+
+    public void SpawnVehiclesForThisScene()
+    {
+        if (DbBoot.Instance == null || catalog == null)
+            return;
 
         var db = DbBoot.Instance.Db;
 
-        // ✅ Spawn BOTH pending and already-spawned vehicles for this scene.
-        var vehiclesForThisScene = db.Table<Vehicle>()
-            .Where(v => v.spawnScene == sceneName)
-            .OrderBy(v => v.id)
+        var vehiclesForScene = db.Table<Vehicle>()
+            .Where(v => v.spawnScene == SceneName)
+            .Where(v => v.spawnBay >= 0)
+            .OrderBy(v => v.spawnBay)
+            .ThenBy(v => v.id)
             .ToList();
 
-        Debug.Log($"[VehicleSpawnManager] Vehicles in '{sceneName}' (pending+spawned): {vehiclesForThisScene.Count}");
-
-        foreach (var v in vehiclesForThisScene)
+        for (int i = 0; i < vehiclesForScene.Count; i++)
         {
-            if (_spawnedVehicleIds.Contains(v.id))
-                continue; // already spawned this session
+            var vehicle = vehiclesForScene[i];
 
-            // validate bay
-            int bayIndex = Mathf.Clamp(v.spawnBay, 0, bays.Length - 1);
-            var bay = bays[bayIndex];
-            if (bay == null)
-            {
-                Debug.LogError($"[VehicleSpawnManager] Bay missing at index {bayIndex}");
+            if (vehicle.spawnPending != 1)
                 continue;
-            }
 
-            // lookup type
-            var type = db.Find<VehicleType>(v.vehicleTypeId);
-            if (type == null)
-            {
-                Debug.LogWarning($"[VehicleSpawnManager] VehicleType missing for vehicle id={v.id}");
-                continue;
-            }
-
-            // prefab mapping
-            if (!catalog.TryGetPrefab(type.name, out var prefab) || prefab == null)
-            {
-                Debug.LogWarning($"[VehicleSpawnManager] No prefab mapped for VehicleType '{type.name}'");
-                continue;
-            }
-
-            // occupancy safety: if something is already in the bay this session, skip
-            if (IsBayOccupiedInScene(bayIndex))
-            {
-                Debug.LogWarning($"[VehicleSpawnManager] Bay {bayIndex} already occupied in-scene. Skipping vehicle id={v.id}");
-                continue;
-            }
-
-            var go = Instantiate(prefab, bay.position, bay.rotation);
-            go.name = $"Vehicle_{v.id}_{type.name}";
-
-            var link = go.GetComponent<VehicleLink>() ?? go.AddComponent<VehicleLink>();
-            link.vehicleId = v.id;
-
-            _spawnedVehicleIds.Add(v.id);
-
-            // If it was pending, mark as spawned (but keep spawnScene/spawnBay as its parking location)
-            if (v.spawnPending == 1)
-            {
-                v.spawnPending = 0;
-                db.Update(v);
-            }
-
-            Debug.Log($"[VehicleSpawnManager] Spawned vehicle id={v.id} '{type.name}' at bay={bayIndex} pendingWas={v.spawnPending}");
+            TrySpawnVehicle(vehicle.id);
         }
-    }
-
-    private bool IsBayOccupiedInScene(int bayIndex)
-    {
-        // Simple check: any VehicleLink already at/under this bay position is “occupied”
-        // If you parent vehicles under bays, this becomes even cleaner.
-        var links = FindObjectsByType<VehicleLink>(FindObjectsSortMode.None);
-        foreach (var l in links)
-        {
-            // optional: if you parent, check transform.parent == bays[bayIndex]
-            // for now, we just treat any existing vehicle whose name indicates bay occupancy as occupied.
-            // Better approach below in Part 2.
-        }
-        return false;
     }
 }
