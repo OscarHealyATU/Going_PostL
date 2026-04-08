@@ -186,11 +186,23 @@ public static class PlayerService
 
     public static void RewardDelivery(double moneyAmount)
     {
+        RewardDelivery(moneyAmount, ExpPerDelivery);
+    }
+
+    public static void RewardDelivery(double moneyAmount, int experienceAmount)
+    {
         AddMoney(moneyAmount);
-        AddExperience(ExpPerDelivery);
+        AddExperience(experienceAmount);
 
         if (DayManager.Instance != null)
-            DayManager.Instance.RegisterDelivery(moneyAmount, ExpPerDelivery);
+            DayManager.Instance.RegisterDelivery(moneyAmount, experienceAmount);
+    }
+
+    public static void RewardDeliveryForZone(double baseMoneyAmount, int zoneId)
+    {
+        int finalPay = DeliveryRewardService.GetFinalPay(Mathf.RoundToInt((float)baseMoneyAmount), zoneId);
+        int finalXp = DeliveryRewardService.GetFinalXp(ExpPerDelivery, zoneId);
+        RewardDelivery(finalPay, finalXp);
     }
 
     // ----------------------------
