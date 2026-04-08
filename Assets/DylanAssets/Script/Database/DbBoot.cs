@@ -10,7 +10,7 @@ public class DbBoot : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("DbBoot Awake ran on: " + gameObject.name);
+        Debug.Log("[DbBoot] Awake on: " + gameObject.name);
 
         if (Instance != null && Instance != this)
         {
@@ -22,18 +22,19 @@ public class DbBoot : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         GameDb = new GameDb();
-        Debug.Log("DB path: " + GameDb.DbPath);
+        Debug.Log("[DbBoot] DB path: " + GameDb.DbPath);
 
         Db.CreateTable<Player>();
         Db.CreateTable<VehicleType>();
         Db.CreateTable<Vehicle>();
+        Db.CreateTable<TransactionLog>();
+        Db.CreateTable<ItemType>();
         Db.CreateTable<InventorySlot>();
         Db.CreateTable<DeliveryJob>();
         Db.CreateTable<DayState>();
 
         EnsurePlayerExists();
 
-        VehicleTypeStore.LoadOrSeedDefaults(Db);
         Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
     }
 
@@ -46,16 +47,29 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 0.0,
+                money = 100000.00,
                 totalExperience = 0,
-                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+
+                returnValid = 0,
+                returnX = 0f,
+                returnY = 0f,
+                returnZ = 0f,
+                returnYaw = 0f,
+
+                hasResumePoint = 0,
+                savedScene = null,
+                savedX = 0f,
+                savedY = 0f,
+                savedZ = 0f,
+                savedYaw = 0f
             });
 
-            Debug.Log("Created Player row");
+            Debug.Log("[DbBoot] Created Player row");
         }
         else
         {
-            Debug.Log("Player exists id=" + player.id);
+            Debug.Log("[DbBoot] Player exists id=" + player.id);
         }
     }
 

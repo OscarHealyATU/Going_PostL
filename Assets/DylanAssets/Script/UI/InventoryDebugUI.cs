@@ -32,9 +32,9 @@ public class InventoryDebugUI : MonoBehaviour
         StringBuilder sb = new StringBuilder();
         sb.AppendLine("Inventory Debug");
 
-        for (int i = 0; i < InventoryManager.Instance.items.Length; i++)
+        for (int i = 0; i < InventoryManager.Instance.Items.Length; i++)
         {
-            ItemData item = InventoryManager.Instance.items[i];
+            ItemData item = InventoryManager.Instance.Items[i];
 
             if (item == null)
                 sb.AppendLine($"Slot {i}: Empty");

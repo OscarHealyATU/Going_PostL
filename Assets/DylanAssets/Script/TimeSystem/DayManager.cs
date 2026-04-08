@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,16 @@ public class DayManager : MonoBehaviour
     [SerializeField] private PlayerLook playerLookScript;
     [SerializeField] private FlyoverController flyoverLookScript;
     [SerializeField] private bool unlockCursorWhenSummaryOpen = true;
+
+    [Header("New Day Transition")]
+    [SerializeField] private float fadeOutDuration = 0.35f;
+    [SerializeField] private float fadeInDuration = 0.35f;
+    [SerializeField] private float blackScreenHold = 0.35f;
+    [SerializeField] private float dayMessageHold = 1.0f;
+    [SerializeField] private string dayMessageFormat = "DAY {0}";
+
+    private CanvasGroup dayTransitionFadeGroup;
+    private TMP_Text dayTransitionText;
 
     private GameObject clockRoot;
     private TMP_Text clockText;
@@ -56,6 +67,8 @@ public class DayManager : MonoBehaviour
     public bool IsDayEnded => state != null && state.isDayEnded == 1;
     public int CurrentMinuteOfDay => state != null ? state.currentMinuteOfDay : StartMinute;
     public int CurrentDayNumber => state != null ? state.dayNumber : 1;
+
+    private bool isTransitioningDay;
 
     private SQLite.SQLiteConnection Db
     {
@@ -138,8 +151,29 @@ public class DayManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        clockRoot = null;
+        clockText = null;
+        dayText = null;
+
+        endDayButtonObject = null;
+        endDayButton = null;
+        startNextDayButton = null;
+        closeSummaryButton = null;
+
+        daySummaryPanel = null;
+        summaryTitleText = null;
+        packagesDeliveredText = null;
+        moneyEarnedText = null;
+        moneySpentText = null;
+        totalRevenueText = null;
+        experienceEarnedText = null;
+
+        dayTransitionFadeGroup = null;
+        dayTransitionText = null;
+
         CachePlayerControlScripts();
         RefreshUIImmediate();
+
         Debug.Log("[DayManager] Scene loaded: " + scene.name);
     }
 
@@ -174,8 +208,36 @@ public class DayManager : MonoBehaviour
         totalRevenueText = ui.TotalRevenueText;
         experienceEarnedText = ui.ExperienceEarnedText;
 
+        dayTransitionFadeGroup = ui.DayTransitionFadeGroup;
+        dayTransitionText = ui.DayTransitionText;
+
         WireButtons();
         RefreshUIImmediate();
+
+        if (dayTransitionFadeGroup != null)
+        {
+            if (!isTransitioningDay)
+            {
+                dayTransitionFadeGroup.alpha = 0f;
+                dayTransitionFadeGroup.blocksRaycasts = false;
+                dayTransitionFadeGroup.interactable = false;
+            }
+            else
+            {
+                dayTransitionFadeGroup.alpha = 1f;
+                dayTransitionFadeGroup.blocksRaycasts = true;
+                dayTransitionFadeGroup.interactable = true;
+            }
+        }
+
+        if (dayTransitionText != null)
+        {
+            if (!isTransitioningDay)
+            {
+                dayTransitionText.gameObject.SetActive(false);
+                dayTransitionText.text = string.Empty;
+            }
+        }
 
         Debug.Log("[DayManager] Scene UI bound.");
     }
@@ -340,6 +402,9 @@ public class DayManager : MonoBehaviour
 
     public void StartNextDay()
     {
+        if (isTransitioningDay)
+            return;
+
         Debug.Log("[DayManager] StartNextDay called.");
 
         if (state == null)
@@ -351,6 +416,55 @@ public class DayManager : MonoBehaviour
             return;
         }
 
+        StartCoroutine(StartNextDayRoutine());
+    }
+
+    private IEnumerator StartNextDayRoutine()
+    {
+        isTransitioningDay = true;
+
+        if (startNextDayButton != null)
+            startNextDayButton.interactable = false;
+
+        if (closeSummaryButton != null)
+            closeSummaryButton.interactable = false;
+
+        int nextDayNumber = state.dayNumber + 1;
+
+        yield return FadeCanvasGroup(dayTransitionFadeGroup, 0f, 1f, fadeOutDuration);
+        yield return new WaitForSecondsRealtime(blackScreenHold);
+
+        BeginNextDayStateOnly();
+
+        SceneManager.LoadScene(warehouseSceneName);
+
+        while (dayTransitionFadeGroup == null || dayTransitionText == null)
+            yield return null;
+
+        dayTransitionText.text = string.Format(dayMessageFormat, nextDayNumber);
+        dayTransitionText.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(dayMessageHold);
+
+        if (dayTransitionText != null)
+        {
+            dayTransitionText.gameObject.SetActive(false);
+            dayTransitionText.text = string.Empty;
+        }
+
+        yield return FadeCanvasGroup(dayTransitionFadeGroup, 1f, 0f, fadeInDuration);
+
+        if (dayTransitionFadeGroup != null)
+        {
+            dayTransitionFadeGroup.blocksRaycasts = false;
+            dayTransitionFadeGroup.interactable = false;
+        }
+
+        isTransitioningDay = false;
+    }
+
+    private void BeginNextDayStateOnly()
+    {
         state.dayNumber += 1;
         state.currentMinuteOfDay = StartMinute;
         state.isDayEnded = 0;
@@ -367,7 +481,35 @@ public class DayManager : MonoBehaviour
         CloseDaySummary();
 
         Debug.Log("[DayManager] Starting Day " + state.dayNumber + ". Loading scene: " + warehouseSceneName);
-        SceneManager.LoadScene(warehouseSceneName);
+    }
+
+    private IEnumerator FadeCanvasGroup(CanvasGroup group, float from, float to, float duration)
+    {
+        if (group == null)
+            yield break;
+
+        group.gameObject.SetActive(true);
+        group.blocksRaycasts = true;
+        group.interactable = true;
+        group.alpha = from;
+
+        if (duration <= 0f)
+        {
+            group.alpha = to;
+            yield break;
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            group.alpha = Mathf.Lerp(from, to, t);
+            yield return null;
+        }
+
+        group.alpha = to;
     }
 
     public void ForceEndDayNow()

@@ -9,11 +9,9 @@ public static class PlayerService
 
     public static event Action<double> OnMoneyChanged;
 
-    // Existing event kept for compatibility
     public static event Action<int, int, int> OnExperienceChanged;
     // level, currentExpIntoLevel, expNeededThisLevel
 
-    // New detailed event for better animation
     public static event Action<int, int, int, int, int, int> OnExperienceChangedDetailed;
     // oldLevel, oldExpIntoLevel, oldExpNeeded, newLevel, newExpIntoLevel, newExpNeeded
 
@@ -90,9 +88,25 @@ public static class PlayerService
         return (GetTotalExperience() / ExpPerLevel) + 1;
     }
 
+    public static int GetLevel(Player player)
+    {
+        if (player == null)
+            return 1;
+
+        return (player.totalExperience / ExpPerLevel) + 1;
+    }
+
     public static int GetExperienceIntoCurrentLevel()
     {
         return GetTotalExperience() % ExpPerLevel;
+    }
+
+    public static int GetExperienceIntoCurrentLevel(Player player)
+    {
+        if (player == null)
+            return 0;
+
+        return player.totalExperience % ExpPerLevel;
     }
 
     public static int GetExperienceNeededForNextLevel()
@@ -103,6 +117,14 @@ public static class PlayerService
     public static float GetLevelProgress01()
     {
         return GetExperienceIntoCurrentLevel() / (float)ExpPerLevel;
+    }
+
+    public static float GetLevelProgress01(Player player)
+    {
+        if (player == null)
+            return 0f;
+
+        return (player.totalExperience % ExpPerLevel) / (float)ExpPerLevel;
     }
 
     public static void AddExperience(int amount)
@@ -322,8 +344,8 @@ public static class PlayerService
     public static void RefreshAllUI()
     {
         var player = Get();
-        int level = (player.totalExperience / ExpPerLevel) + 1;
-        int expIntoLevel = player.totalExperience % ExpPerLevel;
+        int level = GetLevel(player);
+        int expIntoLevel = GetExperienceIntoCurrentLevel(player);
 
         OnMoneyChanged?.Invoke(player.money);
 

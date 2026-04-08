@@ -25,9 +25,17 @@ public class InventoryUI : MonoBehaviour
         if (InventoryManager.Instance == null)
             return;
 
+        int maxSlots = InventoryManager.Instance.MaxSlots;
+
         for (int i = 0; i < slots.Count; i++)
         {
             if (slots[i] == null)
+                continue;
+
+            bool slotIsValid = i < maxSlots;
+            slots[i].gameObject.SetActive(slotIsValid);
+
+            if (!slotIsValid)
                 continue;
 
             ItemData item = InventoryManager.Instance.GetItem(i);
