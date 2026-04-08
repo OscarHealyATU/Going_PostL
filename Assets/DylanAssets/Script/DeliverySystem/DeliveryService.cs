@@ -27,7 +27,12 @@ public static class DeliveryService
 
     public static DeliveryJob Create(string itemId, string itemName, Vector3 targetPosition)
     {
-        Debug.Log($"DeliveryService.Create called: itemId={itemId}, itemName={itemName}, target={targetPosition}");
+        return Create(itemId, itemName, targetPosition, 1);
+    }
+
+    public static DeliveryJob Create(string itemId, string itemName, Vector3 targetPosition, int zoneId)
+    {
+        Debug.Log($"DeliveryService.Create called: itemId={itemId}, itemName={itemName}, target={targetPosition}, zoneId={zoneId}");
 
         var db = DbBoot.Instance.Db;
 
@@ -39,6 +44,7 @@ public static class DeliveryService
             targetX = targetPosition.x,
             targetY = targetPosition.y,
             targetZ = targetPosition.z,
+            zoneId = zoneId,
             createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
         };
 
@@ -78,5 +84,13 @@ public static class DeliveryService
     public static Vector3 GetTargetPosition(DeliveryJob job)
     {
         return new Vector3(job.targetX, job.targetY, job.targetZ);
+    }
+
+    public static int GetZoneId(DeliveryJob job)
+    {
+        if (job == null)
+            return 1;
+
+        return job.zoneId <= 0 ? 1 : job.zoneId;
     }
 }

@@ -96,6 +96,8 @@ public class DeliveryJob
     public float targetY { get; set; }
     public float targetZ { get; set; }
 
+    public int zoneId { get; set; }
+
     public string createdAt { get; set; }
 }
 
@@ -105,9 +107,7 @@ public class DayState
     [PrimaryKey] public int id { get; set; } = 1;
 
     public int dayNumber { get; set; } = 1;
-
     public int currentMinuteOfDay { get; set; } = 9 * 60;
-
     public int isDayEnded { get; set; } = 0;
 
     public int packagesDeliveredToday { get; set; } = 0;
@@ -115,4 +115,25 @@ public class DayState
     public double moneySpentToday { get; set; } = 0;
     public double totalRevenueToday { get; set; } = 0;
     public int experienceEarnedToday { get; set; } = 0;
+}
+
+[Table("DeliveryZone")]
+public class DeliveryZone
+{
+    [PrimaryKey] public int id { get; set; }
+    public string name { get; set; }
+    public int unlockCost { get; set; }
+    public int requiredLevel { get; set; }
+    public float payMultiplier { get; set; }
+    public float xpMultiplier { get; set; }
+    public int startsUnlocked { get; set; }
+}
+
+[Table("PlayerZoneUnlock")]
+public class PlayerZoneUnlock
+{
+    [PrimaryKey, AutoIncrement] public int id { get; set; }
+    public int playerId { get; set; }
+    public int zoneId { get; set; }
+    public string unlockedAt { get; set; }
 }
