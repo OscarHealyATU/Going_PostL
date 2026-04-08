@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,7 +29,9 @@ public class DeliveryManager : MonoBehaviour
     [Tooltip("Extra vertical offset for the spawned delivery point.")]
     [SerializeField] private float deliveryPointHeightOffset = 0f;
 
+    [Header("Rewards")]
     [SerializeField] private double basePay = 100.0;
+    [SerializeField] private int baseDeliveryExperience = PlayerService.ExpPerDelivery;
 
     private DeliveryJob currentJob;
     private DeliveryPointInteractable activeDeliveryPoint;
@@ -127,12 +132,21 @@ public class DeliveryManager : MonoBehaviour
             return;
         }
 
-        Vector3 point = DeliveryGridProvider.Instance.GetRandomPoint();
-        Debug.Log("AddDelivery: got random point " + point);
+        DeliveryZone selectedZone = GetRandomUnlockedZone();
+        int zoneId = selectedZone != null ? selectedZone.id : 1;
 
-        var job = DeliveryService.Create(itemId, itemName, point);
+        Vector3 point;
+        if (!TryGetRandomPointForZone(zoneId, out point))
+        {
+            Debug.LogWarning($"DeliveryManager: could not get random point for zone {zoneId}.");
+            return;
+        }
 
-        Debug.Log($"Created delivery job #{job.id} for {itemName} at {point}");
+        Debug.Log($"AddDelivery: got random point {point} for zone {zoneId}");
+
+        var job = DeliveryService.Create(itemId, itemName, point, zoneId);
+
+        Debug.Log($"Created delivery job #{job.id} for {itemName} at {point} in zone {zoneId}");
 
         if (currentJob == null)
             RefreshCurrentJob();
@@ -212,16 +226,15 @@ public class DeliveryManager : MonoBehaviour
 
     private Vector3 GetOutwardBorderDirection(DeliveryJob job)
     {
-        // Deterministic side selection so the same job always uses the same edge.
         int seed = job != null ? job.id : 0;
         int side = Mathf.Abs(seed) % 4;
 
         switch (side)
         {
-            case 0: return Vector3.forward; // north edge
-            case 1: return Vector3.right;   // east edge
-            case 2: return Vector3.back;    // south edge
-            default: return Vector3.left;   // west edge
+            case 0: return Vector3.forward;
+            case 1: return Vector3.right;
+            case 2: return Vector3.back;
+            default: return Vector3.left;
         }
     }
 
@@ -260,11 +273,15 @@ public class DeliveryManager : MonoBehaviour
             }
         }
 
-        DeliveryService.Complete(currentJob.id);
-        PlayerService.RewardDelivery(basePay);
+        int zoneId = DeliveryService.GetZoneId(currentJob);
+        int finalPay = DeliveryRewardService.GetFinalPay(Mathf.RoundToInt((float)basePay), zoneId);
+        int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
 
-        Debug.Log($"+€{basePay} earned from delivery");
-        Debug.Log($"+{PlayerService.ExpPerDelivery} XP earned from delivery");
+        DeliveryService.Complete(currentJob.id);
+        PlayerService.RewardDelivery(finalPay, finalXp);
+
+        Debug.Log($"+€{finalPay} earned from delivery in zone {zoneId}");
+        Debug.Log($"+{finalXp} XP earned from delivery in zone {zoneId}");
 
         if (activeDeliveryPoint != null)
         {
@@ -276,5 +293,96 @@ public class DeliveryManager : MonoBehaviour
         RefreshCurrentJob();
         RefreshDeliveryPoint();
         return true;
+    }
+
+    private DeliveryZone GetRandomUnlockedZone()
+    {
+        var unlockedZones = ZoneService.GetUnlockedZones();
+
+        if (unlockedZones == null || unlockedZones.Count == 0)
+        {
+            var fallback = DbBoot.Instance.Db.Find<DeliveryZone>(1);
+            if (fallback != null)
+                return fallback;
+
+            return new DeliveryZone
+            {
+                id = 1,
+                name = "Zone 1",
+                unlockCost = 0,
+                requiredLevel = 1,
+                payMultiplier = 1f,
+                xpMultiplier = 1f,
+                startsUnlocked = 1
+            };
+        }
+
+        int index = UnityEngine.Random.Range(0, unlockedZones.Count);
+        return unlockedZones[index];
+    }
+
+    private bool TryGetRandomPointForZone(int zoneId, out Vector3 point)
+    {
+        point = Vector3.zero;
+
+        if (DeliveryGridProvider.Instance == null)
+            return false;
+
+        object provider = DeliveryGridProvider.Instance;
+        Type providerType = provider.GetType();
+
+        MethodInfo zoneMethod = providerType.GetMethod(
+            "GetRandomPointInZone",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null,
+            new Type[] { typeof(int) },
+            null);
+
+        if (zoneMethod != null)
+        {
+            object result = zoneMethod.Invoke(provider, new object[] { zoneId });
+            if (result is Vector3 vectorResult)
+            {
+                point = vectorResult;
+                return true;
+            }
+        }
+
+        MethodInfo fallbackZoneMethod = providerType.GetMethod(
+            "GetRandomPointForZone",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null,
+            new Type[] { typeof(int) },
+            null);
+
+        if (fallbackZoneMethod != null)
+        {
+            object result = fallbackZoneMethod.Invoke(provider, new object[] { zoneId });
+            if (result is Vector3 vectorResult)
+            {
+                point = vectorResult;
+                return true;
+            }
+        }
+
+        MethodInfo oldMethod = providerType.GetMethod(
+            "GetRandomPoint",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+            null,
+            Type.EmptyTypes,
+            null);
+
+        if (oldMethod != null)
+        {
+            object result = oldMethod.Invoke(provider, null);
+            if (result is Vector3 vectorResult)
+            {
+                point = vectorResult;
+                Debug.LogWarning($"DeliveryManager: DeliveryGridProvider has no zone-aware method yet, using fallback GetRandomPoint() for zone {zoneId}.");
+                return true;
+            }
+        }
+
+        return false;
     }
 }
