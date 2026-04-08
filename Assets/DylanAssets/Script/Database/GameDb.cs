@@ -243,8 +243,6 @@ public sealed class GameDb : IDisposable
         DeleteVehicleTypeIfExists("Zone 2");
         DeleteVehicleTypeIfExists("Zone 3");
         DeleteVehicleTypeIfExists("Zone 4");
-        DeleteVehicleTypeIfExists("Zone 5");
-        DeleteVehicleTypeIfExists("Zone 6");
     }
 
     private void UpsertVehicleType(string name, double baseCost, int storageCapacity, double baseHealth)
@@ -330,8 +328,6 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
         UpsertDeliveryZone(2, "Zone 2", 2500,  2, 1.20f, 1.15f, 0);
         UpsertDeliveryZone(3, "Zone 3", 6000,  4, 1.45f, 1.30f, 0);
         UpsertDeliveryZone(4, "Zone 4", 11000, 6, 1.75f, 1.50f, 0);
-        UpsertDeliveryZone(5, "Zone 5", 18000, 8, 2.10f, 1.75f, 0);
-        UpsertDeliveryZone(6, "Zone 6", 30000, 10, 2.50f, 2.10f, 0);
     }
 
     private void UpsertDeliveryZone(
