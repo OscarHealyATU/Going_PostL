@@ -64,21 +64,20 @@ public static class DeliveryService
         db.Update(job);
     }
 
-    public static void Complete(int id)
-    {
-        var db = DbBoot.Instance.Db;
-        db.Delete<DeliveryJob>(id);
-    }
-
     public static void Complete(int id, double moneyEarned, int experienceEarned)
     {
         var db = DbBoot.Instance.Db;
-        db.Delete<DeliveryJob>(id);
 
-        if (DayManager.Instance != null)
+        var job = db.Table<DeliveryJob>().FirstOrDefault(j => j.id == id);
+        if (job == null)
         {
-            DayManager.Instance.RegisterDelivery(moneyEarned, experienceEarned);
+            Debug.LogWarning($"DeliveryService.Complete ignored: job {id} was already completed or does not exist.");
+            return;
         }
+
+        db.Delete(job);
+
+        Debug.Log($"DeliveryService.Complete succeeded for job {id}.");
     }
 
     public static Vector3 GetTargetPosition(DeliveryJob job)
