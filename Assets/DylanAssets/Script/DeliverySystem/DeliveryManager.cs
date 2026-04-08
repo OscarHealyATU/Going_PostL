@@ -1,6 +1,4 @@
-using System;
-using System.Linq;
-using System.Reflection;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -30,8 +28,15 @@ public class DeliveryManager : MonoBehaviour
     [SerializeField] private float deliveryPointHeightOffset = 0f;
 
     [Header("Rewards")]
-    [SerializeField] private double basePay = 100.0;
+    [Tooltip("Base pay before zone multiplier. Usually your Zone 1 base value.")]
+    [SerializeField] private int basePay = 100;
+
+    [Tooltip("Base XP before zone multiplier. Usually your Zone 1 base value.")]
     [SerializeField] private int baseDeliveryExperience = PlayerService.ExpPerDelivery;
+
+    [Header("Zones")]
+    [Tooltip("Highest delivery zone id that can be rolled.")]
+    [SerializeField] private int maxZoneId = 6;
 
     private DeliveryJob currentJob;
     private DeliveryPointInteractable activeDeliveryPoint;
@@ -132,17 +137,19 @@ public class DeliveryManager : MonoBehaviour
             return;
         }
 
-        DeliveryZone selectedZone = GetRandomUnlockedZone();
-        int zoneId = selectedZone != null ? selectedZone.id : 1;
-
+        int zoneId;
         Vector3 point;
-        if (!TryGetRandomPointForZone(zoneId, out point))
+
+        if (!TryGetRandomUnlockedDelivery(zoneId: out zoneId, point: out point))
         {
-            Debug.LogWarning($"DeliveryManager: could not get random point for zone {zoneId}.");
+            Debug.LogWarning("DeliveryManager: could not find any valid unlocked delivery zone with points.");
             return;
         }
 
-        Debug.Log($"AddDelivery: got random point {point} for zone {zoneId}");
+        int finalPay = DeliveryRewardService.GetFinalPay(basePay, zoneId);
+        int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
+
+        Debug.Log($"AddDelivery: zone={zoneId}, point={point}, finalPay={finalPay}, finalXp={finalXp}");
 
         var job = DeliveryService.Create(itemId, itemName, point, zoneId);
 
@@ -268,16 +275,14 @@ public class DeliveryManager : MonoBehaviour
             bool removed = InventoryManager.Instance.RemoveFirstMatchingItem(currentJob.itemId);
 
             if (!removed)
-            {
                 Debug.LogWarning("Delivery completed, but matching item was not found in inventory: " + currentJob.itemId);
-            }
         }
 
         int zoneId = DeliveryService.GetZoneId(currentJob);
-        int finalPay = DeliveryRewardService.GetFinalPay(Mathf.RoundToInt((float)basePay), zoneId);
+        int finalPay = DeliveryRewardService.GetFinalPay(basePay, zoneId);
         int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
 
-        DeliveryService.Complete(currentJob.id);
+        DeliveryService.Complete(currentJob.id, finalPay, finalXp);
         PlayerService.RewardDelivery(finalPay, finalXp);
 
         Debug.Log($"+€{finalPay} earned from delivery in zone {zoneId}");
@@ -295,94 +300,102 @@ public class DeliveryManager : MonoBehaviour
         return true;
     }
 
-    private DeliveryZone GetRandomUnlockedZone()
+    private int GetRandomUnlockedZoneId()
     {
-        var unlockedZones = ZoneService.GetUnlockedZones();
+        List<int> unlockedZoneIds = new List<int>();
 
-        if (unlockedZones == null || unlockedZones.Count == 0)
+        int safeMaxZoneId = Mathf.Max(1, maxZoneId);
+
+        for (int zoneId = 1; zoneId <= safeMaxZoneId; zoneId++)
         {
-            var fallback = DbBoot.Instance.Db.Find<DeliveryZone>(1);
-            if (fallback != null)
-                return fallback;
-
-            return new DeliveryZone
-            {
-                id = 1,
-                name = "Zone 1",
-                unlockCost = 0,
-                requiredLevel = 1,
-                payMultiplier = 1f,
-                xpMultiplier = 1f,
-                startsUnlocked = 1
-            };
+            if (IsZoneUnlockedForDeliveries(zoneId))
+                unlockedZoneIds.Add(zoneId);
         }
 
-        int index = UnityEngine.Random.Range(0, unlockedZones.Count);
-        return unlockedZones[index];
+        if (unlockedZoneIds.Count == 0)
+            return 1;
+
+        int index = Random.Range(0, unlockedZoneIds.Count);
+        return unlockedZoneIds[index];
     }
 
-    private bool TryGetRandomPointForZone(int zoneId, out Vector3 point)
+    private bool IsZoneUnlockedForDeliveries(int zoneId)
     {
+        if (zoneId <= 1)
+            return true;
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+            return false;
+
+        return ZoneService.IsZoneUnlocked(zoneId);
+    }
+
+    private bool TryGetRandomUnlockedDelivery(out int zoneId, out Vector3 point)
+    {
+        zoneId = 1;
         point = Vector3.zero;
 
         if (DeliveryGridProvider.Instance == null)
             return false;
 
-        object provider = DeliveryGridProvider.Instance;
-        Type providerType = provider.GetType();
+        List<int> unlockedZoneIds = GetUnlockedZoneIds();
 
-        MethodInfo zoneMethod = providerType.GetMethod(
-            "GetRandomPointInZone",
-            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int) },
-            null);
+        if (unlockedZoneIds.Count == 0)
+            unlockedZoneIds.Add(1);
 
-        if (zoneMethod != null)
+        Shuffle(unlockedZoneIds);
+
+        for (int i = 0; i < unlockedZoneIds.Count; i++)
         {
-            object result = zoneMethod.Invoke(provider, new object[] { zoneId });
-            if (result is Vector3 vectorResult)
-            {
-                point = vectorResult;
-                return true;
-            }
+            int candidateZoneId = unlockedZoneIds[i];
+            Vector3 candidatePoint = DeliveryGridProvider.Instance.GetRandomPointInZone(candidateZoneId);
+
+            if (candidatePoint == Vector3.zero)
+                continue;
+
+            zoneId = candidateZoneId;
+            point = candidatePoint;
+            return true;
         }
 
-        MethodInfo fallbackZoneMethod = providerType.GetMethod(
-            "GetRandomPointForZone",
-            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-            null,
-            new Type[] { typeof(int) },
-            null);
+        Vector3 fallbackPoint = DeliveryGridProvider.Instance.GetRandomPoint();
 
-        if (fallbackZoneMethod != null)
+        if (fallbackPoint == Vector3.zero)
+            return false;
+
+        zoneId = 1;
+        point = fallbackPoint;
+
+        Debug.LogWarning("DeliveryManager: falling back to any available delivery point.");
+        return true;
+    }
+
+    private List<int> GetUnlockedZoneIds()
+    {
+        List<int> unlockedZoneIds = new List<int>();
+
+        int safeMaxZoneId = Mathf.Max(1, maxZoneId);
+
+        for (int zoneId = 1; zoneId <= safeMaxZoneId; zoneId++)
         {
-            object result = fallbackZoneMethod.Invoke(provider, new object[] { zoneId });
-            if (result is Vector3 vectorResult)
-            {
-                point = vectorResult;
-                return true;
-            }
+            if (IsZoneUnlockedForDeliveries(zoneId))
+                unlockedZoneIds.Add(zoneId);
         }
 
-        MethodInfo oldMethod = providerType.GetMethod(
-            "GetRandomPoint",
-            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-            null,
-            Type.EmptyTypes,
-            null);
+        return unlockedZoneIds;
+    }
 
-        if (oldMethod != null)
+    private void Shuffle(List<int> list)
+    {
+        if (list == null || list.Count <= 1)
+            return;
+
+        for (int i = 0; i < list.Count; i++)
         {
-            object result = oldMethod.Invoke(provider, null);
-            if (result is Vector3 vectorResult)
-            {
-                point = vectorResult;
-                Debug.LogWarning($"DeliveryManager: DeliveryGridProvider has no zone-aware method yet, using fallback GetRandomPoint() for zone {zoneId}.");
-                return true;
-            }
+            int swapIndex = Random.Range(i, list.Count);
+            int temp = list[i];
+            list[i] = list[swapIndex];
+            list[swapIndex] = temp;
         }
-
-        return false;
     }
 }
