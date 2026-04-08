@@ -127,8 +127,8 @@ public class DbBoot : MonoBehaviour
             {
                 id = 2,
                 name = "Zone 2",
-                unlockCost = 500,
-                requiredLevel = 2,
+                unlockCost = 2500,
+                requiredLevel = 3,
                 payMultiplier = 1.2f,
                 xpMultiplier = 1.2f,
                 startsUnlocked = 0
@@ -137,8 +137,8 @@ public class DbBoot : MonoBehaviour
             {
                 id = 3,
                 name = "Zone 3",
-                unlockCost = 1200,
-                requiredLevel = 3,
+                unlockCost = 6000,
+                requiredLevel = 6,
                 payMultiplier = 1.6f,
                 xpMultiplier = 1.3f,
                 startsUnlocked = 0
@@ -147,8 +147,8 @@ public class DbBoot : MonoBehaviour
             {
                 id = 4,
                 name = "Zone 4",
-                unlockCost = 2500,
-                requiredLevel = 4,
+                unlockCost = 11000,
+                requiredLevel = 10,
                 payMultiplier = 2.0f,
                 xpMultiplier = 1.5f,
                 startsUnlocked = 0

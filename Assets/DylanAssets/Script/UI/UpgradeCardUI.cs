@@ -40,14 +40,14 @@ public class UpgradeCardUI : MonoBehaviour
         if (descriptionText != null)
             descriptionText.text = boundUpgrade.description;
 
-        if (requiredLevelText != null)
-            requiredLevelText.text = $"Required Level: {boundUpgrade.requiredLevel}";
-
-        if (priceText != null)
-            priceText.text = $"Price: €{boundUpgrade.price}";
-
         if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
         {
+            if (requiredLevelText != null)
+                requiredLevelText.text = "Required Level: -";
+
+            if (priceText != null)
+                priceText.text = "Price: -";
+
             if (buyButtonText != null)
                 buyButtonText.text = "Loading";
 
@@ -57,9 +57,28 @@ public class UpgradeCardUI : MonoBehaviour
             return;
         }
 
+        int requiredLevel = boundUpgrade.requiredLevel;
+        int price = boundUpgrade.price;
+
+        if (boundUpgrade.upgradeType == UpgradeType.ZoneLicense)
+        {
+            var zone = DbBoot.Instance.Db.Find<DeliveryZone>(boundUpgrade.zoneId);
+            if (zone != null)
+            {
+                requiredLevel = zone.requiredLevel;
+                price = zone.unlockCost;
+            }
+        }
+
+        if (requiredLevelText != null)
+            requiredLevelText.text = $"Required Level: {requiredLevel}";
+
+        if (priceText != null)
+            priceText.text = $"Price: €{price}";
+
         bool isOwned = IsOwned();
-        bool hasLevel = PlayerService.GetLevel() >= boundUpgrade.requiredLevel;
-        bool canAfford = PlayerService.GetMoney() >= boundUpgrade.price;
+        bool hasLevel = PlayerService.GetLevel() >= requiredLevel;
+        bool canAfford = PlayerService.GetMoney() >= price;
         bool canBuyNow = CanBuyNow();
 
         if (buyButtonText != null)
