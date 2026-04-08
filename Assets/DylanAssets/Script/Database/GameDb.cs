@@ -22,6 +22,9 @@ public sealed class GameDb : IDisposable
         EnsureVehicleTypeColumns();
         EnsureVehicleSpawnColumns();
         EnsureDayStateColumns();
+        EnsureDeliveryJobColumns();
+        EnsureDeliveryZoneColumns();
+
         Seed();
         EnsureDayStateRow();
     }
@@ -105,6 +108,7 @@ public sealed class GameDb : IDisposable
           targetX REAL NOT NULL,
           targetY REAL NOT NULL,
           targetZ REAL NOT NULL,
+          zoneId INTEGER NOT NULL DEFAULT 1,
           createdAt TEXT NOT NULL DEFAULT (datetime('now'))
         );");
 
@@ -120,6 +124,31 @@ public sealed class GameDb : IDisposable
           totalRevenueToday REAL NOT NULL DEFAULT 0.0,
           experienceEarnedToday INTEGER NOT NULL DEFAULT 0
         );");
+
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS DeliveryZone (
+          id INTEGER PRIMARY KEY,
+          name TEXT NOT NULL,
+          unlockCost INTEGER NOT NULL DEFAULT 0,
+          requiredLevel INTEGER NOT NULL DEFAULT 1,
+          payMultiplier REAL NOT NULL DEFAULT 1.0,
+          xpMultiplier REAL NOT NULL DEFAULT 1.0,
+          startsUnlocked INTEGER NOT NULL DEFAULT 0
+        );");
+
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS PlayerZoneUnlock (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playerId INTEGER NOT NULL,
+          zoneId INTEGER NOT NULL,
+          unlockedAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(playerId) REFERENCES Player(id),
+          FOREIGN KEY(zoneId) REFERENCES DeliveryZone(id)
+        );");
+
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_playerzoneunlock_player_zone
+        ON PlayerZoneUnlock(playerId, zoneId);");
     }
 
     private void EnsurePlayerColumns()
@@ -167,6 +196,20 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("DayState", "experienceEarnedToday", "INTEGER NOT NULL DEFAULT 0");
     }
 
+    private void EnsureDeliveryJobColumns()
+    {
+        AddColumnIfMissing("DeliveryJob", "zoneId", "INTEGER NOT NULL DEFAULT 1");
+    }
+
+    private void EnsureDeliveryZoneColumns()
+    {
+        AddColumnIfMissing("DeliveryZone", "unlockCost", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("DeliveryZone", "requiredLevel", "INTEGER NOT NULL DEFAULT 1");
+        AddColumnIfMissing("DeliveryZone", "payMultiplier", "REAL NOT NULL DEFAULT 1.0");
+        AddColumnIfMissing("DeliveryZone", "xpMultiplier", "REAL NOT NULL DEFAULT 1.0");
+        AddColumnIfMissing("DeliveryZone", "startsUnlocked", "INTEGER NOT NULL DEFAULT 0");
+    }
+
     private void AddColumnIfMissing(string table, string column, string columnSql)
     {
         var cols = Db.Query<PragmaColumn>($"PRAGMA table_info({table});");
@@ -186,6 +229,7 @@ public sealed class GameDb : IDisposable
     {
         SeedVehicleTypes();
         SeedItemTypes();
+        SeedDeliveryZones();
     }
 
     private void SeedVehicleTypes()
@@ -199,6 +243,8 @@ public sealed class GameDb : IDisposable
         DeleteVehicleTypeIfExists("Zone 2");
         DeleteVehicleTypeIfExists("Zone 3");
         DeleteVehicleTypeIfExists("Zone 4");
+        DeleteVehicleTypeIfExists("Zone 5");
+        DeleteVehicleTypeIfExists("Zone 6");
     }
 
     private void UpsertVehicleType(string name, double baseCost, int storageCapacity, double baseHealth)
@@ -278,6 +324,60 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
 ('toaster', 'Toaster', 'mediumItem', 0, 20.0);");
     }
 
+    private void SeedDeliveryZones()
+    {
+        UpsertDeliveryZone(1, "Zone 1", 0,     1, 1.00f, 1.00f, 1);
+        UpsertDeliveryZone(2, "Zone 2", 2500,  2, 1.20f, 1.15f, 0);
+        UpsertDeliveryZone(3, "Zone 3", 6000,  4, 1.45f, 1.30f, 0);
+        UpsertDeliveryZone(4, "Zone 4", 11000, 6, 1.75f, 1.50f, 0);
+        UpsertDeliveryZone(5, "Zone 5", 18000, 8, 2.10f, 1.75f, 0);
+        UpsertDeliveryZone(6, "Zone 6", 30000, 10, 2.50f, 2.10f, 0);
+    }
+
+    private void UpsertDeliveryZone(
+        int id,
+        string name,
+        int unlockCost,
+        int requiredLevel,
+        float payMultiplier,
+        float xpMultiplier,
+        int startsUnlocked)
+    {
+        var existing = Db.Find<DeliveryZone>(id);
+
+        if (existing == null)
+        {
+            Db.Insert(new DeliveryZone
+            {
+                id = id,
+                name = name,
+                unlockCost = unlockCost,
+                requiredLevel = requiredLevel,
+                payMultiplier = payMultiplier,
+                xpMultiplier = xpMultiplier,
+                startsUnlocked = startsUnlocked
+            });
+
+            Debug.Log($"[GameDb] Seeded DeliveryZone '{name}'");
+            return;
+        }
+
+        bool changed = false;
+
+        if (existing.name != name) { existing.name = name; changed = true; }
+        if (existing.unlockCost != unlockCost) { existing.unlockCost = unlockCost; changed = true; }
+        if (existing.requiredLevel != requiredLevel) { existing.requiredLevel = requiredLevel; changed = true; }
+        if (Math.Abs(existing.payMultiplier - payMultiplier) > 0.001f) { existing.payMultiplier = payMultiplier; changed = true; }
+        if (Math.Abs(existing.xpMultiplier - xpMultiplier) > 0.001f) { existing.xpMultiplier = xpMultiplier; changed = true; }
+        if (existing.startsUnlocked != startsUnlocked) { existing.startsUnlocked = startsUnlocked; changed = true; }
+
+        if (changed)
+        {
+            Db.Update(existing);
+            Debug.Log($"[GameDb] Updated DeliveryZone '{name}'");
+        }
+    }
+
     private void EnsureDayStateRow()
     {
         var existing = Db.Table<DayState>().FirstOrDefault();
@@ -287,7 +387,7 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
         {
             id = 1,
             dayNumber = 1,
-            currentMinuteOfDay = 16 * 60 + 55,
+            currentMinuteOfDay = 9 * 60,
             isDayEnded = 0,
             packagesDeliveredToday = 0,
             moneyEarnedToday = 0.0,

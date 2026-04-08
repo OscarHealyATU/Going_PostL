@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Linq;
 
 public class DbBoot : MonoBehaviour
@@ -8,10 +9,8 @@ public class DbBoot : MonoBehaviour
 
     public SQLite.SQLiteConnection Db => GameDb.Db;
 
-    private void Awake()
+    void Awake()
     {
-        Debug.Log("[DbBoot] Awake on: " + gameObject.name);
-
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -22,19 +21,12 @@ public class DbBoot : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         GameDb = new GameDb();
-        Debug.Log("[DbBoot] DB path: " + GameDb.DbPath);
-
-        Db.CreateTable<Player>();
-        Db.CreateTable<VehicleType>();
-        Db.CreateTable<Vehicle>();
-        Db.CreateTable<TransactionLog>();
-        Db.CreateTable<ItemType>();
-        Db.CreateTable<InventorySlot>();
-        Db.CreateTable<DeliveryJob>();
-        Db.CreateTable<DayState>();
+        Debug.Log("DB path: " + GameDb.DbPath);
 
         EnsurePlayerExists();
+        EnsureStartingZonesUnlocked();
 
+        VehicleTypeStore.LoadOrSeedDefaults(Db);
         Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
     }
 
@@ -47,9 +39,9 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 100000.00,
+                money = 0.0,
                 totalExperience = 0,
-                createdAt = System.DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+                createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
 
                 returnValid = 0,
                 returnX = 0f,
@@ -73,7 +65,36 @@ public class DbBoot : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    private void EnsureStartingZonesUnlocked()
+    {
+        var player = Db.Table<Player>().FirstOrDefault();
+        if (player == null)
+            return;
+
+        var startingZones = Db.Table<DeliveryZone>()
+            .Where(z => z.startsUnlocked == 1)
+            .ToList();
+
+        foreach (var zone in startingZones)
+        {
+            bool alreadyUnlocked = Db.Table<PlayerZoneUnlock>()
+                .Any(x => x.playerId == player.id && x.zoneId == zone.id);
+
+            if (alreadyUnlocked)
+                continue;
+
+            Db.Insert(new PlayerZoneUnlock
+            {
+                playerId = player.id,
+                zoneId = zone.id,
+                unlockedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+            });
+
+            Debug.Log($"[DbBoot] Auto-unlocked starting zone '{zone.name}'");
+        }
+    }
+
+    void OnApplicationQuit()
     {
         GameDb?.Dispose();
         GameDb = null;

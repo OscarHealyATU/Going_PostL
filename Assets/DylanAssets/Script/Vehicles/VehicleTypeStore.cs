@@ -9,9 +9,15 @@ public static class VehicleTypeStore
     public static void LoadOrSeedDefaults(SQLite.SQLiteConnection db)
     {
         db.CreateTable<VehicleType>();
-        All = db.Table<VehicleType>().OrderBy(v => v.baseCost).ToList();
 
-        Debug.Log("[VehicleTypeStore] Loaded vehicle types = " + All.Count);
+        int before = db.Table<VehicleType>().Count();
+        Debug.Log("[VehicleTypeStore] rows BEFORE load = " + before);
+
+        All = db.Table<VehicleType>()
+            .OrderBy(v => v.baseCost)
+            .ToList();
+
+        Debug.Log("[VehicleTypeStore] Loaded into All = " + All.Count);
     }
 
     public static void Load()
