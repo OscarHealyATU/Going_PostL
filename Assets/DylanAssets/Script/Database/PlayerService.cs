@@ -15,21 +15,32 @@ public static class PlayerService
     public static event Action<int, int, int, int, int, int> OnExperienceChangedDetailed;
     // oldLevel, oldExpIntoLevel, oldExpNeeded, newLevel, newExpIntoLevel, newExpNeeded
 
+    private static SQLite.SQLiteConnection GetDbOrNull()
+    {
+        if (DbBoot.Instance == null)
+            return null;
+
+        return DbBoot.Instance.Db;
+    }
+
     public static Player Get()
     {
-        var db = DbBoot.Instance.Db;
-        var player = db.Table<Player>().FirstOrDefault();
+        var db = GetDbOrNull();
+        if (db == null)
+            return null;
 
-        if (player == null)
-            throw new Exception("No Player row exists.");
-
-        return player;
+        return db.Table<Player>().FirstOrDefault();
     }
 
     public static void SetMoney(double newMoney)
     {
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         player.money = newMoney;
         db.Update(player);
@@ -43,6 +54,9 @@ public static class PlayerService
             return;
 
         var player = Get();
+        if (player == null)
+            return;
+
         SetMoney(player.money + amount);
     }
 
@@ -52,6 +66,9 @@ public static class PlayerService
             amount = Math.Abs(amount);
 
         var player = Get();
+        if (player == null)
+            return false;
+
         if (player.money < amount)
             return false;
 
@@ -72,7 +89,8 @@ public static class PlayerService
 
     public static double GetMoney()
     {
-        return Get().money;
+        var player = Get();
+        return player != null ? player.money : 0.0;
     }
 
     // ----------------------------
@@ -80,7 +98,8 @@ public static class PlayerService
     // ----------------------------
     public static int GetTotalExperience()
     {
-        return Get().totalExperience;
+        var player = Get();
+        return player != null ? player.totalExperience : 0;
     }
 
     public static int GetLevel()
@@ -137,8 +156,13 @@ public static class PlayerService
         if (amount <= 0)
             return;
 
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         int oldTotalExp = player.totalExperience;
         int oldLevel = (oldTotalExp / ExpPerLevel) + 1;
@@ -210,8 +234,13 @@ public static class PlayerService
     // ----------------------------
     public static void SaveReturnPoint(Vector3 position, float yaw)
     {
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         player.returnValid = 1;
         player.returnX = position.x;
@@ -226,7 +255,7 @@ public static class PlayerService
     {
         var player = Get();
 
-        if (player.returnValid != 1)
+        if (player == null || player.returnValid != 1)
         {
             position = Vector3.zero;
             yaw = 0f;
@@ -240,8 +269,13 @@ public static class PlayerService
 
     public static void ClearReturnPoint()
     {
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         player.returnValid = 0;
         player.returnX = 0f;
@@ -257,8 +291,13 @@ public static class PlayerService
     // ----------------------------
     public static void SaveResumePoint(string sceneName, Vector3 position, float yaw)
     {
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         player.hasResumePoint = 1;
         player.savedScene = sceneName;
@@ -273,14 +312,14 @@ public static class PlayerService
     public static bool HasResumePoint()
     {
         var player = Get();
-        return player.hasResumePoint == 1 && !string.IsNullOrEmpty(player.savedScene);
+        return player != null && player.hasResumePoint == 1 && !string.IsNullOrEmpty(player.savedScene);
     }
 
     public static bool TryGetResumePoint(out string sceneName, out Vector3 position, out float yaw)
     {
         var player = Get();
 
-        if (player.hasResumePoint != 1 || string.IsNullOrEmpty(player.savedScene))
+        if (player == null || player.hasResumePoint != 1 || string.IsNullOrEmpty(player.savedScene))
         {
             sceneName = null;
             position = Vector3.zero;
@@ -296,8 +335,13 @@ public static class PlayerService
 
     public static void ClearResumePoint()
     {
-        var db = DbBoot.Instance.Db;
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
         var player = Get();
+        if (player == null)
+            return;
 
         player.hasResumePoint = 0;
         player.savedScene = null;
@@ -311,10 +355,15 @@ public static class PlayerService
 
     public static void ResetForNewGame(double startingMoney = 10000.0)
     {
-        var db = DbBoot.Instance.Db;
-        var player = Get();
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
 
-        int oldLevel = GetLevel();
+        var player = Get();
+        if (player == null)
+            return;
+
+        int oldLevel = GetLevel(player);
         int oldExpIntoLevel = player.totalExperience % ExpPerLevel;
 
         player.money = startingMoney;
@@ -356,6 +405,9 @@ public static class PlayerService
     public static void RefreshAllUI()
     {
         var player = Get();
+        if (player == null)
+            return;
+
         int level = GetLevel(player);
         int expIntoLevel = GetExperienceIntoCurrentLevel(player);
 

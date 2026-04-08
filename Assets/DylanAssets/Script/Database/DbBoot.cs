@@ -1,15 +1,16 @@
 using UnityEngine;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class DbBoot : MonoBehaviour
 {
     public static DbBoot Instance { get; private set; }
     public GameDb GameDb { get; private set; }
 
-    public SQLite.SQLiteConnection Db => GameDb.Db;
+    public SQLite.SQLiteConnection Db => GameDb != null ? GameDb.Db : null;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -24,6 +25,7 @@ public class DbBoot : MonoBehaviour
         Debug.Log("DB path: " + GameDb.DbPath);
 
         EnsurePlayerExists();
+        EnsureDeliveryZonesSeeded();
         EnsureStartingZonesUnlocked();
 
         VehicleTypeStore.LoadOrSeedDefaults(Db);
@@ -32,6 +34,12 @@ public class DbBoot : MonoBehaviour
 
     private void EnsurePlayerExists()
     {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsurePlayerExists.");
+            return;
+        }
+
         var player = Db.Table<Player>().FirstOrDefault();
 
         if (player == null)
@@ -65,8 +73,97 @@ public class DbBoot : MonoBehaviour
         }
     }
 
+    private void EnsureDeliveryZonesSeeded()
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureDeliveryZonesSeeded.");
+            return;
+        }
+
+        List<DeliveryZone> desiredZones = GetDesiredDeliveryZones();
+
+        foreach (var desiredZone in desiredZones)
+        {
+            var existingZone = Db.Find<DeliveryZone>(desiredZone.id);
+
+            if (existingZone == null)
+            {
+                Db.Insert(desiredZone);
+                Debug.Log($"[DbBoot] Inserted DeliveryZone '{desiredZone.name}'");
+            }
+            else
+            {
+                existingZone.name = desiredZone.name;
+                existingZone.unlockCost = desiredZone.unlockCost;
+                existingZone.requiredLevel = desiredZone.requiredLevel;
+                existingZone.payMultiplier = desiredZone.payMultiplier;
+                existingZone.xpMultiplier = desiredZone.xpMultiplier;
+                existingZone.startsUnlocked = desiredZone.startsUnlocked;
+
+                Db.Update(existingZone);
+                Debug.Log($"[DbBoot] Updated DeliveryZone '{existingZone.name}'");
+            }
+        }
+
+        Debug.Log("[DbBoot] DeliveryZone rows now: " + Db.Table<DeliveryZone>().Count());
+    }
+
+    private List<DeliveryZone> GetDesiredDeliveryZones()
+    {
+        return new List<DeliveryZone>
+        {
+            new DeliveryZone
+            {
+                id = 1,
+                name = "Zone 1",
+                unlockCost = 0,
+                requiredLevel = 1,
+                payMultiplier = 1.0f,
+                xpMultiplier = 1.0f,
+                startsUnlocked = 1
+            },
+            new DeliveryZone
+            {
+                id = 2,
+                name = "Zone 2",
+                unlockCost = 500,
+                requiredLevel = 2,
+                payMultiplier = 1.2f,
+                xpMultiplier = 1.2f,
+                startsUnlocked = 0
+            },
+            new DeliveryZone
+            {
+                id = 3,
+                name = "Zone 3",
+                unlockCost = 1200,
+                requiredLevel = 3,
+                payMultiplier = 1.6f,
+                xpMultiplier = 1.3f,
+                startsUnlocked = 0
+            },
+            new DeliveryZone
+            {
+                id = 4,
+                name = "Zone 4",
+                unlockCost = 2500,
+                requiredLevel = 4,
+                payMultiplier = 2.0f,
+                xpMultiplier = 1.5f,
+                startsUnlocked = 0
+            }
+        };
+    }
+
     private void EnsureStartingZonesUnlocked()
     {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureStartingZonesUnlocked.");
+            return;
+        }
+
         var player = Db.Table<Player>().FirstOrDefault();
         if (player == null)
             return;
@@ -94,10 +191,23 @@ public class DbBoot : MonoBehaviour
         }
     }
 
-    void OnApplicationQuit()
+    private void OnApplicationQuit()
+    {
+        DisposeDb();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            DisposeDb();
+    }
+
+    private void DisposeDb()
     {
         GameDb?.Dispose();
         GameDb = null;
-        Instance = null;
+
+        if (Instance == this)
+            Instance = null;
     }
 }
