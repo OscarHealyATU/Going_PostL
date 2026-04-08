@@ -114,6 +114,7 @@ MonoBehaviour:
   deliveryPointHeightOffset: 1.5
   basePay: 100
   baseDeliveryExperience: 100
+  maxZoneId: 6
 --- !u!114 &1711621020559437261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,21 +131,27 @@ MonoBehaviour:
   - zoneId: 1
     unlockWithZoneId: 1
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: 44756268c131fe543b1343ac126a7e05, type: 2}
   - zoneId: 1
     unlockWithZoneId: 1
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: 50a549fd64252f0439072315adbe57ad, type: 2}
   - zoneId: 2
     unlockWithZoneId: 2
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: c6c6b16f429d13a4589771eac1f86be9, type: 2}
   - zoneId: 2
     unlockWithZoneId: 2
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: 163b2220120bf954ca1e661dfaf4b0aa, type: 2}
   - zoneId: 3
     unlockWithZoneId: 3
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: f62da6115529e3746bc9e4caae62583f, type: 2}
   - zoneId: 4
     unlockWithZoneId: 4
     grid: {fileID: 0}
+    layoutAsset: {fileID: 11400000, guid: 8a353835aaa2efd4091fa198e6c431b2, type: 2}
   cityGrid: {fileID: 0}
   xStartPosition: 0
   zStartPosition: 0

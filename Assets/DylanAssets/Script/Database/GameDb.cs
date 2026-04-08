@@ -325,9 +325,9 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
     private void SeedDeliveryZones()
     {
         UpsertDeliveryZone(1, "Zone 1", 0,     1, 1.00f, 1.00f, 1);
-        UpsertDeliveryZone(2, "Zone 2", 2500,  2, 1.20f, 1.15f, 0);
-        UpsertDeliveryZone(3, "Zone 3", 6000,  4, 1.45f, 1.30f, 0);
-        UpsertDeliveryZone(4, "Zone 4", 11000, 6, 1.75f, 1.50f, 0);
+        UpsertDeliveryZone(2, "Zone 2", 2500,  3, 1.20f, 1.20f, 0);
+        UpsertDeliveryZone(3, "Zone 3", 6000,  6, 1.60f, 1.30f, 0);
+        UpsertDeliveryZone(4, "Zone 4", 11000, 10, 2.00f, 1.50f, 0);
     }
 
     private void UpsertDeliveryZone(
