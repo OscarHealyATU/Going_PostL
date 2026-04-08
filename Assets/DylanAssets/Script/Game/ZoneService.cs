@@ -162,6 +162,9 @@ public static class ZoneService
             });
         });
 
+        if (DayManager.Instance != null)
+            DayManager.Instance.RegisterMoneySpent(zone.unlockCost);
+
         result.success = true;
         result.message = $"{zone.name} unlocked.";
         return result;
