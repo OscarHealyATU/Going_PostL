@@ -107,7 +107,7 @@ public static class VehicleService
         PlayerService.RefreshAllUI();
 
         result.success = true;
-        result.message = $"{vehicleType.name} purchased. Reserved for spawn point {reservedBay + 1}.";
+        result.message = $"{vehicleType.name} purchased. Reserved at garage in parking space {reservedBay + 1}.";
         result.purchasedVehicle = createdVehicle;
         result.usedSpawnPointIndex = reservedBay;
         return result;

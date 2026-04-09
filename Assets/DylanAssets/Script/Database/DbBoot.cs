@@ -24,12 +24,55 @@ public class DbBoot : MonoBehaviour
         GameDb = new GameDb();
         Debug.Log("DB path: " + GameDb.DbPath);
 
+        EnsurePlayerSchema();
         EnsurePlayerExists();
         EnsureDeliveryZonesSeeded();
         EnsureStartingZonesUnlocked();
 
         VehicleTypeStore.LoadOrSeedDefaults(Db);
         Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
+    }
+
+    private void EnsurePlayerSchema()
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsurePlayerSchema.");
+            return;
+        }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Player ADD COLUMN inventorySlotCount INTEGER NOT NULL DEFAULT 3");
+            Debug.Log("[DbBoot] Added inventorySlotCount column to Player");
+        }
+        catch (Exception)
+        {
+            // Column already exists or Player table not yet created in a fresh DB.
+        }
+
+        try
+        {
+            var players = Db.Table<Player>().ToList();
+
+            bool anyUpdated = false;
+            foreach (var player in players)
+            {
+                if (player.inventorySlotCount <= 0)
+                {
+                    player.inventorySlotCount = 3;
+                    Db.Update(player);
+                    anyUpdated = true;
+                }
+            }
+
+            if (anyUpdated)
+                Debug.Log("[DbBoot] Backfilled inventorySlotCount for existing players");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("[DbBoot] EnsurePlayerSchema backfill skipped: " + ex.Message);
+        }
     }
 
     private void EnsurePlayerExists()
@@ -47,9 +90,11 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 0.0,
-                totalExperience = 0,
+                money = 200000.0,
+                totalExperience = 3000,
                 createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+
+                inventorySlotCount = 3,
 
                 returnValid = 0,
                 returnX = 0f,
@@ -69,6 +114,13 @@ public class DbBoot : MonoBehaviour
         }
         else
         {
+            if (player.inventorySlotCount <= 0)
+            {
+                player.inventorySlotCount = 3;
+                Db.Update(player);
+                Debug.Log("[DbBoot] Fixed Player inventorySlotCount to default 3");
+            }
+
             Debug.Log("[DbBoot] Player exists id=" + player.id);
         }
     }

@@ -1,4 +1,5 @@
 using SQLite;
+using UnityEngine;
 
 [Table("Player")]
 public class Player
@@ -8,6 +9,8 @@ public class Player
     public double money { get; set; }
     public int totalExperience { get; set; }
     public string createdAt { get; set; }
+
+    public int inventorySlotCount { get; set; }
 
     public int returnValid { get; set; }
     public float returnX { get; set; }
@@ -136,4 +139,30 @@ public class PlayerZoneUnlock
     public int playerId { get; set; }
     public int zoneId { get; set; }
     public string unlockedAt { get; set; }
+}
+
+public enum UpgradeType
+{
+    ZoneLicense,
+    Storage
+}
+
+[System.Serializable]
+public class UpgradeDefinition
+{
+    public UpgradeType upgradeType = UpgradeType.ZoneLicense;
+
+    [Header("Display")]
+    public string title;
+    [TextArea(2, 4)] public string description;
+
+    [Header("Requirements")]
+    public int requiredLevel = 1;
+    public int price = 0;
+
+    [Header("Zone License")]
+    public int zoneId = 1;
+
+    [Header("Storage")]
+    public int inventorySlotIncrease = 0;
 }

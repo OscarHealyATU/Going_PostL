@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -52,13 +53,48 @@ public class UpgradesPageUI : MonoBehaviour
 
         spawnedCards.Clear();
 
-        for (int i = 0; i < upgrades.Count; i++)
+        List<UpgradeDefinition> sortedUpgrades = upgrades
+            .OrderBy(u => GetSortRequiredLevel(u))
+            .ThenBy(u => GetSortPrice(u))
+            .ToList();
+
+        for (int i = 0; i < sortedUpgrades.Count; i++)
         {
             UpgradeCardUI card = Instantiate(cardPrefab, contentRoot);
             card.name = $"UpgradeCard_{i + 1}";
-            card.Bind(upgrades[i], this);
+            card.Bind(sortedUpgrades[i], this);
             spawnedCards.Add(card);
         }
+    }
+
+    private int GetSortRequiredLevel(UpgradeDefinition upgrade)
+    {
+        if (upgrade == null)
+            return int.MaxValue;
+
+        if (upgrade.upgradeType == UpgradeType.ZoneLicense && DbBoot.Instance != null && DbBoot.Instance.Db != null)
+        {
+            var zone = DbBoot.Instance.Db.Find<DeliveryZone>(upgrade.zoneId);
+            if (zone != null)
+                return zone.requiredLevel;
+        }
+
+        return upgrade.requiredLevel;
+    }
+
+    private int GetSortPrice(UpgradeDefinition upgrade)
+    {
+        if (upgrade == null)
+            return int.MaxValue;
+
+        if (upgrade.upgradeType == UpgradeType.ZoneLicense && DbBoot.Instance != null && DbBoot.Instance.Db != null)
+        {
+            var zone = DbBoot.Instance.Db.Find<DeliveryZone>(upgrade.zoneId);
+            if (zone != null)
+                return zone.unlockCost;
+        }
+
+        return upgrade.price;
     }
 
     public void RefreshAll()
