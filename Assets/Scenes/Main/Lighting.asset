@@ -32,40 +32,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b2db86121404754db890f4c8dfe81b2, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.Bloom
-  active: 1
+  active: 0
   skipIterations:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   threshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.9
   intensity:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   scatter:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.7
   clamp:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 65472
   tint:
     m_OverrideState: 1
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
+    m_Value: {r: 1, g: 0.9323158, b: 0.7877358, a: 1}
   highQualityFiltering:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   downscale:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
   maxIterations:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 6
   dirtTexture:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
   dirtIntensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &-6953496448787876275
 MonoBehaviour:
@@ -301,24 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.VolumeProfile
   components:
   - {fileID: -7111259916495160213}
-  - {fileID: 626606437050522088}
-  - {fileID: -7779762698960403800}
-  - {fileID: 6821878188772842796}
-  - {fileID: -6605438471551810466}
-  - {fileID: -6674406167001139753}
-  - {fileID: -3671034402398645939}
-  - {fileID: -2584694860011770065}
-  - {fileID: -6953496448787876275}
-  - {fileID: 5891587853475879193}
-  - {fileID: 601717872572547330}
-  - {fileID: 5353218541263206951}
-  - {fileID: 7104587334499255380}
-  - {fileID: 6414359935181983935}
-  - {fileID: -1066171280941202196}
-  - {fileID: 1828206902964264327}
-  - {fileID: 216928115494953178}
-  - {fileID: -5965693781316906953}
-  - {fileID: 3410758151748267555}
 --- !u!114 &216928115494953178
 MonoBehaviour:
   m_ObjectHideFlags: 3
