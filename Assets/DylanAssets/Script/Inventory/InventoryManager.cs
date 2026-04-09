@@ -28,13 +28,9 @@ public class InventoryManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Hard lock inventory size to 3
-        maxSlots = 3;
+        ApplyCapacityFromPlayer();
 
-        if (items == null || items.Length != maxSlots)
-            items = new ItemData[maxSlots];
-
-        Debug.Log($"[InventoryManager] Awake maxSlots={maxSlots}, items.Length={items.Length}");
+        Debug.Log($"[InventoryManager] Awake maxSlots={maxSlots}, items.Length={(items != null ? items.Length : 0)}");
     }
 
     private IEnumerator Start()
@@ -50,6 +46,8 @@ public class InventoryManager : MonoBehaviour
         while (ItemCatalog.Instance == null)
             yield return null;
 
+        ApplyCapacityFromPlayer();
+
         if (!hasLoadedFromDatabase)
         {
             LoadFromDatabase();
@@ -58,15 +56,48 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    private void ApplyCapacityFromPlayer()
+    {
+        int desiredSlots = PlayerService.GetInventorySlotCount();
+        if (desiredSlots <= 0)
+            desiredSlots = 3;
+
+        if (items == null)
+        {
+            items = new ItemData[desiredSlots];
+        }
+        else if (items.Length != desiredSlots)
+        {
+            ItemData[] resized = new ItemData[desiredSlots];
+            int copyCount = Mathf.Min(items.Length, desiredSlots);
+
+            for (int i = 0; i < copyCount; i++)
+                resized[i] = items[i];
+
+            items = resized;
+        }
+
+        maxSlots = desiredSlots;
+    }
+
+    public void RefreshCapacityFromPlayer()
+    {
+        int oldMaxSlots = maxSlots;
+
+        ApplyCapacityFromPlayer();
+
+        Debug.Log($"[InventoryManager] Capacity refreshed from {oldMaxSlots} to {maxSlots}");
+
+        SaveToDatabase();
+        RefreshUI();
+    }
+
     public bool AddItem(ItemData item)
     {
         if (item == null)
             return false;
 
-        maxSlots = 3;
-
-        if (items == null || items.Length != maxSlots)
-            items = new ItemData[maxSlots];
+        ApplyCapacityFromPlayer();
 
         for (int i = 0; i < maxSlots; i++)
         {
@@ -87,6 +118,8 @@ public class InventoryManager : MonoBehaviour
 
     public void RemoveItem(int slotIndex)
     {
+        ApplyCapacityFromPlayer();
+
         if (items == null || slotIndex < 0 || slotIndex >= maxSlots)
             return;
 
@@ -97,6 +130,8 @@ public class InventoryManager : MonoBehaviour
 
     public ItemData GetItem(int slotIndex)
     {
+        ApplyCapacityFromPlayer();
+
         if (items == null || slotIndex < 0 || slotIndex >= maxSlots)
             return null;
 
@@ -105,6 +140,8 @@ public class InventoryManager : MonoBehaviour
 
     public int GetFirstSlotByCategory(string category)
     {
+        ApplyCapacityFromPlayer();
+
         if (items == null)
             return -1;
 
@@ -119,6 +156,8 @@ public class InventoryManager : MonoBehaviour
 
     public int GetFirstSlotByKey(string itemKey)
     {
+        ApplyCapacityFromPlayer();
+
         if (items == null)
             return -1;
 
@@ -131,25 +170,46 @@ public class InventoryManager : MonoBehaviour
         return -1;
     }
 
+    public bool RemoveFirstMatchingItem(string itemKey)
+    {
+        ApplyCapacityFromPlayer();
+
+        if (string.IsNullOrEmpty(itemKey) || items == null)
+            return false;
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (items[i] == null)
+                continue;
+
+            if (items[i].itemKey != itemKey)
+                continue;
+
+            items[i] = null;
+            SaveToDatabase();
+            RefreshUI();
+            return true;
+        }
+
+        return false;
+    }
+
     public void SaveToDatabase()
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("InventoryManager: DbBoot not found.");
+            Debug.LogWarning("[InventoryManager] DbBoot not found.");
             return;
         }
 
         var player = PlayerService.Get();
         if (player == null)
         {
-            Debug.LogWarning("InventoryManager: PlayerService.Get() returned null.");
+            Debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
             return;
         }
 
-        maxSlots = 3;
-
-        if (items == null || items.Length != maxSlots)
-            items = new ItemData[maxSlots];
+        ApplyCapacityFromPlayer();
 
         var db = DbBoot.Instance.Db;
 
@@ -169,7 +229,7 @@ public class InventoryManager : MonoBehaviour
 
             if (string.IsNullOrWhiteSpace(items[i].itemKey))
             {
-                Debug.LogWarning($"Slot {i}: itemKey is blank, skipping DB insert.");
+                Debug.LogWarning($"[InventoryManager] Slot {i}: itemKey blank, skipping insert.");
                 continue;
             }
 
@@ -184,39 +244,36 @@ public class InventoryManager : MonoBehaviour
             insertedCount++;
         }
 
-        Debug.Log($"[InventoryManager] Inventory saved to DB. Inserted rows: {insertedCount}");
+        Debug.Log($"[InventoryManager] Saved inventory. Capacity={maxSlots}, Inserted={insertedCount}");
     }
 
     public void LoadFromDatabase()
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("InventoryManager: DbBoot not found.");
+            Debug.LogWarning("[InventoryManager] DbBoot not found.");
             return;
         }
 
         if (ItemCatalog.Instance == null)
         {
-            Debug.LogWarning("InventoryManager: ItemCatalog not found.");
+            Debug.LogWarning("[InventoryManager] ItemCatalog not found.");
             return;
         }
 
         var player = PlayerService.Get();
         if (player == null)
         {
-            Debug.LogWarning("InventoryManager: PlayerService.Get() returned null.");
+            Debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
             return;
         }
 
-        maxSlots = 3;
-
-        if (items == null || items.Length != maxSlots)
-            items = new ItemData[maxSlots];
-
-        var db = DbBoot.Instance.Db;
+        ApplyCapacityFromPlayer();
 
         for (int i = 0; i < maxSlots; i++)
             items[i] = null;
+
+        var db = DbBoot.Instance.Db;
 
         var savedSlots = db.Table<InventorySlot>()
             .Where(s => s.playerId == player.id && s.slotIndex >= 0 && s.slotIndex < maxSlots)
@@ -225,23 +282,21 @@ public class InventoryManager : MonoBehaviour
 
         foreach (var row in savedSlots)
         {
-            Debug.Log($"[InventoryManager] Loading slot {row.slotIndex}: key={row.itemKey}, name={row.itemName}");
-
             ItemData item = ItemCatalog.Instance.GetByKey(row.itemKey);
 
             if (item == null)
             {
-                Debug.LogWarning($"Load failed: no ItemData found for key '{row.itemKey}'");
+                Debug.LogWarning($"[InventoryManager] No ItemData found for key '{row.itemKey}'");
                 continue;
             }
 
             items[row.slotIndex] = item;
         }
 
-        // Rewrite DB so old slotIndex values above 2 are removed
+        // Rewrite DB so any rows above current capacity are removed.
         SaveToDatabase();
 
-        Debug.Log("[InventoryManager] Inventory loaded from DB.");
+        Debug.Log($"[InventoryManager] Loaded inventory. Capacity={maxSlots}");
     }
 
     public void RefreshUI()
@@ -249,27 +304,5 @@ public class InventoryManager : MonoBehaviour
         InventoryUI ui = FindFirstObjectByType<InventoryUI>();
         if (ui != null)
             ui.RefreshUI();
-    }
-
-    public bool RemoveFirstMatchingItem(string itemKey)
-    {
-        if (string.IsNullOrEmpty(itemKey) || items == null)
-            return false;
-
-        for (int i = 0; i < maxSlots; i++)
-        {
-            if (items[i] == null)
-                continue;
-
-            if (items[i].itemKey != itemKey)
-                continue;
-
-            items[i] = null;
-            SaveToDatabase();
-            RefreshUI();
-            return true;
-        }
-
-        return false;
     }
 }
