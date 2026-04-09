@@ -11,6 +11,23 @@ public class VehicleForSaleCardUI : MonoBehaviour
 
     private VehicleType boundVehicleType;
     private TerminalManagerUI owner;
+    private TMP_Text buyButtonText;
+
+    private void Awake()
+    {
+        if (buyButton != null)
+            buyButtonText = buyButton.GetComponentInChildren<TMP_Text>();
+    }
+
+    private void OnEnable()
+    {
+        PlayerService.OnMoneyChanged += OnMoneyChanged;
+    }
+
+    private void OnDisable()
+    {
+        PlayerService.OnMoneyChanged -= OnMoneyChanged;
+    }
 
     public void Bind(VehicleType vehicleType, TerminalManagerUI ownerUi)
     {
@@ -18,7 +35,7 @@ public class VehicleForSaleCardUI : MonoBehaviour
         owner = ownerUi;
 
         if (vehicleTypeText != null)
-            vehicleTypeText.text = $"{vehicleType.name}";
+            vehicleTypeText.text = vehicleType.name;
 
         if (priceText != null)
             priceText.text = $"Price: €{vehicleType.baseCost:0}";
@@ -31,6 +48,27 @@ public class VehicleForSaleCardUI : MonoBehaviour
             buyButton.onClick.RemoveAllListeners();
             buyButton.onClick.AddListener(OnBuyClicked);
         }
+
+        RefreshBuyButton();
+    }
+
+    private void OnMoneyChanged(double _)
+    {
+        RefreshBuyButton();
+    }
+
+    private void RefreshBuyButton()
+    {
+        if (buyButton == null || boundVehicleType == null)
+            return;
+
+        double playerMoney = PlayerService.Get().money;
+        bool canAfford = playerMoney >= boundVehicleType.baseCost;
+
+        buyButton.interactable = canAfford;
+
+        if (buyButtonText != null)
+            buyButtonText.text = canAfford ? "Buy" : "Locked";
     }
 
     private void OnBuyClicked()
