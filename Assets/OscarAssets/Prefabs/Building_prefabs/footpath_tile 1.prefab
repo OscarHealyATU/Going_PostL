@@ -89,8 +89,16 @@ PrefabInstance:
       value: footpath_tile 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ce501226d82d5424ca9e97fba9d2e0e9, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ce501226d82d5424ca9e97fba9d2e0e9, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ce501226d82d5424ca9e97fba9d2e0e9, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 0
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
