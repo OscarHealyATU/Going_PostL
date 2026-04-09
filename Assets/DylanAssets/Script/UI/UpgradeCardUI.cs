@@ -89,6 +89,8 @@ public class UpgradeCardUI : MonoBehaviour
                 buyButtonText.text = "Locked";
             else if (!canBuyNow)
                 buyButtonText.text = "Locked";
+            else if (!canAfford)
+                buyButtonText.text = "Too Expensive";
             else
                 buyButtonText.text = "Buy";
         }
@@ -106,6 +108,9 @@ public class UpgradeCardUI : MonoBehaviour
         {
             case UpgradeType.ZoneLicense:
                 return ZoneService.IsZoneUnlocked(boundUpgrade.zoneId);
+
+            case UpgradeType.Storage:
+                return PlayerService.GetInventorySlotCount() >= 5;
         }
 
         return false;
@@ -120,6 +125,9 @@ public class UpgradeCardUI : MonoBehaviour
         {
             case UpgradeType.ZoneLicense:
                 return ZoneService.CanUnlockZoneInSequence(boundUpgrade.zoneId);
+
+            case UpgradeType.Storage:
+                return !IsOwned();
         }
 
         return false;
@@ -143,6 +151,35 @@ public class UpgradeCardUI : MonoBehaviour
                 if (result.success && DeliveryGridProvider.Instance != null)
                     DeliveryGridProvider.Instance.RefreshUnlockedZones();
 
+                break;
+            }
+
+            case UpgradeType.Storage:
+            {
+                if (IsOwned())
+                {
+                    Debug.Log("[UpgradeCardUI] Storage upgrade already owned.");
+                    break;
+                }
+
+                if (PlayerService.GetLevel() < boundUpgrade.requiredLevel)
+                {
+                    Debug.Log("[UpgradeCardUI] Player level too low for storage upgrade.");
+                    break;
+                }
+
+                if (!PlayerService.TrySpendMoney(boundUpgrade.price))
+                {
+                    Debug.Log("[UpgradeCardUI] Not enough money for storage upgrade.");
+                    break;
+                }
+
+                PlayerService.SetInventorySlotCount(5);
+
+                if (InventoryManager.Instance != null)
+                    InventoryManager.Instance.RefreshCapacityFromPlayer();
+
+                Debug.Log("[UpgradeCardUI] Purchased Delivery Satchel. Inventory expanded to 5 slots.");
                 break;
             }
         }

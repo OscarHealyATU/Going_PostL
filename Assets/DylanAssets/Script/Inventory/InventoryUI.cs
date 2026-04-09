@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
+    [Header("Panels")]
+    [SerializeField] private GameObject basePanel;
+    [SerializeField] private GameObject upgradePanel;
+
     [Header("Slots")]
     public List<InventorySlotUI> slots = new List<InventorySlotUI>();
 
@@ -26,6 +30,13 @@ public class InventoryUI : MonoBehaviour
             return;
 
         int maxSlots = InventoryManager.Instance.MaxSlots;
+        bool hasUpgradeSlots = maxSlots > 3;
+
+        if (basePanel != null)
+            basePanel.SetActive(true);
+
+        if (upgradePanel != null)
+            upgradePanel.SetActive(hasUpgradeSlots);
 
         for (int i = 0; i < slots.Count; i++)
         {
