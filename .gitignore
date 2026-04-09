@@ -98,4 +98,11 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
+
+# Baked lighting data
+Assets/Scenes/Main/
+Assets/Scenes/Warehouse/
+*.LightingData*
+*.lightingdata*
+
 .fake
