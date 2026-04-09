@@ -90,7 +90,7 @@ public class UpgradeCardUI : MonoBehaviour
             else if (!canBuyNow)
                 buyButtonText.text = "Locked";
             else if (!canAfford)
-                buyButtonText.text = "Too Expensive";
+                buyButtonText.text = "Locked";
             else
                 buyButtonText.text = "Buy";
         }

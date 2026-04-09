@@ -234,8 +234,8 @@ public sealed class GameDb : IDisposable
 
     private void SeedVehicleTypes()
     {
-        UpsertVehicleType("Bicycle", 500.0, 5, 80.0);
-        UpsertVehicleType("3Wheeler", 2000.0, 20, 120.0);
+        UpsertVehicleType("Bicycle", 1500.0, 5, 80.0);
+        UpsertVehicleType("3Wheeler", 4000.0, 20, 120.0);
         UpsertVehicleType("eVan", 15000.0, 60, 250.0);
         UpsertVehicleType("Lorry", 50000.0, 150, 400.0);
 
