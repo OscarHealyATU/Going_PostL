@@ -18,7 +18,7 @@ public class VehicleForSaleCardUI : MonoBehaviour
         owner = ownerUi;
 
         if (vehicleTypeText != null)
-            vehicleTypeText.text = $"Vehicle type: {vehicleType.name}";
+            vehicleTypeText.text = $"{vehicleType.name}";
 
         if (priceText != null)
             priceText.text = $"Price: €{vehicleType.baseCost:0}";

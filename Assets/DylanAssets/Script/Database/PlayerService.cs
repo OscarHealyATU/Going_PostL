@@ -6,6 +6,8 @@ public static class PlayerService
 {
     public const int ExpPerDelivery = 100;
     public const int ExpPerLevel = 1000;
+    public const int DefaultInventorySlotCount = 3;
+    public const int ExpandedInventorySlotCount = 5;
 
     public static event Action<double> OnMoneyChanged;
 
@@ -91,6 +93,48 @@ public static class PlayerService
     {
         var player = Get();
         return player != null ? player.money : 0.0;
+    }
+
+    // ----------------------------
+    // Inventory Slots
+    // ----------------------------
+    public static int GetInventorySlotCount()
+    {
+        var player = Get();
+        if (player == null)
+            return DefaultInventorySlotCount;
+
+        if (player.inventorySlotCount <= 0)
+            return DefaultInventorySlotCount;
+
+        return player.inventorySlotCount;
+    }
+
+    public static void SetInventorySlotCount(int newCount)
+    {
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
+        var player = Get();
+        if (player == null)
+            return;
+
+        player.inventorySlotCount = Mathf.Max(1, newCount);
+        db.Update(player);
+    }
+
+    public static void AddInventorySlots(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        SetInventorySlotCount(GetInventorySlotCount() + amount);
+    }
+
+    public static bool HasExpandedInventory()
+    {
+        return GetInventorySlotCount() >= ExpandedInventorySlotCount;
     }
 
     // ----------------------------
@@ -368,6 +412,7 @@ public static class PlayerService
 
         player.money = startingMoney;
         player.totalExperience = 0;
+        player.inventorySlotCount = DefaultInventorySlotCount;
 
         player.returnValid = 0;
         player.returnX = 0f;
