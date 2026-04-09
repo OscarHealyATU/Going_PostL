@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 3028594123596454435}
   - component: {fileID: 3396187947501410074}
   - component: {fileID: 8092309613999579409}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BUILDING.119
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1058657558582264684
 Transform:
