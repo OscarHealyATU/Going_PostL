@@ -1,8 +1,12 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 
 public static class VehicleService
 {
+    public const double ResaleMultiplier = 0.75;
+
     public struct PurchaseResult
     {
         public bool success;
@@ -142,5 +146,127 @@ public static class VehicleService
         return DbBoot.Instance.Db.Table<VehicleType>()
             .OrderBy(v => v.baseCost)
             .ToArray();
+    }
+
+    public static List<Vehicle> GetOwnedVehicles()
+    {
+        if (DbBoot.Instance == null)
+            return new List<Vehicle>();
+
+        var db = DbBoot.Instance.Db;
+        var player = PlayerService.Get();
+
+        if (player == null)
+            return new List<Vehicle>();
+
+        return db.Table<Vehicle>()
+            .Where(v => v.ownedByPlayerId == player.id)
+            .OrderBy(v => v.id)
+            .ToList();
+    }
+
+    public static double GetSellPrice(int vehicleTypeId)
+    {
+        if (DbBoot.Instance == null)
+            return 0;
+
+        var db = DbBoot.Instance.Db;
+        var vehicleType = db.Find<VehicleType>(vehicleTypeId);
+
+        if (vehicleType == null)
+            return 0;
+
+        return Math.Round(vehicleType.baseCost * ResaleMultiplier, 2);
+    }
+
+    public static bool TrySellVehicle(int vehicleId, out string message, out double sellPrice)
+    {
+        message = "Vehicle sale failed.";
+        sellPrice = 0;
+
+        if (DbBoot.Instance == null)
+        {
+            message = "Database not available.";
+            return false;
+        }
+
+        var db = DbBoot.Instance.Db;
+        var player = PlayerService.Get();
+
+        if (player == null)
+        {
+            message = "Player not found.";
+            return false;
+        }
+
+        var vehicle = db.Find<Vehicle>(vehicleId);
+        if (vehicle == null)
+        {
+            message = "Vehicle not found.";
+            return false;
+        }
+
+        if (vehicle.ownedByPlayerId != player.id)
+        {
+            message = "You do not own this vehicle.";
+            return false;
+        }
+
+        var vehicleType = db.Find<VehicleType>(vehicle.vehicleTypeId);
+        if (vehicleType == null)
+        {
+            message = "Vehicle type not found.";
+            return false;
+        }
+
+        double calculatedSellPrice = Math.Round(vehicleType.baseCost * ResaleMultiplier, 2);
+        bool saleCommitted = false;
+
+        db.RunInTransaction(() =>
+        {
+            player.money += calculatedSellPrice;
+            db.Update(player);
+
+            db.Delete(vehicle);
+
+            db.Insert(new TransactionLog
+            {
+                playerId = player.id,
+                type = "vehicle_sell",
+                amount = calculatedSellPrice,
+                description = $"Sold {vehicleType.name} for €{calculatedSellPrice:0.##} (75% resale value)",
+                timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+            });
+
+            saleCommitted = true;
+        });
+
+        if (!saleCommitted)
+        {
+            message = "Vehicle sale failed.";
+            return false;
+        }
+
+        sellPrice = calculatedSellPrice;
+
+        RemoveSpawnedVehicleFromScene(vehicleId);
+
+        PlayerService.RefreshAllUI();
+
+        message = $"{vehicleType.name} has been sold for €{sellPrice:0}";
+        return true;
+    }
+
+    private static void RemoveSpawnedVehicleFromScene(int vehicleId)
+    {
+        var links = UnityEngine.Object.FindObjectsOfType<VehicleLink>(true);
+        foreach (var link in links)
+        {
+            if (link != null && link.vehicleId == vehicleId)
+            {
+                UnityEngine.Object.Destroy(link.gameObject);
+                return;
+            }
+        }
     }
 }
