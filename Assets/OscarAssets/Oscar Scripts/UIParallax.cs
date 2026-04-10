@@ -24,7 +24,7 @@ public class UIParallax : MonoBehaviour
 
         float normalisedX = (mousePos.x / Screen.width - 0.5f) * 2f;
         float normalisedY = (mousePos.y / Screen.width - 0.5f) * 2f;
-        float targetRotationZ = (-normalisedX * normalisedY) * 10f;
+        float targetRotationZ = (-normalisedX * normalisedY) * 5f;
         
         Quaternion targetRotation = startRotation * Quaternion.Euler(0f,targetRotationZ,0f);
 
