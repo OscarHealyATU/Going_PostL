@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SwitchSceneTrigger : MonoBehaviour
 {
@@ -49,6 +50,6 @@ public class SwitchSceneTrigger : MonoBehaviour
         if (SceneFader.Instance != null)
             SceneFader.Instance.FadeToScene(sceneName);
         else
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName);
     }
 }
