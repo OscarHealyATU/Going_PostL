@@ -90,7 +90,7 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 0.0,
+                money = 100000,
                 totalExperience = 0,
                 createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
 
