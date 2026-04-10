@@ -25,6 +25,9 @@ public class TerminalManagerUI : MonoBehaviour
     [SerializeField] private GameObject ownedVehiclesPage;
     [SerializeField] private GameObject forSaleVehiclesPage;
 
+    [Header("Vehicle Page Scripts")]
+    [SerializeField] private OwnedVehiclesPageUI ownedVehiclesPageUI;
+
     [Header("Vehicle Subpage Buttons")]
     [SerializeField] private Button ownedVehiclesButton;
     [SerializeField] private Button forSaleVehiclesButton;
@@ -45,6 +48,9 @@ public class TerminalManagerUI : MonoBehaviour
         RefreshTopBar();
         BuildVehicleForSalePage();
         ClearMessage();
+
+        if (ownedVehiclesPageUI != null)
+            ownedVehiclesPageUI.Rebuild();
     }
 
     public void ShowUpgradesPage()
@@ -58,6 +64,10 @@ public class TerminalManagerUI : MonoBehaviour
         SetActiveMainPage(vehiclesPage);
         ShowOwnedVehiclesSubpage();
         BuildVehicleForSalePage();
+
+        if (ownedVehiclesPageUI != null)
+            ownedVehiclesPageUI.Rebuild();
+
         UpdateLeftMenuVisuals(vehiclesButton);
     }
 
@@ -77,6 +87,9 @@ public class TerminalManagerUI : MonoBehaviour
     {
         if (ownedVehiclesPage != null) ownedVehiclesPage.SetActive(true);
         if (forSaleVehiclesPage != null) forSaleVehiclesPage.SetActive(false);
+
+        if (ownedVehiclesPageUI != null)
+            ownedVehiclesPageUI.Rebuild();
 
         UpdateVehicleSubpageVisuals(ownedVehiclesButton);
     }
@@ -152,6 +165,9 @@ public class TerminalManagerUI : MonoBehaviour
         RefreshTopBar();
         SetMessage(result.message);
 
+        if (ownedVehiclesPageUI != null)
+            ownedVehiclesPageUI.Rebuild();
+
         PlayerService.RefreshAllUI();
     }
 
@@ -173,6 +189,11 @@ public class TerminalManagerUI : MonoBehaviour
     {
         if (messageText != null)
             messageText.text = message;
+    }
+
+    public void SetStatusMessage(string message)
+    {
+        SetMessage(message);
     }
 
     private void ClearMessage()
