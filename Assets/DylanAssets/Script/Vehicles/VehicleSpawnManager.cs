@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,9 @@ public class VehicleSpawnManager : MonoBehaviour
     [Header("Vehicle Catalog")]
     [SerializeField] private VehicleCatalog catalog;
 
+    private readonly HashSet<int> spawnedVehicleIds = new HashSet<int>();
+    private bool hasSpawnedForCurrentScene = false;
+
     private string SceneName =>
         string.IsNullOrWhiteSpace(sceneNameOverride)
             ? SceneManager.GetActiveScene().name
@@ -26,9 +30,39 @@ public class VehicleSpawnManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     private void Start()
     {
+        TrySpawnForActiveScene();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (!string.Equals(scene.name, SceneName, StringComparison.Ordinal))
+            return;
+
+        hasSpawnedForCurrentScene = false;
+        spawnedVehicleIds.Clear();
+
+        TrySpawnForActiveScene();
+    }
+
+    private void TrySpawnForActiveScene()
+    {
+        if (hasSpawnedForCurrentScene)
+            return;
+
         SpawnVehiclesForThisScene();
+        hasSpawnedForCurrentScene = true;
     }
 
     public bool TrySpawnVehicle(int vehicleId)
@@ -47,8 +81,20 @@ public class VehicleSpawnManager : MonoBehaviour
         if (vehicle.spawnBay < 0 || vehicle.spawnBay >= spawnPoints.Length)
             return false;
 
+        if (spawnedVehicleIds.Contains(vehicle.id))
+            return true;
+
+        if (FindExistingVehicle(vehicle.id) != null)
+        {
+            spawnedVehicleIds.Add(vehicle.id);
+            return true;
+        }
+
         var point = spawnPoints[vehicle.spawnBay];
-        if (point == null || point.IsOccupied())
+        if (point == null)
+            return false;
+
+        if (IsSpawnPointOccupiedByAnotherVehicle(vehicle.spawnBay, vehicle.id))
             return false;
 
         var type = db.Find<VehicleType>(vehicle.vehicleTypeId);
@@ -67,9 +113,15 @@ public class VehicleSpawnManager : MonoBehaviour
 
         link.vehicleId = vehicle.id;
         link.spawnPointIndex = vehicle.spawnBay;
+        link.spawnScene = vehicle.spawnScene;
 
-        vehicle.spawnPending = 0;
-        db.Update(vehicle);
+        spawnedVehicleIds.Add(vehicle.id);
+
+        if (vehicle.spawnPending != 0)
+        {
+            vehicle.spawnPending = 0;
+            db.Update(vehicle);
+        }
 
         return true;
     }
@@ -92,10 +144,56 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             var vehicle = vehiclesForScene[i];
 
-            if (vehicle.spawnPending != 1)
-                continue;
-
+            // Spawn every vehicle assigned to this scene,
+            // not only newly-purchased pending ones.
             TrySpawnVehicle(vehicle.id);
         }
+    }
+
+    private VehicleLink FindExistingVehicle(int vehicleId)
+    {
+        var allLinks = FindObjectsOfType<VehicleLink>(true);
+        for (int i = 0; i < allLinks.Length; i++)
+        {
+            if (allLinks[i] != null && allLinks[i].vehicleId == vehicleId)
+                return allLinks[i];
+        }
+
+        return null;
+    }
+
+    private bool IsSpawnPointOccupiedByAnotherVehicle(int spawnPointIndex, int vehicleId)
+    {
+        var allLinks = FindObjectsOfType<VehicleLink>(true);
+
+        for (int i = 0; i < allLinks.Length; i++)
+        {
+            var link = allLinks[i];
+            if (link == null)
+                continue;
+
+            if (link.vehicleId == vehicleId)
+                continue;
+
+            if (!string.Equals(link.spawnScene, SceneName, StringComparison.Ordinal))
+                continue;
+
+            if (link.spawnPointIndex == spawnPointIndex)
+                return true;
+        }
+
+        // Optional fallback if your VehicleSpawnPoint has its own occupancy logic.
+        if (spawnPointIndex >= 0 && spawnPointIndex < spawnPoints.Length)
+        {
+            var point = spawnPoints[spawnPointIndex];
+            if (point != null)
+            {
+                var pointOccupied = point.IsOccupied();
+                if (pointOccupied)
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

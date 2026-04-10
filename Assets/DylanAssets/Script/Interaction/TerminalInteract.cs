@@ -20,6 +20,12 @@ public class TerminalInteract : MonoBehaviour
     private void Awake()
     {
         CachePlayerScripts();
+
+        if (managerPanel != null)
+            managerPanel.SetActive(false);
+
+        if (promptText != null)
+            promptText.gameObject.SetActive(false);
     }
 
     private void OnValidate()
@@ -29,12 +35,6 @@ public class TerminalInteract : MonoBehaviour
 
     private void Start()
     {
-        if (managerPanel != null)
-            managerPanel.SetActive(false);
-
-        if (promptText != null)
-            promptText.gameObject.SetActive(false);
-
         LockPlayer(false);
     }
 
