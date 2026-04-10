@@ -10,6 +10,9 @@ public class MiniMapMarker : MonoBehaviour
 
     public float zoomPercent = 0.3f;
 
+    public float zoomAmount = 0.1f, minZoom = 0.1f, maxZoom = 1f;
+
+
     void Update()
     {
         float normX = Mathf.InverseLerp(miniMap.mapMinX, miniMap.mapMaxX, Player.position.x);
@@ -31,5 +34,15 @@ public class MiniMapMarker : MonoBehaviour
         );
 
         playerMarker.localEulerAngles = new Vector3(0, 0, -Player.eulerAngles.y);
+    }
+
+    public void ZoomIn()
+    {
+        zoomPercent = Mathf.Clamp(zoomPercent - zoomAmount, minZoom, maxZoom);
+    }
+
+    public void ZoomOut()
+    {
+        zoomPercent = Mathf.Clamp(zoomPercent + zoomAmount, minZoom, maxZoom);
     }
 }
