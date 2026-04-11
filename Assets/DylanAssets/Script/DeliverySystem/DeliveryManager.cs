@@ -76,8 +76,7 @@ public class DeliveryManager : MonoBehaviour
     {
         player = null;
         TryFindPlayer();
-        RefreshCurrentJob();
-        RefreshDeliveryPoint();
+        RefreshDeliveryState();
     }
 
     private void Update()
@@ -140,7 +139,7 @@ public class DeliveryManager : MonoBehaviour
         int zoneId;
         Vector3 point;
 
-        if (!TryGetRandomUnlockedDelivery(zoneId: out zoneId, point: out point))
+        if (!TryGetRandomUnlockedDelivery(out zoneId, out point))
         {
             Debug.LogWarning("DeliveryManager: could not find any valid unlocked delivery zone with points.");
             return;
@@ -170,6 +169,22 @@ public class DeliveryManager : MonoBehaviour
             DeliveryService.SetActive(currentJob.id);
             currentJob.status = 1;
         }
+    }
+
+    public void RefreshDeliveryState()
+    {
+        RefreshCurrentJob();
+
+        if (currentJob == null)
+        {
+            if (activeMarker != null)
+                activeMarker.gameObject.SetActive(false);
+
+            DestroyDeliveryPoint();
+            return;
+        }
+
+        RefreshDeliveryPoint();
     }
 
     public Vector3? GetCurrentTarget()

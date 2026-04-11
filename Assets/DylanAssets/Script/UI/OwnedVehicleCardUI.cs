@@ -8,6 +8,7 @@ public class OwnedVehicleCardUI : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TMP_Text vehicleTypeText;
     [SerializeField] private TMP_Text sellInfoText;
+    [SerializeField] private TMP_Text storageInfoText;
     [SerializeField] private Button sellButton;
 
     private int vehicleId;
@@ -19,12 +20,17 @@ public class OwnedVehicleCardUI : MonoBehaviour
         onSold = soldCallback;
 
         double sellPrice = VehicleService.GetSellPrice(vehicle.vehicleTypeId);
+        int usedStorage = VehicleStorageService.GetUsedSlotCount(vehicle.id);
+        int maxStorage = VehicleStorageService.GetCapacity(vehicle.id);
 
         if (vehicleTypeText != null)
             vehicleTypeText.text = type != null ? type.name : "Unknown Vehicle";
 
         if (sellInfoText != null)
-            sellInfoText.text = $"Sell for €{sellPrice:0} (75% of original price)";
+            sellInfoText.text = $"Sell for 75% of original price";
+
+        if (storageInfoText != null)
+            storageInfoText.text = $"Storage used: {usedStorage}/{maxStorage}";
 
         if (sellButton != null)
         {

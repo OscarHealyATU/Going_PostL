@@ -107,13 +107,7 @@ public class VehicleSpawnManager : MonoBehaviour
         GameObject spawned = Instantiate(prefab, point.transform.position, point.transform.rotation);
         spawned.name = $"Vehicle_{vehicle.id}_{type.name}";
 
-        VehicleLink link = spawned.GetComponent<VehicleLink>();
-        if (link == null)
-            link = spawned.AddComponent<VehicleLink>();
-
-        link.vehicleId = vehicle.id;
-        link.spawnPointIndex = vehicle.spawnBay;
-        link.spawnScene = vehicle.spawnScene;
+        ApplyVehicleLinkData(spawned, vehicle);
 
         spawnedVehicleIds.Add(vehicle.id);
 
@@ -143,11 +137,39 @@ public class VehicleSpawnManager : MonoBehaviour
         for (int i = 0; i < vehiclesForScene.Count; i++)
         {
             var vehicle = vehiclesForScene[i];
-
-            // Spawn every vehicle assigned to this scene,
-            // not only newly-purchased pending ones.
             TrySpawnVehicle(vehicle.id);
         }
+    }
+
+    private void ApplyVehicleLinkData(GameObject spawned, Vehicle vehicle)
+    {
+        if (spawned == null || vehicle == null)
+            return;
+
+        var links = spawned.GetComponentsInChildren<VehicleLink>(true);
+
+        if (links == null || links.Length == 0)
+        {
+            var rootLink = spawned.AddComponent<VehicleLink>();
+            rootLink.vehicleId = vehicle.id;
+            rootLink.spawnPointIndex = vehicle.spawnBay;
+            rootLink.spawnScene = vehicle.spawnScene;
+
+            Debug.Log($"[VehicleSpawnManager] Added VehicleLink to '{spawned.name}' with vehicleId={vehicle.id}");
+            return;
+        }
+
+        for (int i = 0; i < links.Length; i++)
+        {
+            if (links[i] == null)
+                continue;
+
+            links[i].vehicleId = vehicle.id;
+            links[i].spawnPointIndex = vehicle.spawnBay;
+            links[i].spawnScene = vehicle.spawnScene;
+        }
+
+        Debug.Log($"[VehicleSpawnManager] Applied vehicleId={vehicle.id} to {links.Length} VehicleLink component(s) on '{spawned.name}'");
     }
 
     private VehicleLink FindExistingVehicle(int vehicleId)
@@ -182,7 +204,6 @@ public class VehicleSpawnManager : MonoBehaviour
                 return true;
         }
 
-        // Optional fallback if your VehicleSpawnPoint has its own occupancy logic.
         if (spawnPointIndex >= 0 && spawnPointIndex < spawnPoints.Length)
         {
             var point = spawnPoints[spawnPointIndex];

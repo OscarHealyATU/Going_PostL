@@ -25,6 +25,31 @@ public static class DeliveryService
         return GetPending().FirstOrDefault();
     }
 
+    public static DeliveryJob GetById(int id)
+    {
+        if (DbBoot.Instance == null)
+            return null;
+
+        return DbBoot.Instance.Db.Table<DeliveryJob>()
+            .FirstOrDefault(j => j.id == id);
+    }
+
+    public static DeliveryJob GetByItemId(string itemId)
+    {
+        if (DbBoot.Instance == null || string.IsNullOrWhiteSpace(itemId))
+            return null;
+
+        return DbBoot.Instance.Db.Table<DeliveryJob>()
+            .Where(j => j.status == 0 || j.status == 1)
+            .OrderBy(j => j.id)
+            .FirstOrDefault(j => j.itemId == itemId);
+    }
+
+    public static bool HasActiveJobForItem(string itemId)
+    {
+        return GetByItemId(itemId) != null;
+    }
+
     public static DeliveryJob Create(string itemId, string itemName, Vector3 targetPosition)
     {
         return Create(itemId, itemName, targetPosition, 1);
