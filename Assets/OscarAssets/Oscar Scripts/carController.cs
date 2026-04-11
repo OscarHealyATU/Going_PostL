@@ -51,7 +51,12 @@ public class carController : MonoBehaviour
         {
             rearLeftWheel.motorTorque = throttleInput * maxMotorTorque;
             rearRightWheel.motorTorque = throttleInput * maxMotorTorque;
-        }
+        } 
+        else
+        {
+            rearLeftWheel.motorTorque = 0f;
+            rearRightWheel.motorTorque = 0f;
+        } 
 
         float brake = isBraking ? brakeTorque : 0f;
         rearLeftWheel.brakeTorque = brake;

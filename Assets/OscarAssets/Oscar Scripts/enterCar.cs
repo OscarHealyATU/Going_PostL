@@ -1,27 +1,26 @@
 using UnityEngine;
-using Unity.Cinemachine;
 
 public class enterCar : MonoBehaviour
 {
 
     private float enterDistance = 3f;
-    [Header("Cinemachine Handling")]
-    public Camera playerCam;
-
+   
     [Header("Player Handling")]
     public Transform driverSeat;
     private carController currentCar;
     private bool isInCar = false;
     private CharacterController playerController;
     private PlayerMovementOutside playerMovement;
-    private PlayerLook playerLook;
+    private Rigidbody playerRigidBody;
+    public PlayerLook playerLook;
 
 
     void Start()
     {
         playerController = GetComponent<CharacterController>();
         playerMovement = GetComponent<PlayerMovementOutside>();
-        playerLook = GetComponent<PlayerLook>();
+        playerRigidBody = GetComponent<Rigidbody>();
+        // playerLook = GetComponent<PlayerLook>();
     }
 
     // Update is called once per frame
@@ -57,9 +56,12 @@ public class enterCar : MonoBehaviour
         playerMovement.canMove = false;
         playerLook.canLook = false;
         playerController.enabled = false;
+        playerRigidBody.isKinematic = true;
 
-        transform.SetParent(driverSeat);
-        transform.position = driverSeat != null ? driverSeat.position : currentCar.transform.position;
+        playerLook.cameraRoot.SetParent(driverSeat);
+        playerLook.cameraRoot.localPosition = Vector3.zero;
+        playerLook.cameraRoot.localRotation = Quaternion.identity;
+        transform.position = new Vector3(0,-500,0);
     }
 
     void ExitCar()
@@ -67,15 +69,20 @@ public class enterCar : MonoBehaviour
         isInCar = false;
         currentCar.isBeingDriven = false;
 
-        transform.SetParent(null);
+        playerLook.cameraRoot.SetParent(transform);
+        playerLook.cameraRoot.localPosition = Vector3.zero;
+        playerLook.cameraRoot.localRotation = Quaternion.identity;
         transform.position = currentCar.transform.position + currentCar.transform.right * 2f;
 
         playerMovement.canMove = true;
-        playerMovement.enabled = true;
         playerLook.canLook = true;
+        playerController.enabled = true;
+        playerRigidBody.isKinematic = false;
+
+        currentCar = null;
     }
 
-    void OGizmosSelected()
+    void OnDrawGizmosSelected()
     {
 
         Gizmos.color = Color.yellow;
