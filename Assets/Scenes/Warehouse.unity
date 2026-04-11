@@ -8344,7 +8344,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1604679255}
   m_HandleRect: {fileID: 1604679254}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -9509,7 +9509,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 384.91068, y: 400}
+  m_CellSize: {x: 520.65717, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -13919,7 +13919,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 225838375}
   m_HandleRect: {fileID: 225838374}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -19417,7 +19417,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 404.91068, y: 400}
+  m_CellSize: {x: 540.65717, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
