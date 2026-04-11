@@ -194,6 +194,195 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    public int GetFirstEmptySlot()
+    {
+        ApplyCapacityFromPlayer();
+
+        if (items == null)
+            return -1;
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (items[i] == null)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public bool HasFreeSlot()
+    {
+        return GetFirstEmptySlot() >= 0;
+    }
+
+    public bool ContainsItemKey(string itemKey)
+    {
+        return GetFirstSlotByKey(itemKey) >= 0;
+    }
+
+    public bool TryStoreDeliveryFromInventoryToVehicle(int inventorySlotIndex, int vehicleId, int vehicleSlotIndex, out string message)
+    {
+        message = "Failed to store delivery.";
+
+        ApplyCapacityFromPlayer();
+
+        if (inventorySlotIndex < 0 || inventorySlotIndex >= maxSlots)
+        {
+            message = "Invalid inventory slot.";
+            return false;
+        }
+
+        ItemData item = items[inventorySlotIndex];
+        if (item == null)
+        {
+            message = "Inventory slot is empty.";
+            return false;
+        }
+
+        DeliveryJob job = DeliveryService.GetByItemId(item.itemKey);
+        if (job == null)
+        {
+            message = "That inventory item is not an active delivery.";
+            return false;
+        }
+
+        var storeResult = VehicleStorageService.StoreDeliveryInVehicle(vehicleId, job.id, vehicleSlotIndex);
+        if (!storeResult.success)
+        {
+            message = storeResult.message;
+            return false;
+        }
+
+        items[inventorySlotIndex] = null;
+        SaveToDatabase();
+        RefreshUI();
+
+        if (DeliveryManager.Instance != null)
+            DeliveryManager.Instance.RefreshDeliveryState();
+
+        message = storeResult.message;
+        return true;
+    }
+
+    public bool TryStoreDeliveryFromInventoryToVehicleAuto(int inventorySlotIndex, int vehicleId, out string message)
+    {
+        message = "Failed to store delivery.";
+
+        ApplyCapacityFromPlayer();
+
+        if (inventorySlotIndex < 0 || inventorySlotIndex >= maxSlots)
+        {
+            message = "Invalid inventory slot.";
+            return false;
+        }
+
+        ItemData item = items[inventorySlotIndex];
+        if (item == null)
+        {
+            message = "Inventory slot empty.";
+            return false;
+        }
+
+        DeliveryJob job = DeliveryService.GetByItemId(item.itemKey);
+        if (job == null)
+        {
+            message = "Item is not an active delivery.";
+            return false;
+        }
+
+        int slotIndex = VehicleStorageService.GetFirstEmptySlot(vehicleId);
+        if (slotIndex < 0)
+        {
+            message = "Vehicle storage full.";
+            return false;
+        }
+
+        var storeResult = VehicleStorageService.StoreDeliveryInVehicle(vehicleId, job.id, slotIndex);
+        if (!storeResult.success)
+        {
+            message = storeResult.message;
+            return false;
+        }
+
+        items[inventorySlotIndex] = null;
+        SaveToDatabase();
+        RefreshUI();
+
+        if (DeliveryManager.Instance != null)
+            DeliveryManager.Instance.RefreshDeliveryState();
+
+        message = storeResult.message;
+        return true;
+    }
+
+    public bool TryMoveStoredDeliveryToInventory(int storedDeliveryId, out string message)
+    {
+        message = "Failed to move stored delivery to inventory.";
+
+        ApplyCapacityFromPlayer();
+
+        if (!HasFreeSlot())
+        {
+            message = "Inventory is full.";
+            return false;
+        }
+
+        StoredDelivery stored = VehicleStorageService.GetStoredDeliveryById(storedDeliveryId);
+        if (stored == null)
+        {
+            message = "Stored delivery not found.";
+            return false;
+        }
+
+        if (ItemCatalog.Instance == null)
+        {
+            message = "Item catalog not available.";
+            return false;
+        }
+
+        ItemData item = ItemCatalog.Instance.GetByKey(stored.itemId);
+        if (item == null)
+        {
+            message = $"No ItemData found for key '{stored.itemId}'.";
+            return false;
+        }
+
+        bool added = AddItem(item);
+        if (!added)
+        {
+            message = "Inventory is full.";
+            return false;
+        }
+
+        var unstoreResult = VehicleStorageService.RemoveStoredDeliveryFromVehicle(storedDeliveryId);
+        if (!unstoreResult.success)
+        {
+            RemoveFirstMatchingItem(item.itemKey);
+            message = unstoreResult.message;
+            return false;
+        }
+
+        if (DeliveryManager.Instance != null)
+            DeliveryManager.Instance.RefreshDeliveryState();
+
+        message = unstoreResult.message;
+        return true;
+    }
+
+    public bool TryMoveStoredDeliverySlotToInventory(int vehicleId, int vehicleSlotIndex, out string message)
+    {
+        message = "Failed to move stored delivery to inventory.";
+
+        StoredDelivery stored = VehicleStorageService.GetStoredDeliveryInSlot(vehicleId, vehicleSlotIndex);
+        if (stored == null)
+        {
+            message = "No stored delivery found in that vehicle slot.";
+            return false;
+        }
+
+        return TryMoveStoredDeliveryToInventory(stored.id, out message);
+    }
+
     public void SaveToDatabase()
     {
         if (DbBoot.Instance == null)
@@ -293,7 +482,6 @@ public class InventoryManager : MonoBehaviour
             items[row.slotIndex] = item;
         }
 
-        // Rewrite DB so any rows above current capacity are removed.
         SaveToDatabase();
 
         Debug.Log($"[InventoryManager] Loaded inventory. Capacity={maxSlots}");

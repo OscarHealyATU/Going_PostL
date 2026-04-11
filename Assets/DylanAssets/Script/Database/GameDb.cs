@@ -24,6 +24,7 @@ public sealed class GameDb : IDisposable
         EnsureDayStateColumns();
         EnsureDeliveryJobColumns();
         EnsureDeliveryZoneColumns();
+        EnsureStoredDeliveryColumns();
 
         Seed();
         EnsureDayStateRow();
@@ -63,6 +64,30 @@ public sealed class GameDb : IDisposable
           FOREIGN KEY(vehicleTypeId) REFERENCES VehicleType(id),
           FOREIGN KEY(ownedByPlayerId) REFERENCES Player(id)
         );");
+
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS StoredDelivery (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          vehicleId INTEGER NOT NULL,
+          originalDeliveryJobId INTEGER NOT NULL DEFAULT 0,
+          itemId TEXT NOT NULL,
+          itemName TEXT,
+          targetX REAL NOT NULL,
+          targetY REAL NOT NULL,
+          targetZ REAL NOT NULL,
+          zoneId INTEGER NOT NULL DEFAULT 1,
+          slotIndex INTEGER NOT NULL,
+          storedAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(vehicleId) REFERENCES Vehicle(id)
+        );");
+
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_storeddelivery_vehicle_slot
+        ON StoredDelivery(vehicleId, slotIndex);");
+
+        Db.Execute(@"
+        CREATE INDEX IF NOT EXISTS idx_storeddelivery_vehicle
+        ON StoredDelivery(vehicleId);");
 
         Db.Execute(@"
         CREATE TABLE IF NOT EXISTS TransactionLog (
@@ -154,6 +179,7 @@ public sealed class GameDb : IDisposable
     private void EnsurePlayerColumns()
     {
         AddColumnIfMissing("Player", "totalExperience", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "inventorySlotCount", "INTEGER NOT NULL DEFAULT 3");
         AddColumnIfMissing("Player", "returnValid", "INTEGER NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnX", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
@@ -210,6 +236,44 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("DeliveryZone", "startsUnlocked", "INTEGER NOT NULL DEFAULT 0");
     }
 
+    private void EnsureStoredDeliveryColumns()
+    {
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS StoredDelivery (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          vehicleId INTEGER NOT NULL,
+          originalDeliveryJobId INTEGER NOT NULL DEFAULT 0,
+          itemId TEXT NOT NULL,
+          itemName TEXT,
+          targetX REAL NOT NULL,
+          targetY REAL NOT NULL,
+          targetZ REAL NOT NULL,
+          zoneId INTEGER NOT NULL DEFAULT 1,
+          slotIndex INTEGER NOT NULL,
+          storedAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(vehicleId) REFERENCES Vehicle(id)
+        );");
+
+        AddColumnIfMissing("StoredDelivery", "vehicleId", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "originalDeliveryJobId", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "itemId", "TEXT");
+        AddColumnIfMissing("StoredDelivery", "itemName", "TEXT");
+        AddColumnIfMissing("StoredDelivery", "targetX", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "targetY", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "targetZ", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "zoneId", "INTEGER NOT NULL DEFAULT 1");
+        AddColumnIfMissing("StoredDelivery", "slotIndex", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("StoredDelivery", "storedAt", "TEXT");
+
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_storeddelivery_vehicle_slot
+        ON StoredDelivery(vehicleId, slotIndex);");
+
+        Db.Execute(@"
+        CREATE INDEX IF NOT EXISTS idx_storeddelivery_vehicle
+        ON StoredDelivery(vehicleId);");
+    }
+
     private void AddColumnIfMissing(string table, string column, string columnSql)
     {
         var cols = Db.Query<PragmaColumn>($"PRAGMA table_info({table});");
@@ -235,9 +299,9 @@ public sealed class GameDb : IDisposable
     private void SeedVehicleTypes()
     {
         UpsertVehicleType("Bicycle", 1500.0, 5, 80.0);
-        UpsertVehicleType("3Wheeler", 4000.0, 20, 120.0);
-        UpsertVehicleType("eVan", 15000.0, 60, 250.0);
-        UpsertVehicleType("Lorry", 50000.0, 150, 400.0);
+        UpsertVehicleType("3Wheeler", 4000.0, 15, 120.0);
+        UpsertVehicleType("eVan", 15000.0, 30, 250.0);
+        UpsertVehicleType("Lorry", 50000.0, 60, 400.0);
 
         DeleteVehicleTypeIfExists("Zone 1");
         DeleteVehicleTypeIfExists("Zone 2");

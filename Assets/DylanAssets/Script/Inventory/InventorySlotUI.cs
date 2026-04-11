@@ -41,6 +41,23 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
         if (CurrentItem == null)
             return;
 
+        // If vehicle storage is open, send item directly to vehicle
+        if (VehicleStorageUI.Instance != null && VehicleStorageUI.Instance.IsOpen)
+        {
+            bool stored = InventoryManager.Instance.TryStoreDeliveryFromInventoryToVehicleAuto(
+                SlotIndex,
+                VehicleStorageUI.Instance.CurrentVehicleId,
+                out string message
+            );
+
+            Debug.Log(message);
+
+            if (stored)
+                VehicleStorageUI.Instance.RefreshUI();
+
+            return;
+        }
+
         if (PackingTableUI.Instance == null)
             return;
 

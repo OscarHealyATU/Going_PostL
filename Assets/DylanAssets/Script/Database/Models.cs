@@ -54,6 +54,28 @@ public class Vehicle
     public int spawnPending { get; set; }
 }
 
+[Table("StoredDelivery")]
+public class StoredDelivery
+{
+    [PrimaryKey, AutoIncrement] public int id { get; set; }
+
+    public int vehicleId { get; set; }
+    public int originalDeliveryJobId { get; set; }
+
+    public string itemId { get; set; }
+    public string itemName { get; set; }
+
+    public float targetX { get; set; }
+    public float targetY { get; set; }
+    public float targetZ { get; set; }
+
+    public int zoneId { get; set; }
+
+    public int slotIndex { get; set; }
+
+    public string storedAt { get; set; }
+}
+
 [Table("TransactionLog")]
 public class TransactionLog
 {
