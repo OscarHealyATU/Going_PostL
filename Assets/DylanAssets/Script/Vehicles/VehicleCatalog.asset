@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VehicleCatalog
   entries:
   - vehicleTypeName: Bicycle
-    prefab: {fileID: 5984925334235573984, guid: 039234fbf1761f94a86c4ed64e75e05b, type: 3}
+    prefab: {fileID: 1738089102066300647, guid: 930d4b5c24f0e7e4ebaf8804df9504e0, type: 3}
   - vehicleTypeName: 3Wheeler
     prefab: {fileID: 4215715351662060927, guid: 56c0dcd8526b1f345974ab510ebe6b4f, type: 3}
   - vehicleTypeName: eVan
-    prefab: {fileID: 3693979709036026264, guid: 8670d82c84f61334bb9f6ce1ff8aa28a, type: 3}
+    prefab: {fileID: 5985625047747235036, guid: ee47c73c8425ebc458cf8ad1badc28d2, type: 3}
   - vehicleTypeName: Lorry
     prefab: {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}

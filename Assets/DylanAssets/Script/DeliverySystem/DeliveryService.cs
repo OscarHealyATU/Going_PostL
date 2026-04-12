@@ -83,7 +83,8 @@ public static class DeliveryService
     {
         var db = DbBoot.Instance.Db;
         var job = db.Table<DeliveryJob>().FirstOrDefault(j => j.id == id);
-        if (job == null) return;
+        if (job == null)
+            return;
 
         job.status = 1;
         db.Update(job);
@@ -103,6 +104,40 @@ public static class DeliveryService
         db.Delete(job);
 
         Debug.Log($"DeliveryService.Complete succeeded for job {id}.");
+    }
+
+    public static bool DeleteJob(int id)
+    {
+        if (DbBoot.Instance == null)
+            return false;
+
+        var db = DbBoot.Instance.Db;
+        var job = db.Table<DeliveryJob>().FirstOrDefault(j => j.id == id);
+
+        if (job == null)
+        {
+            Debug.LogWarning($"DeliveryService.DeleteJob could not find job {id}.");
+            return false;
+        }
+
+        db.Delete(job);
+        Debug.Log($"DeliveryService.DeleteJob removed job {id}.");
+        return true;
+    }
+
+    public static bool DeleteJobByItemId(string itemId)
+    {
+        if (string.IsNullOrWhiteSpace(itemId))
+            return false;
+
+        var job = GetByItemId(itemId);
+        if (job == null)
+        {
+            Debug.LogWarning($"DeliveryService.DeleteJobByItemId could not find active job for itemId '{itemId}'.");
+            return false;
+        }
+
+        return DeleteJob(job.id);
     }
 
     public static Vector3 GetTargetPosition(DeliveryJob job)
