@@ -23,7 +23,8 @@ public class carController : MonoBehaviour
 
     public Transform driverSeat;
     [Header("UI")]
-    public GameObject UseVehiclePrompt;
+    public GameObject useVehiclePrompt;
+    public GameObject drivingInstructions;
     [HideInInspector] public bool isBeingDriven = false;
 
     void Start()

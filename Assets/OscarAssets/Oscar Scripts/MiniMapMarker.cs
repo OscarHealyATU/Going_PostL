@@ -15,6 +15,8 @@ public class MiniMapMarker : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.C)) ZoomIn();
+        if (Input.GetKeyDown(KeyCode.V)) ZoomOut();
         float normX = Mathf.InverseLerp(miniMap.mapMinX, miniMap.mapMaxX, Player.position.x);
         float normZ = Mathf.InverseLerp(miniMap.mapMinZ, miniMap.mapMaxZ, Player.position.z);
 

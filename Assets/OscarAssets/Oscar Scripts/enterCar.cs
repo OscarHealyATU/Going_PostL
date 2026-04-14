@@ -35,7 +35,7 @@ public class enterCar : MonoBehaviour
             if (currentCar != null)
             {
                 // prompts player to enter into a vehicle
-                currentCar.UseVehiclePrompt.SetActive(true);
+                currentCar.useVehiclePrompt.SetActive(true);
                 if (Input.GetKeyDown(KeyCode.F)) EnterCar();
             }
             else
@@ -54,7 +54,7 @@ public class enterCar : MonoBehaviour
         carController[] cars = FindObjectsByType<carController>(FindObjectsSortMode.None);
         foreach (carController car in cars)
         {
-            if(car.UseVehiclePrompt != null) car.UseVehiclePrompt.SetActive(false);
+            if(car.useVehiclePrompt != null) car.useVehiclePrompt.SetActive(false);
         }
     }
 
@@ -71,7 +71,8 @@ public class enterCar : MonoBehaviour
 
     void EnterCar()
     {
-        currentCar.UseVehiclePrompt.SetActive(false);
+        currentCar.useVehiclePrompt.SetActive(false);
+        currentCar.drivingInstructions.SetActive(true);
 
         isInCar = true;
         currentCar.isBeingDriven = true;
@@ -103,7 +104,8 @@ public class enterCar : MonoBehaviour
         playerController.enabled = true;
         playerRigidBody.isKinematic = false;
 
-        currentCar.UseVehiclePrompt.SetActive(false);
+        currentCar.useVehiclePrompt.SetActive(false);
+        currentCar.drivingInstructions.SetActive(false);
         currentCar = null;
     }
 
