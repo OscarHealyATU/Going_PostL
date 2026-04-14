@@ -439,6 +439,7 @@ MonoBehaviour:
   engineBrakeTorque: 500
   stopBrakeTorque: 1500
   creepThreshold: 1
+  driverSeat: {fileID: 5336243205955633882}
   isBeingDriven: 0
 --- !u!54 &7663247255953671609
 Rigidbody:

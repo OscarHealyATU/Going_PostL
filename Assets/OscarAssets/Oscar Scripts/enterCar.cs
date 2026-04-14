@@ -6,7 +6,7 @@ public class enterCar : MonoBehaviour
     private float enterDistance = 3f;
    
     [Header("Player Handling")]
-    public Transform driverSeat;
+    
     private carController currentCar;
     private bool isInCar = false;
     private CharacterController playerController;
@@ -60,7 +60,7 @@ public class enterCar : MonoBehaviour
         playerController.enabled = false;
         playerRigidBody.isKinematic = true;
 
-        playerLook.cameraRoot.SetParent(driverSeat);
+        playerLook.cameraRoot.SetParent(currentCar.driverSeat);
         playerLook.cameraRoot.localPosition = Vector3.zero;
         playerLook.cameraRoot.localRotation = Quaternion.identity;
         transform.position = new Vector3(0,-500,0);

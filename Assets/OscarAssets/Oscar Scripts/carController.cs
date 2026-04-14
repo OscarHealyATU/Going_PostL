@@ -20,6 +20,8 @@ public class carController : MonoBehaviour
     public float stopBrakeTorque = 1500f;
     public float creepThreshold = 1f;
     private Rigidbody rb;
+
+    public Transform driverSeat;
     [HideInInspector] public bool isBeingDriven = false;
 
     void Start()
