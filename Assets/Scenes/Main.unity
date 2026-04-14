@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: cefff8247986fd943837a3c79805b95e, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: b25fa3cfd123f6c4aafa9f65abd1c903, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 034ce00866fa6cd44a9cede588d3b5d6, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -219,7 +219,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1435130440771434322, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 262.8
+      value: 98
       objectReference: {fileID: 0}
     - target: {fileID: 1435130440771434322, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
       propertyPath: m_LocalPosition.y
@@ -227,7 +227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1435130440771434322, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 673.78
+      value: 705.2
       objectReference: {fileID: 0}
     - target: {fileID: 1435130440771434322, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
       propertyPath: m_LocalRotation.w
@@ -260,6 +260,62 @@ PrefabInstance:
     - target: {fileID: 2140929946491987511, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
       propertyPath: m_Name
       value: car
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -13
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99932843
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.036643673
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5336243205955633882, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663247255953671609, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_Mass
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663247255953671609, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_ImplicitCom
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663247255953671609, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663247255953671609, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_ImplicitTensor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7663247255953671609, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7926122756933466673, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: maxSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7926122756933466673, guid: 8011e4c14c1292e4aa5736558cfc0591, type: 3}
+      propertyPath: maxMotorTorque
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1682,7 +1738,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 974702920}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.4999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4326,7 +4382,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 389.1, y: -147.3002}
+  m_AnchoredPosition: {x: 389.1, y: -159.85997}
   m_SizeDelta: {x: 760, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869750475
@@ -10401,7 +10457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -41.400024, y: -31.400024}
+  m_AnchoredPosition: {x: -41.399902, y: -31.400024}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2002560587
