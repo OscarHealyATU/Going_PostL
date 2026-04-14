@@ -14,13 +14,15 @@ public class enterCar : MonoBehaviour
     private Rigidbody playerRigidBody;
     public PlayerLook playerLook;
 
+    private Vector3 playerHeight;
+
 
     void Start()
     {
         playerController = GetComponent<CharacterController>();
         playerMovement = GetComponent<PlayerMovementOutside>();
         playerRigidBody = GetComponent<Rigidbody>();
-        // playerLook = GetComponent<PlayerLook>();
+        playerHeight = playerLook.cameraRoot.localPosition;
     }
 
     // Update is called once per frame
@@ -70,7 +72,7 @@ public class enterCar : MonoBehaviour
         currentCar.isBeingDriven = false;
 
         playerLook.cameraRoot.SetParent(transform);
-        playerLook.cameraRoot.localPosition = Vector3.zero;
+        playerLook.cameraRoot.localPosition = playerHeight;
         playerLook.cameraRoot.localRotation = Quaternion.identity;
         transform.position = currentCar.transform.position + currentCar.transform.right * 2f;
 
