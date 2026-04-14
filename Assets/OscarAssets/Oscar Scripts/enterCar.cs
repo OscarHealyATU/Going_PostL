@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class enterCar : MonoBehaviour
@@ -31,11 +32,29 @@ public class enterCar : MonoBehaviour
         if (!isInCar)
         {
             currentCar = FindCar();
-            if (currentCar != null && Input.GetKeyDown(KeyCode.F)) EnterCar();
+            if (currentCar != null)
+            {
+                // prompts player to enter into a vehicle
+                currentCar.UseVehiclePrompt.SetActive(true);
+                if (Input.GetKeyDown(KeyCode.F)) EnterCar();
+            }
+            else
+            {
+                HidePrompts();
+            }
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.F)) ExitCar();
+        }
+    }
+
+     void HidePrompts()
+    {
+        carController[] cars = FindObjectsByType<carController>(FindObjectsSortMode.None);
+        foreach (carController car in cars)
+        {
+            if(car.UseVehiclePrompt != null) car.UseVehiclePrompt.SetActive(false);
         }
     }
 
@@ -52,6 +71,8 @@ public class enterCar : MonoBehaviour
 
     void EnterCar()
     {
+        currentCar.UseVehiclePrompt.SetActive(false);
+
         isInCar = true;
         currentCar.isBeingDriven = true;
         
@@ -68,6 +89,7 @@ public class enterCar : MonoBehaviour
 
     void ExitCar()
     {
+        
         isInCar = false;
         currentCar.isBeingDriven = false;
 
@@ -81,6 +103,7 @@ public class enterCar : MonoBehaviour
         playerController.enabled = true;
         playerRigidBody.isKinematic = false;
 
+        currentCar.UseVehiclePrompt.SetActive(false);
         currentCar = null;
     }
 

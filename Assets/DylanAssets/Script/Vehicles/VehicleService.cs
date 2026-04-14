@@ -259,7 +259,7 @@ public static class VehicleService
 
     private static void RemoveSpawnedVehicleFromScene(int vehicleId)
     {
-        var links = UnityEngine.Object.FindObjectsOfType<VehicleLink>(true);
+        var links = UnityEngine.Object.FindObjectsByType<VehicleLink>(UnityEngine.FindObjectsSortMode.None);
         foreach (var link in links)
         {
             if (link != null && link.vehicleId == vehicleId)

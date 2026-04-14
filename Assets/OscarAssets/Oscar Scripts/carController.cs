@@ -22,6 +22,8 @@ public class carController : MonoBehaviour
     private Rigidbody rb;
 
     public Transform driverSeat;
+    [Header("UI")]
+    public GameObject UseVehiclePrompt;
     [HideInInspector] public bool isBeingDriven = false;
 
     void Start()
