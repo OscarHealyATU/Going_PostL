@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/OscarAssets/MyUI/styles.uss?fileID=7433441132597879392&amp;guid=aef5287795f372b4693c1a8c38966350&amp;type=3#styles" />
+    <ui:VisualElement name="Panel" class="Panel" style="flex-grow: 1; flex-direction: row; width: 80%; position: absolute; top: 0; right: 10%; height: 1079px; color: rgb(51, 51, 51); background-color: rgb(210, 195, 162); text-shadow: 10px -10px 0 rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="side" style="flex-grow: 1; width: 20%; background-color: rgb(52, 52, 52);">
+            <ui:VisualElement name="Logo" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/OscarAssets/MyUI/Artboard%202@3x.png?fileID=2800000&amp;guid=c4ad8e24ff9bde54c9b70aa8c7e17d81&amp;type=3#Artboard 2@3x&quot;); -unity-background-scale-mode: stretch-to-fill; -unity-slice-type: sliced; height: auto; text-shadow: 10px -10px 0 rgb(51, 51, 51); -unity-text-outline-width: 10px; background-color: rgb(255, 255, 255);" />
+            <ui:VisualElement name="navbar" style="flex-grow: 1; justify-content: space-evenly; align-items: stretch; height: 30%; background-color: rgba(208, 232, 206, 0.9);">
+                <ui:Button text="Cancel" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
+                <ui:Button text="Apply" name="Button" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
+                <ui:Button text="Back" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="main" style="flex-grow: 1; flex-direction: column; width: 60%;">
+            <ui:VisualElement name="Content" style="flex-grow: 1; height: 80%;">
+                <ui:Label text="Settings" name="Heading" style="font-size: 36px; -unity-font-style: bold; -unity-text-align: middle-left; align-self: stretch; color: rgb(255, 255, 255); padding-top: 16px; padding-right: 4px; padding-bottom: 16px; padding-left: 16px; border-bottom-color: rgba(255, 255, 255, 0.5); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-color: rgb(206, 73, 72);" />
+                <ui:VisualElement name="Graphics" style="flex-grow: 1; background-color: rgb(51, 51, 51);">
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(232, 224, 206);">
+                        <ui:Label text="Graphics" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
+                        <ui:RadioButtonGroup label="HDR" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(232, 224, 206);">
+                        <ui:Label text="Audio" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); margin-left: 0; padding-left: 8px;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(232, 224, 206);">
+                        <ui:Label text="Controls" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
