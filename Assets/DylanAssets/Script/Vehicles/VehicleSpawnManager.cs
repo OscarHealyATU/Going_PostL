@@ -174,7 +174,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
     private VehicleLink FindExistingVehicle(int vehicleId)
     {
-        var allLinks = FindObjectsOfType<VehicleLink>(true);
+        var allLinks = FindObjectsByType<VehicleLink>(FindObjectsSortMode.None);
         for (int i = 0; i < allLinks.Length; i++)
         {
             if (allLinks[i] != null && allLinks[i].vehicleId == vehicleId)
@@ -186,7 +186,7 @@ public class VehicleSpawnManager : MonoBehaviour
 
     private bool IsSpawnPointOccupiedByAnotherVehicle(int spawnPointIndex, int vehicleId)
     {
-        var allLinks = FindObjectsOfType<VehicleLink>(true);
+        var allLinks = FindObjectsByType<VehicleLink>(FindObjectsSortMode.None);
 
         for (int i = 0; i < allLinks.Length; i++)
         {
