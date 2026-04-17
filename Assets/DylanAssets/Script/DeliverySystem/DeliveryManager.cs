@@ -11,7 +11,7 @@ public class DeliveryManager : MonoBehaviour
     public string playerTag = "Player";
 
     [Header("Delivery")]
-    public float completeRadius = 10f;
+    public float completeRadius = 5f;
     public string mainSceneName = "Main";
 
     [Header("Optional world marker")]
