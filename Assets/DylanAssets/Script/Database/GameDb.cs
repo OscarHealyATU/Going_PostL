@@ -39,7 +39,8 @@ public sealed class GameDb : IDisposable
           name TEXT NOT NULL,
           money REAL NOT NULL DEFAULT 0.0,
           totalExperience INTEGER NOT NULL DEFAULT 0,
-          createdAt TEXT NOT NULL DEFAULT (datetime('now'))
+          createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+          lastWarehouseId INTEGER NOT NULL DEFAULT 0
         );");
 
         Db.Execute(@"
@@ -211,6 +212,7 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("Player", "returnY", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "lastWarehouseId", "INTEGER NOT NULL DEFAULT 0");
     }
 
     private void EnsurePlayerResumeColumns()

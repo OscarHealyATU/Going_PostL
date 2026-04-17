@@ -97,6 +97,63 @@ public static class WarehouseService
                 w.tileZ == tileZ);
     }
 
+    public static Warehouse GetWarehouseById(int warehouseId)
+    {
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null || warehouseId <= 0)
+            return null;
+
+        var player = GetPlayerOrNull();
+        if (player == null)
+            return null;
+
+        return DbBoot.Instance.Db.Table<Warehouse>()
+            .FirstOrDefault(w => w.id == warehouseId && w.playerId == player.id);
+    }
+
+    public static Warehouse GetLastInteractedWarehouse()
+    {
+        var player = GetPlayerOrNull();
+        if (player == null || player.lastWarehouseId <= 0)
+            return null;
+
+        return GetWarehouseById(player.lastWarehouseId);
+    }
+
+    public static bool SetLastInteractedWarehouse(int warehouseId)
+    {
+        if (warehouseId <= 0)
+            return false;
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+            return false;
+
+        var db = DbBoot.Instance.Db;
+        var player = GetPlayerOrNull();
+        if (player == null)
+            return false;
+
+        var warehouse = db.Table<Warehouse>()
+            .FirstOrDefault(w => w.id == warehouseId && w.playerId == player.id);
+
+        if (warehouse == null)
+            return false;
+
+        player.lastWarehouseId = warehouse.id;
+        db.Update(player);
+
+        Debug.Log($"[WarehouseService] Set last interacted warehouse to ID {warehouse.id}");
+        return true;
+    }
+
+    public static bool SetLastInteractedWarehouse(string zoneName, int tileX, int tileZ)
+    {
+        Warehouse warehouse = GetWarehouseAtTile(zoneName, tileX, tileZ);
+        if (warehouse == null)
+            return false;
+
+        return SetLastInteractedWarehouse(warehouse.id);
+    }
+
     public static void EnsureStarterWarehouse(
         string zoneName,
         int tileX,
@@ -129,7 +186,15 @@ public static class WarehouseService
             .FirstOrDefault(w => w.playerId == player.id && w.isStarterWarehouse == 1);
 
         if (existingStarter != null)
+        {
+            if (player.lastWarehouseId <= 0)
+            {
+                player.lastWarehouseId = existingStarter.id;
+                db.Update(player);
+            }
+
             return;
+        }
 
         var sameTile = db.Table<Warehouse>()
             .FirstOrDefault(w =>
@@ -139,7 +204,15 @@ public static class WarehouseService
                 w.tileZ == tileZ);
 
         if (sameTile != null)
+        {
+            if (player.lastWarehouseId <= 0)
+            {
+                player.lastWarehouseId = sameTile.id;
+                db.Update(player);
+            }
+
             return;
+        }
 
         var warehouse = new Warehouse
         {
@@ -155,6 +228,12 @@ public static class WarehouseService
         };
 
         db.Insert(warehouse);
+
+        if (player.lastWarehouseId <= 0)
+        {
+            player.lastWarehouseId = warehouse.id;
+            db.Update(player);
+        }
 
         Debug.Log($"[WarehouseService] Starter warehouse saved at zone '{zoneName}' tile ({tileX}, {tileZ})");
     }

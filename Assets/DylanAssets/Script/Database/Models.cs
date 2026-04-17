@@ -24,6 +24,9 @@ public class Player
     public float savedY { get; set; }
     public float savedZ { get; set; }
     public float savedYaw { get; set; }
+
+    // NEW: the warehouse the player most recently interacted with
+    public int lastWarehouseId { get; set; }
 }
 
 [Table("VehicleType")]
@@ -170,19 +173,15 @@ public class Warehouse
 
     public int playerId { get; set; }
 
-    // For your properties tab / future scaling
     public string zoneName { get; set; }
 
-    // Grid tile coordinates
     public int tileX { get; set; }
     public int tileZ { get; set; }
 
-    // Cached world position
     public float worldX { get; set; }
     public float worldY { get; set; }
     public float worldZ { get; set; }
 
-    // Optional marker for the original hardcoded warehouse
     public int isStarterWarehouse { get; set; }
 
     public string createdAt { get; set; }

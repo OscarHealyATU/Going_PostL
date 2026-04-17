@@ -68,8 +68,7 @@ public class WarehouseSceneOverlay : MonoBehaviour
         if (warehouse == null)
             return;
 
-        // The starter warehouse already exists in the scene through your runtime generation.
-        // Do not spawn a duplicate on top of it.
+        // Starter warehouse already exists through your other setup.
         if (warehouse.isStarterWarehouse == 1)
             return;
 
@@ -103,7 +102,39 @@ public class WarehouseSceneOverlay : MonoBehaviour
         marker.tileX = warehouse.tileX;
         marker.tileZ = warehouse.tileZ;
 
+        AssignWarehouseIdentity(warehouseGo, warehouse);
+
         spawnedWarehouses.Add(warehouseGo);
+    }
+
+    private void AssignWarehouseIdentity(GameObject warehouseGo, Warehouse warehouse)
+    {
+        if (warehouseGo == null || warehouse == null)
+            return;
+
+        WarehouseIdentity identity = warehouseGo.GetComponent<WarehouseIdentity>();
+
+        if (identity == null)
+            identity = warehouseGo.GetComponentInChildren<WarehouseIdentity>(true);
+
+        if (identity == null)
+        {
+            Debug.LogWarning(
+                $"[WarehouseSceneOverlay] Spawned warehouse prefab '{warehouseGo.name}' has no WarehouseIdentity component."
+            );
+            return;
+        }
+
+        identity.SetIdentity(
+            warehouse.id,
+            warehouse.zoneName,
+            warehouse.tileX,
+            warehouse.tileZ
+        );
+
+        Debug.Log(
+            $"[WarehouseSceneOverlay] Assigned WarehouseIdentity for warehouse ID {warehouse.id} at {warehouse.zoneName} {warehouse.tileX}, {warehouse.tileZ}"
+        );
     }
 
     private void SpawnGroundAtTile(gridify zoneGrid, Vector3 tileWorldPos)

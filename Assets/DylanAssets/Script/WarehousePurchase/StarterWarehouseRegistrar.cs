@@ -20,6 +20,7 @@ public class StarterWarehouseRegistrar : MonoBehaviour
 
     [Header("Behaviour")]
     [SerializeField] private bool registerOnStart = true;
+    [SerializeField] private bool setAsCurrentWarehouseAfterRegister = true;
 
     private void Start()
     {
@@ -58,6 +59,9 @@ public class StarterWarehouseRegistrar : MonoBehaviour
             worldPos.y,
             worldPos.z
         );
+
+        if (setAsCurrentWarehouseAfterRegister)
+            WarehouseService.SetLastInteractedWarehouse(zoneName, starterTileX, starterTileZ);
     }
 
     [ContextMenu("Register Starter Warehouse From Runtime Object Or Tile")]
@@ -92,6 +96,9 @@ public class StarterWarehouseRegistrar : MonoBehaviour
                     worldPos.y,
                     worldPos.z
                 );
+
+                if (setAsCurrentWarehouseAfterRegister)
+                    WarehouseService.SetLastInteractedWarehouse(zoneName, tileX, tileZ);
 
                 Debug.Log($"[StarterWarehouseRegistrar] Registered starter warehouse from runtime object at tile ({tileX}, {tileZ})");
                 return;

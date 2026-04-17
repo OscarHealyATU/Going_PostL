@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -62,15 +61,6 @@ public class PropertiesPageUI : MonoBehaviour
 
     private void HookUiEvents()
     {
-        if (zoneDropdown != null)
-            zoneDropdown.onValueChanged.AddListener(_ => RefreshSelectionPreview());
-
-        if (streetInput != null)
-            streetInput.onValueChanged.AddListener(_ => RefreshSelectionPreview());
-
-        if (avenueInput != null)
-            avenueInput.onValueChanged.AddListener(_ => RefreshSelectionPreview());
-
         if (purchaseButton != null)
             purchaseButton.onClick.AddListener(OnPurchaseClicked);
 
@@ -81,7 +71,7 @@ public class PropertiesPageUI : MonoBehaviour
     private void RefreshAll()
     {
         RefreshMoney();
-        RefreshSelectionPreview();
+        RefreshCurrentTileFromDatabase();
         RefreshOwnedWarehouses();
         ClearFeedback();
     }
@@ -101,28 +91,19 @@ public class PropertiesPageUI : MonoBehaviour
         moneyText.text = $"Money: €{player.money:0}";
     }
 
-    private void RefreshSelectionPreview()
+    private void RefreshCurrentTileFromDatabase()
     {
         if (currentTileText == null)
             return;
 
-        int tileX;
-        int tileZ;
-
-        if (!TryReadTileInputs(out tileX, out tileZ))
+        Warehouse warehouse = WarehouseService.GetLastInteractedWarehouse();
+        if (warehouse == null)
         {
-            currentTileText.text = "Current Tile: -";
+            currentTileText.text = "Current Tile: Zone 1(1) | 4,6";
             return;
         }
 
-        DeliveryZoneLayoutAsset selectedLayout = GetSelectedLayout();
-        if (selectedLayout == null)
-        {
-            currentTileText.text = "Current Tile: -";
-            return;
-        }
-
-        currentTileText.text = $"Current Tile: {selectedLayout.name} {tileX}, {tileZ}";
+        currentTileText.text = $"Current Tile: {warehouse.zoneName} | {warehouse.tileX},{warehouse.tileZ}";
     }
 
     private void RefreshOwnedWarehouses()
@@ -209,7 +190,7 @@ public class PropertiesPageUI : MonoBehaviour
 
         RefreshMoney();
         RefreshOwnedWarehouses();
-        RefreshSelectionPreview();
+        RefreshCurrentTileFromDatabase();
     }
 
     private bool TryReadTileInputs(out int tileX, out int tileZ)
