@@ -1,27 +1,36 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/OscarAssets/MyUI/styles.uss?fileID=7433441132597879392&amp;guid=aef5287795f372b4693c1a8c38966350&amp;type=3#styles" />
-    <ui:VisualElement name="Panel" class="Panel" style="flex-grow: 1; flex-direction: row; width: 80%; position: absolute; top: 0; right: 10%; height: 1079px; color: rgb(51, 51, 51); background-color: rgb(210, 195, 162); text-shadow: 10px -10px 0 rgba(0, 0, 0, 0);">
+    <ui:VisualElement name="Panel" class="Panel" style="flex-grow: 1; flex-direction: row; width: auto; position: relative; top: 0; right: 0; height: auto; color: rgb(51, 51, 51); background-color: rgb(210, 195, 162); text-shadow: 10px -10px 0 rgba(0, 0, 0, 0); bottom: 0; left: 0;">
         <ui:VisualElement name="side" style="flex-grow: 1; width: 20%; background-color: rgb(52, 52, 52);">
-            <ui:VisualElement name="Logo" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/OscarAssets/MyUI/Artboard%202@3x.png?fileID=2800000&amp;guid=c4ad8e24ff9bde54c9b70aa8c7e17d81&amp;type=3#Artboard 2@3x&quot;); -unity-background-scale-mode: stretch-to-fill; -unity-slice-type: sliced; height: auto; text-shadow: 10px -10px 0 rgb(51, 51, 51); -unity-text-outline-width: 10px; background-color: rgb(255, 255, 255);" />
-            <ui:VisualElement name="navbar" style="flex-grow: 1; justify-content: space-evenly; align-items: stretch; height: 30%; background-color: rgb(232, 224, 206);">
-                <ui:Button text="Cancel" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
-                <ui:Button text="Apply" name="Button" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
-                <ui:Button text="Back" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
+            <ui:VisualElement name="Logo" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/OscarAssets/MyUI/Artboard%202@3x.png?fileID=2800000&amp;guid=c4ad8e24ff9bde54c9b70aa8c7e17d81&amp;type=3#Artboard 2@3x&quot;); -unity-background-scale-mode: stretch-to-fill; -unity-slice-type: sliced; height: 0; text-shadow: 10px -10px 0 rgb(51, 51, 51); -unity-text-outline-width: 10px; background-color: rgb(255, 255, 255); width: 100%;" />
+            <ui:VisualElement name="navbar" style="flex-grow: 1; justify-content: space-evenly; align-items: stretch; height: 30%; background-color: rgb(238, 240, 241); flex-wrap: nowrap; flex-direction: column-reverse; flex-basis: auto;">
+                <ui:Button text="Cancel" name="CancelBtn" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255); top: auto;" />
+                <ui:Button text="Apply" name="ApplyBtn" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255);" />
+                <ui:Button text="Back" name="BackBtn" style="background-color: rgb(206, 73, 72); -unity-font-style: bold; font-size: 22px; color: rgb(255, 255, 255); top: auto;" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="main" style="flex-grow: 1; flex-direction: column; width: 60%;">
             <ui:VisualElement name="Content" style="flex-grow: 1; height: 80%; background-color: rgb(206, 73, 72);">
-                <ui:Label text="Settings" name="Heading" style="font-size: 36px; -unity-font-style: bold; -unity-text-align: middle-left; align-self: stretch; color: rgb(255, 255, 255); padding-top: 16px; padding-right: 4px; padding-bottom: 16px; padding-left: 16px; border-bottom-color: rgb(206, 73, 72); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-color: rgb(206, 73, 72); border-left-color: rgb(206, 73, 72); border-right-color: rgb(206, 73, 72); border-top-color: rgb(206, 73, 72); width: 921px;" />
+                <ui:Label text="Settings" name="Heading" style="font-size: 36px; -unity-font-style: bold; -unity-text-align: middle-left; align-self: stretch; color: rgb(255, 255, 255); padding-top: 16px; padding-right: 4px; padding-bottom: 16px; padding-left: 16px; border-bottom-color: rgb(206, 73, 72); border-top-width: 2px; border-right-width: 2px; border-bottom-width: 2px; border-left-width: 2px; background-color: rgb(206, 73, 72); border-left-color: rgb(206, 73, 72); border-right-color: rgb(206, 73, 72); border-top-color: rgb(206, 73, 72); width: auto;" />
                 <ui:VisualElement name="Graphics" style="flex-grow: 1; background-color: rgb(51, 51, 51);">
-                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(32, 32, 32);">
-                        <ui:Label text="Graphics" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
-                        <ui:RadioButtonGroup label="HDR" />
+                    <ui:VisualElement name="GraphicsDiv" style="flex-grow: 1; background-color: rgb(32, 32, 32);">
+                        <ui:Label text="Graphics" name="GraphicsHeading" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
+                        <ui:Toggle label="Enable HDR" name="HDRToggle" class="toggle" style="font-size: 22px; color: rgb(232, 224, 206);" />
+                        <ui:Toggle label="vsync" name="VsyncToggle" class="toggle" style="font-size: 22px; color: rgb(232, 224, 206);" />
+                        <ui:Toggle label="Motion Blur" name="MotionBlurToggle" class="toggle" style="font-size: 22px; color: rgb(232, 224, 206);" />
+                        <ui:Toggle label="Depth of field (Background Blur)" name="DOFToggle" class="toggle" style="font-size: 22px; color: rgb(232, 224, 206);" />
+                        <ui:DropdownField label="Resolution" name="Resolution" style="font-size: 22px; color: rgb(232, 224, 206);" />
                     </ui:VisualElement>
-                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(32, 32, 32);">
-                        <ui:Label text="Audio" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); margin-left: 0; padding-left: 8px;" />
+                    <ui:VisualElement name="AudioDiv" style="flex-grow: 1; background-color: rgb(32, 32, 32);">
+                        <ui:Label text="Audio" name="AudioHeading" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); margin-left: 0; padding-left: 8px;" />
+                        <ui:Toggle label="Mute Music" name="MuteToggle" class="toggle" style="font-size: 22px; color: rgb(232, 224, 206);" />
+                        <ui:Slider label="Master Volume" value="42" high-value="100" name="MasterSlider" style="color: rgb(232, 224, 206); font-size: 22px;" />
+                        <ui:Slider label="Music volume" value="42" high-value="100" name="MusicSlider" style="color: rgb(232, 224, 206); font-size: 22px;" />
+                        <ui:Slider label="SFX Volume" value="42" high-value="100" name="SFXSlider" style="color: rgb(232, 224, 206); font-size: 22px;" />
                     </ui:VisualElement>
-                    <ui:VisualElement style="flex-grow: 1; background-color: rgb(32, 32, 32);">
-                        <ui:Label text="Controls" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
+                    <ui:VisualElement name="ControlsDiv" style="flex-grow: 1; background-color: rgb(32, 32, 32);">
+                        <ui:Label text="Controls" name="ControlsHeading" style="height: 45px; color: rgb(255, 255, 255); font-size: 28px; background-color: rgb(206, 73, 72); padding-left: 8px; margin-left: 0;" />
+                        <ui:Slider label="Mouse Sensitivity" value="42" high-value="100" name="SensSlider" style="color: rgb(232, 224, 206); font-size: 22px;" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
