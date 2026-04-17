@@ -10,6 +10,14 @@ public class DbBoot : MonoBehaviour
 
     public SQLite.SQLiteConnection Db => GameDb != null ? GameDb.Db : null;
 
+    [Header("Starter Warehouse")]
+    [SerializeField] private string starterWarehouseZoneName = "Zone 1(1)";
+    [SerializeField] private int starterWarehouseTileX = 4;
+    [SerializeField] private int starterWarehouseTileZ = 6;
+    [SerializeField] private float starterWarehouseWorldX = 220f;
+    [SerializeField] private float starterWarehouseWorldY = 0f;
+    [SerializeField] private float starterWarehouseWorldZ = 770f;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,6 +36,8 @@ public class DbBoot : MonoBehaviour
         EnsurePlayerExists();
         EnsureDeliveryZonesSeeded();
         EnsureStartingZonesUnlocked();
+        EnsureWarehouseSchema();
+        EnsureStarterWarehouseRegisteredAtBoot();
 
         VehicleTypeStore.LoadOrSeedDefaults(Db);
         Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
@@ -48,7 +58,6 @@ public class DbBoot : MonoBehaviour
         }
         catch (Exception)
         {
-            // Column already exists or Player table not yet created in a fresh DB.
         }
 
         try
@@ -241,6 +250,137 @@ public class DbBoot : MonoBehaviour
 
             Debug.Log($"[DbBoot] Auto-unlocked starting zone '{zone.name}'");
         }
+    }
+
+    private void EnsureWarehouseSchema()
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureWarehouseSchema.");
+            return;
+        }
+
+        try
+        {
+            Db.CreateTable<Warehouse>();
+            Debug.Log("[DbBoot] Ensured Warehouse table exists");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning("[DbBoot] EnsureWarehouseSchema failed: " + ex.Message);
+        }
+    }
+
+    private void EnsureStarterWarehouseRegisteredAtBoot()
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseRegisteredAtBoot.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(starterWarehouseZoneName))
+        {
+            Debug.LogWarning("[DbBoot] Starter warehouse zone name is empty.");
+            return;
+        }
+
+        var player = Db.Table<Player>().FirstOrDefault();
+        if (player == null)
+        {
+            Debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse at boot.");
+            return;
+        }
+
+        var existingStarter = Db.Table<Warehouse>()
+            .FirstOrDefault(w => w.playerId == player.id && w.isStarterWarehouse == 1);
+
+        if (existingStarter != null)
+            return;
+
+        var sameTile = Db.Table<Warehouse>()
+            .FirstOrDefault(w =>
+                w.playerId == player.id &&
+                w.zoneName == starterWarehouseZoneName &&
+                w.tileX == starterWarehouseTileX &&
+                w.tileZ == starterWarehouseTileZ);
+
+        if (sameTile != null)
+            return;
+
+        Db.Insert(new Warehouse
+        {
+            playerId = player.id,
+            zoneName = starterWarehouseZoneName,
+            tileX = starterWarehouseTileX,
+            tileZ = starterWarehouseTileZ,
+            worldX = starterWarehouseWorldX,
+            worldY = starterWarehouseWorldY,
+            worldZ = starterWarehouseWorldZ,
+            isStarterWarehouse = 1,
+            createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+        });
+
+        Debug.Log($"[DbBoot] Registered starter warehouse at boot in '{starterWarehouseZoneName}' at tile ({starterWarehouseTileX}, {starterWarehouseTileZ})");
+    }
+
+    public void EnsureStarterWarehouseExists(
+        string zoneName,
+        int tileX,
+        int tileZ,
+        float worldX,
+        float worldY,
+        float worldZ)
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseExists.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(zoneName))
+        {
+            Debug.LogWarning("[DbBoot] zoneName is invalid when trying to create starter warehouse.");
+            return;
+        }
+
+        var player = Db.Table<Player>().FirstOrDefault();
+        if (player == null)
+        {
+            Debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse.");
+            return;
+        }
+
+        var existingStarter = Db.Table<Warehouse>()
+            .FirstOrDefault(w => w.playerId == player.id && w.isStarterWarehouse == 1);
+
+        if (existingStarter != null)
+            return;
+
+        var sameTile = Db.Table<Warehouse>()
+            .FirstOrDefault(w =>
+                w.playerId == player.id &&
+                w.zoneName == zoneName &&
+                w.tileX == tileX &&
+                w.tileZ == tileZ);
+
+        if (sameTile != null)
+            return;
+
+        Db.Insert(new Warehouse
+        {
+            playerId = player.id,
+            zoneName = zoneName,
+            tileX = tileX,
+            tileZ = tileZ,
+            worldX = worldX,
+            worldY = worldY,
+            worldZ = worldZ,
+            isStarterWarehouse = 1,
+            createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+        });
+
+        Debug.Log($"[DbBoot] Registered starter warehouse in '{zoneName}' at tile ({tileX}, {tileZ})");
     }
 
     private void OnApplicationQuit()

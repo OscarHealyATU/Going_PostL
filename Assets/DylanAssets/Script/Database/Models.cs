@@ -163,6 +163,31 @@ public class PlayerZoneUnlock
     public string unlockedAt { get; set; }
 }
 
+[Table("Warehouse")]
+public class Warehouse
+{
+    [PrimaryKey, AutoIncrement] public int id { get; set; }
+
+    public int playerId { get; set; }
+
+    // For your properties tab / future scaling
+    public string zoneName { get; set; }
+
+    // Grid tile coordinates
+    public int tileX { get; set; }
+    public int tileZ { get; set; }
+
+    // Cached world position
+    public float worldX { get; set; }
+    public float worldY { get; set; }
+    public float worldZ { get; set; }
+
+    // Optional marker for the original hardcoded warehouse
+    public int isStarterWarehouse { get; set; }
+
+    public string createdAt { get; set; }
+}
+
 public enum UpgradeType
 {
     ZoneLicense,

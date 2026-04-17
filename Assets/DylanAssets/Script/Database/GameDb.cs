@@ -25,6 +25,7 @@ public sealed class GameDb : IDisposable
         EnsureDeliveryJobColumns();
         EnsureDeliveryZoneColumns();
         EnsureStoredDeliveryColumns();
+        EnsureWarehouseColumns();
 
         Seed();
         EnsureDayStateRow();
@@ -174,6 +175,31 @@ public sealed class GameDb : IDisposable
         Db.Execute(@"
         CREATE UNIQUE INDEX IF NOT EXISTS idx_playerzoneunlock_player_zone
         ON PlayerZoneUnlock(playerId, zoneId);");
+
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS Warehouse (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playerId INTEGER NOT NULL,
+          zoneName TEXT,
+          tileX INTEGER NOT NULL DEFAULT 0,
+          tileZ INTEGER NOT NULL DEFAULT 0,
+          worldX REAL NOT NULL DEFAULT 0,
+          worldY REAL NOT NULL DEFAULT 0,
+          worldZ REAL NOT NULL DEFAULT 0,
+          isStarterWarehouse INTEGER NOT NULL DEFAULT 0,
+          createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(playerId) REFERENCES Player(id)
+        );");
+
+        Db.Execute(@"
+        CREATE INDEX IF NOT EXISTS idx_warehouse_player
+        ON Warehouse(playerId);");
+
+        Db.Execute(@"DROP INDEX IF EXISTS idx_warehouse_player_tile;");
+
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_warehouse_player_zone_tile
+        ON Warehouse(playerId, zoneName, tileX, tileZ);");
     }
 
     private void EnsurePlayerColumns()
@@ -272,6 +298,44 @@ public sealed class GameDb : IDisposable
         Db.Execute(@"
         CREATE INDEX IF NOT EXISTS idx_storeddelivery_vehicle
         ON StoredDelivery(vehicleId);");
+    }
+
+    private void EnsureWarehouseColumns()
+    {
+        Db.Execute(@"
+        CREATE TABLE IF NOT EXISTS Warehouse (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          playerId INTEGER NOT NULL,
+          zoneName TEXT,
+          tileX INTEGER NOT NULL DEFAULT 0,
+          tileZ INTEGER NOT NULL DEFAULT 0,
+          worldX REAL NOT NULL DEFAULT 0,
+          worldY REAL NOT NULL DEFAULT 0,
+          worldZ REAL NOT NULL DEFAULT 0,
+          isStarterWarehouse INTEGER NOT NULL DEFAULT 0,
+          createdAt TEXT NOT NULL DEFAULT (datetime('now')),
+          FOREIGN KEY(playerId) REFERENCES Player(id)
+        );");
+
+        AddColumnIfMissing("Warehouse", "playerId", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "zoneName", "TEXT");
+        AddColumnIfMissing("Warehouse", "tileX", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "tileZ", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "worldX", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "worldY", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "worldZ", "REAL NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "isStarterWarehouse", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Warehouse", "createdAt", "TEXT");
+
+        Db.Execute(@"
+        CREATE INDEX IF NOT EXISTS idx_warehouse_player
+        ON Warehouse(playerId);");
+
+        Db.Execute(@"DROP INDEX IF EXISTS idx_warehouse_player_tile;");
+
+        Db.Execute(@"
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_warehouse_player_zone_tile
+        ON Warehouse(playerId, zoneName, tileX, tileZ);");
     }
 
     private void AddColumnIfMissing(string table, string column, string columnSql)

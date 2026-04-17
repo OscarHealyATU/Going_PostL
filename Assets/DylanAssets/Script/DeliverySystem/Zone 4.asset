@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc8d2665a6025854ba2911741f4586da, type: 3}
-  m_Name: Zone1
+  m_Name: Zone 4
   m_EditorClassIdentifier: Assembly-CSharp::DeliveryZoneLayoutAsset
-  zoneId: 1
-  unlockWithZoneId: 1
-  xStartPosition: 0
-  zStartPosition: 0
+  zoneId: 4
+  unlockWithZoneId: 4
+  xStartPosition: 550
+  zStartPosition: 792.5
   noOfHousesX: 25
   noOfHousesZ: 25
   distance: 22

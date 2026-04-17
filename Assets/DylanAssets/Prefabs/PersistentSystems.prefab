@@ -48,6 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ea15cebcd7c66468f64f27c27c03a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DbBoot
+  starterWarehouseZoneName: Zone 1(1)
+  starterWarehouseTileX: 4
+  starterWarehouseTileZ: 6
+  starterWarehouseWorldX: 220
+  starterWarehouseWorldY: 0
+  starterWarehouseWorldZ: 770
 --- !u!114 &4864468709611084654
 MonoBehaviour:
   m_ObjectHideFlags: 0
