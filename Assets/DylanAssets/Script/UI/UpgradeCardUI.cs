@@ -174,6 +174,9 @@ public class UpgradeCardUI : MonoBehaviour
                     break;
                 }
 
+                if (DayManager.Instance != null)
+                    DayManager.Instance.RegisterMoneySpent(boundUpgrade.price);
+
                 PlayerService.SetInventorySlotCount(5);
 
                 if (InventoryManager.Instance != null)

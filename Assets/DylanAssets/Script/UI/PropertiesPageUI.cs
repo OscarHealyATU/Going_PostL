@@ -19,13 +19,11 @@ public class PropertiesPageUI : MonoBehaviour
     [SerializeField] private TMP_Text currentTileText;
     [SerializeField] private TMP_Text ownedWarehousesText;
     [SerializeField] private TMP_Text feedbackText;
+    [SerializeField] private TMP_Text selectedWarehouseCostText;
 
     [Header("Buttons")]
     [SerializeField] private Button purchaseButton;
     [SerializeField] private Button refreshButton;
-
-    [Header("Purchase")]
-    [SerializeField] private double warehousePrice = 0.0;
 
     private void Awake()
     {
@@ -66,6 +64,9 @@ public class PropertiesPageUI : MonoBehaviour
 
         if (refreshButton != null)
             refreshButton.onClick.AddListener(RefreshAll);
+
+        if (zoneDropdown != null)
+            zoneDropdown.onValueChanged.AddListener(OnZoneChanged);
     }
 
     private void RefreshAll()
@@ -73,6 +74,7 @@ public class PropertiesPageUI : MonoBehaviour
         RefreshMoney();
         RefreshCurrentTileFromDatabase();
         RefreshOwnedWarehouses();
+        RefreshSelectedWarehouseCost();
         ClearFeedback();
     }
 
@@ -131,6 +133,28 @@ public class PropertiesPageUI : MonoBehaviour
         ownedWarehousesText.text = sb.ToString();
     }
 
+    private void RefreshSelectedWarehouseCost()
+    {
+        if (selectedWarehouseCostText == null)
+            return;
+
+        DeliveryZoneLayoutAsset selectedLayout = GetSelectedLayout();
+        if (selectedLayout == null)
+        {
+            selectedWarehouseCostText.text = "Selected Warehouse Cost: €0";
+            return;
+        }
+
+        double price = GetWarehousePriceForZone(selectedLayout.name);
+        selectedWarehouseCostText.text = $"€{price:0}";
+    }
+
+    private void OnZoneChanged(int index)
+    {
+        RefreshSelectedWarehouseCost();
+        ClearFeedback();
+    }
+
     private void OnPurchaseClicked()
     {
         ClearFeedback();
@@ -170,6 +194,7 @@ public class PropertiesPageUI : MonoBehaviour
             return;
         }
 
+        double warehousePrice = GetWarehousePriceForZone(zoneName);
         Vector3 worldPos = TileToWorld(selectedLayout, tileX, tileZ);
 
         WarehouseService.WarehousePurchaseResult result =
@@ -183,7 +208,7 @@ public class PropertiesPageUI : MonoBehaviour
                 warehousePrice
             );
 
-        SetFeedback(result.message);
+        SetFeedback($"{result.message} {(result.success ? $"(Cost: €{warehousePrice:0})" : "")}");
 
         if (!result.success)
             return;
@@ -191,6 +216,7 @@ public class PropertiesPageUI : MonoBehaviour
         RefreshMoney();
         RefreshOwnedWarehouses();
         RefreshCurrentTileFromDatabase();
+        RefreshSelectedWarehouseCost();
     }
 
     private bool TryReadTileInputs(out int tileX, out int tileZ)
@@ -226,6 +252,30 @@ public class PropertiesPageUI : MonoBehaviour
             0f,
             layout.zStartPosition + tileZ * layout.distance
         );
+    }
+
+    private double GetWarehousePriceForZone(string zoneName)
+    {
+        switch (zoneName)
+        {
+            case "Zone 1":
+            case "Zone 1(1)":
+                return 1500.0;
+
+            case "Zone 2":
+            case "Zone 2(1)":
+                return 3000.0;
+
+            case "Zone 3":
+                return 5000.0;
+
+            case "Zone 4":
+                return 7000.0;
+
+            default:
+                Debug.LogWarning($"[PropertiesPageUI] No custom warehouse price set for zone '{zoneName}'. Using Zone 1 default.");
+                return 1500.0;
+        }
     }
 
     private void SetFeedback(string message)

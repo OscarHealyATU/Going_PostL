@@ -327,6 +327,9 @@ public static class WarehouseService
                 db.Insert(warehouse);
             });
 
+            if (price > 0.0 && DayManager.Instance != null)
+                DayManager.Instance.RegisterMoneySpent(price);
+
             result.success = true;
             result.message = "Warehouse purchased successfully.";
             result.warehouse = warehouse;
