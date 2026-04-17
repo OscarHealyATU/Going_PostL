@@ -99,7 +99,7 @@ public class PropertiesPageUI : MonoBehaviour
         Warehouse warehouse = WarehouseService.GetLastInteractedWarehouse();
         if (warehouse == null)
         {
-            currentTileText.text = "Current Tile: Zone 1(1) | 4,6";
+            currentTileText.text = "Current Tile: Zone 1(1) | X = 4,Y = 6";
             return;
         }
 

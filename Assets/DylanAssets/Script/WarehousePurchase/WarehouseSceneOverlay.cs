@@ -13,21 +13,55 @@ public class WarehouseSceneOverlay : MonoBehaviour
 
     [Header("Behaviour")]
     [SerializeField] private bool buildOnStart = true;
-    [SerializeField] private float delayBeforeBuild = 0.15f;
     [SerializeField] private float positionTolerance = 0.35f;
 
     private readonly List<GameObject> spawnedWarehouses = new List<GameObject>();
 
+    private bool hasBuilt;
+    private Coroutine buildRoutine;
+
     private void Start()
     {
         if (buildOnStart)
-            StartCoroutine(BuildAfterDelay());
+            buildRoutine = StartCoroutine(BuildWhenReady());
     }
 
-    private IEnumerator BuildAfterDelay()
+    private IEnumerator BuildWhenReady()
     {
-        yield return new WaitForSeconds(delayBeforeBuild);
+        yield return new WaitUntil(IsReadyToBuild);
         RebuildWarehouses();
+        hasBuilt = true;
+        buildRoutine = null;
+    }
+
+    private bool IsReadyToBuild()
+    {
+        if (warehousePrefab == null)
+            return false;
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+            return false;
+
+        if (zoneGrids == null || zoneGrids.Count == 0)
+            return false;
+
+        bool foundAtLeastOneValidGrid = false;
+
+        for (int i = 0; i < zoneGrids.Count; i++)
+        {
+            WarehouseZoneGrid entry = zoneGrids[i];
+            if (entry == null || entry.grid == null)
+                continue;
+
+            foundAtLeastOneValidGrid = true;
+
+            // gridify populates its tiles/buildings as children in Start().
+            // If childCount is still 0, that grid likely has not finished building yet.
+            if (entry.grid.transform.childCount == 0)
+                return false;
+        }
+
+        return foundAtLeastOneValidGrid;
     }
 
     [ContextMenu("Rebuild Warehouses")]
@@ -36,6 +70,12 @@ public class WarehouseSceneOverlay : MonoBehaviour
         if (warehousePrefab == null)
         {
             Debug.LogWarning("[WarehouseSceneOverlay] Warehouse prefab is not assigned.");
+            return;
+        }
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+        {
+            Debug.LogWarning("[WarehouseSceneOverlay] Database is not ready yet.");
             return;
         }
 

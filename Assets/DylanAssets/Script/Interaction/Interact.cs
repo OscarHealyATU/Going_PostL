@@ -93,37 +93,31 @@ public class Interact : MonoBehaviour
             SceneManager.LoadScene(sceneToLoad);
     }
 
-    private void TrySetCurrentWarehouse()
+        private void TrySetCurrentWarehouse()
     {
         CacheWarehouseIdentity();
 
-        if (warehouseIdentity == null)
+        // Normal warehouses
+        if (warehouseIdentity != null && warehouseIdentity.WarehouseId > 0)
         {
-            Debug.LogWarning($"[Interact] No WarehouseIdentity found on '{gameObject.name}' or its parents.");
-            return;
+            bool success = WarehouseService.SetLastInteractedWarehouse(warehouseIdentity.WarehouseId);
+
+            if (success)
+            {
+                Debug.Log($"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}");
+                return;
+            }
         }
 
-        if (warehouseIdentity.WarehouseId <= 0)
+        // Fallback for starter warehouse
+        Debug.Log("[Interact] No warehouse identity found. Falling back to starter warehouse ID 1.");
+
+        bool starterSuccess = WarehouseService.SetLastInteractedWarehouse(1);
+
+        if (!starterSuccess)
         {
-            Debug.LogWarning(
-                $"[Interact] WarehouseIdentity exists but WarehouseId is invalid on '{warehouseIdentity.gameObject.name}'."
-            );
-            return;
+            Debug.LogWarning("[Interact] Failed to set starter warehouse as current.");
         }
-
-        bool success = WarehouseService.SetLastInteractedWarehouse(warehouseIdentity.WarehouseId);
-
-        if (!success)
-        {
-            Debug.LogWarning(
-                $"[Interact] Failed to set current warehouse from WarehouseIdentity ID {warehouseIdentity.WarehouseId}."
-            );
-            return;
-        }
-
-        Debug.Log(
-            $"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}."
-        );
     }
 
     private void CacheWarehouseIdentity()
