@@ -558,6 +558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 129262135}
   - component: {fileID: 129262136}
+  - component: {fileID: 129262137}
   m_Layer: 0
   m_Name: WarehouseSystems
   m_TagString: Untagged
@@ -609,6 +610,29 @@ MonoBehaviour:
   buildOnStart: 1
   delayBeforeBuild: 0.15
   positionTolerance: 0.35
+--- !u!114 &129262137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 129262134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ff454534b0930f41bcd9e6bf4faf9a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StarterWarehouseRegistrar
+  zoneGrids:
+  - zoneName: Zone 1(1)
+    grid: {fileID: 3942344554745251865}
+  zoneName: Zone 1(1)
+  starterTileX: 4
+  starterTileZ: 6
+  tryFindRuntimeWarehouseObject: 1
+  runtimeWarehouseObjectName: purchased_Warehouse1(Clone)
+  lookupDelay: 0.25
+  registerOnStart: 1
+  setAsCurrentWarehouseAfterRegister: 0
 --- !u!1 &135449662
 GameObject:
   m_ObjectHideFlags: 0
@@ -1875,7 +1899,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 974702920}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.50000006
+  m_Size: 0.5
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4519,7 +4543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 389.1, y: -184.94388}
+  m_AnchoredPosition: {x: 389.1, y: -192.19847}
   m_SizeDelta: {x: 760, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869750475

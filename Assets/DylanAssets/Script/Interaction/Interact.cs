@@ -19,9 +19,6 @@ public class Interact : MonoBehaviour
 
     [Header("Warehouse Tracking")]
     [SerializeField] private bool setCurrentWarehouseOnInteract = false;
-    [SerializeField] private string warehouseZoneName;
-    [SerializeField] private int warehouseTileX = -1;
-    [SerializeField] private int warehouseTileZ = -1;
 
     [Header("Runtime Identity")]
     [SerializeField] private WarehouseIdentity warehouseIdentity;
@@ -51,7 +48,7 @@ public class Interact : MonoBehaviour
         yield return null;
         yield return new WaitForFixedUpdate();
 
-        var player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player == null || triggerCollider == null)
             yield break;
 
@@ -66,7 +63,7 @@ public class Interact : MonoBehaviour
 
     private void Update()
     {
-        var kb = Keyboard.current;
+        Keyboard kb = Keyboard.current;
         if (!playerInRange || kb == null || !kb.eKey.wasPressedThisFrame)
             return;
 
@@ -100,46 +97,33 @@ public class Interact : MonoBehaviour
     {
         CacheWarehouseIdentity();
 
-        if (warehouseIdentity != null && warehouseIdentity.WarehouseId > 0)
+        if (warehouseIdentity == null)
         {
-            bool successById = WarehouseService.SetLastInteractedWarehouse(warehouseIdentity.WarehouseId);
-
-            if (successById)
-            {
-                Debug.Log($"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}");
-                return;
-            }
-
-            Debug.LogWarning($"[Interact] WarehouseIdentity found, but DB update failed for warehouse ID {warehouseIdentity.WarehouseId}.");
-        }
-
-        if (string.IsNullOrWhiteSpace(warehouseZoneName))
-        {
-            Debug.LogWarning("[Interact] No WarehouseIdentity found and warehouseZoneName is not set.");
+            Debug.LogWarning($"[Interact] No WarehouseIdentity found on '{gameObject.name}' or its parents.");
             return;
         }
 
-        if (warehouseTileX < 0 || warehouseTileZ < 0)
-        {
-            Debug.LogWarning("[Interact] Warehouse tile coordinates are invalid.");
-            return;
-        }
-
-        bool success = WarehouseService.SetLastInteractedWarehouse(
-            warehouseZoneName,
-            warehouseTileX,
-            warehouseTileZ
-        );
-
-        if (!success)
+        if (warehouseIdentity.WarehouseId <= 0)
         {
             Debug.LogWarning(
-                $"[Interact] Failed to set current warehouse for {warehouseZoneName} {warehouseTileX}, {warehouseTileZ}"
+                $"[Interact] WarehouseIdentity exists but WarehouseId is invalid on '{warehouseIdentity.gameObject.name}'."
             );
             return;
         }
 
-        Debug.Log($"[Interact] Current warehouse set to {warehouseZoneName} {warehouseTileX}, {warehouseTileZ}");
+        bool success = WarehouseService.SetLastInteractedWarehouse(warehouseIdentity.WarehouseId);
+
+        if (!success)
+        {
+            Debug.LogWarning(
+                $"[Interact] Failed to set current warehouse from WarehouseIdentity ID {warehouseIdentity.WarehouseId}."
+            );
+            return;
+        }
+
+        Debug.Log(
+            $"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}."
+        );
     }
 
     private void CacheWarehouseIdentity()

@@ -69,6 +69,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a6084dc7eab23f943b1bb7e21b283665, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1426541730320690391}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a6084dc7eab23f943b1bb7e21b283665, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6141801170995012007}
   m_SourcePrefab: {fileID: 100100000, guid: a6084dc7eab23f943b1bb7e21b283665, type: 3}
 --- !u!1 &8642313098951650224 stripped
 GameObject:
@@ -132,3 +135,22 @@ MonoBehaviour:
   sceneToLoad: Warehouse
   saveReturnPointBeforeSceneLoad: 1
   interactPromptText: {fileID: 4776790092161787438, guid: b756921f311bb4549b1e91f0b4588bd1, type: 3}
+  triggerCollider: {fileID: 0}
+  setCurrentWarehouseOnInteract: 1
+  warehouseIdentity: {fileID: 0}
+--- !u!114 &-6141801170995012007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8642313098951650224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43755dd4423ca4f45a3f297d4ff3be49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WarehouseIdentity
+  warehouseId: -1
+  zoneName: 
+  tileX: -1
+  tileZ: -1

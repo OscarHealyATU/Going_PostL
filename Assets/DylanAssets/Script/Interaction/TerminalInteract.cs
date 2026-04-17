@@ -11,15 +11,6 @@ public class TerminalInteract : MonoBehaviour
     [Header("Player Object")]
     [SerializeField] private GameObject playerCapsule;
 
-    [Header("Warehouse Tracking")]
-    [SerializeField] private bool setCurrentWarehouseOnOpen = false;
-    [SerializeField] private string warehouseZoneName;
-    [SerializeField] private int warehouseTileX = -1;
-    [SerializeField] private int warehouseTileZ = -1;
-
-    [Header("Runtime Identity")]
-    [SerializeField] private WarehouseIdentity warehouseIdentity;
-
     [Header("Detected Scripts (read only at runtime)")]
     [SerializeField] private MonoBehaviour playerMovementScript;
     [SerializeField] private MonoBehaviour playerLookScript;
@@ -29,7 +20,6 @@ public class TerminalInteract : MonoBehaviour
     private void Awake()
     {
         CachePlayerScripts();
-        CacheWarehouseIdentity();
 
         if (managerPanel != null)
             managerPanel.SetActive(false);
@@ -41,7 +31,6 @@ public class TerminalInteract : MonoBehaviour
     private void OnValidate()
     {
         CachePlayerScripts();
-        CacheWarehouseIdentity();
     }
 
     private void Start()
@@ -67,10 +56,6 @@ public class TerminalInteract : MonoBehaviour
             return;
 
         CachePlayerScripts();
-        CacheWarehouseIdentity();
-
-        if (setCurrentWarehouseOnOpen)
-            TrySetCurrentWarehouse();
 
         managerPanel.SetActive(true);
 
@@ -90,63 +75,6 @@ public class TerminalInteract : MonoBehaviour
 
         LockPlayer(false);
         RefreshPlayerUi();
-    }
-
-    private void TrySetCurrentWarehouse()
-    {
-        CacheWarehouseIdentity();
-
-        if (warehouseIdentity != null && warehouseIdentity.WarehouseId > 0)
-        {
-            bool successById = WarehouseService.SetLastInteractedWarehouse(warehouseIdentity.WarehouseId);
-
-            if (successById)
-            {
-                Debug.Log($"[TerminalInteract] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}");
-                return;
-            }
-
-            Debug.LogWarning($"[TerminalInteract] WarehouseIdentity found, but DB update failed for warehouse ID {warehouseIdentity.WarehouseId}.");
-        }
-
-        if (string.IsNullOrWhiteSpace(warehouseZoneName))
-        {
-            Debug.LogWarning("[TerminalInteract] No WarehouseIdentity found and warehouseZoneName is not set.");
-            return;
-        }
-
-        if (warehouseTileX < 0 || warehouseTileZ < 0)
-        {
-            Debug.LogWarning("[TerminalInteract] Warehouse tile coordinates are invalid.");
-            return;
-        }
-
-        bool success = WarehouseService.SetLastInteractedWarehouse(
-            warehouseZoneName,
-            warehouseTileX,
-            warehouseTileZ
-        );
-
-        if (!success)
-        {
-            Debug.LogWarning(
-                $"[TerminalInteract] Failed to set current warehouse for {warehouseZoneName} {warehouseTileX}, {warehouseTileZ}"
-            );
-            return;
-        }
-
-        Debug.Log($"[TerminalInteract] Current warehouse set to {warehouseZoneName} {warehouseTileX}, {warehouseTileZ}");
-    }
-
-    private void CacheWarehouseIdentity()
-    {
-        if (warehouseIdentity != null)
-            return;
-
-        warehouseIdentity = GetComponent<WarehouseIdentity>();
-
-        if (warehouseIdentity == null)
-            warehouseIdentity = GetComponentInParent<WarehouseIdentity>();
     }
 
     private void LockPlayer(bool locked)

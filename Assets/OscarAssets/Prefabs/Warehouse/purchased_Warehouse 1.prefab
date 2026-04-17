@@ -377,10 +377,7 @@ MonoBehaviour:
   saveReturnPointBeforeSceneLoad: 1
   interactPromptText: {fileID: 4776790092161787438}
   triggerCollider: {fileID: 0}
-  setCurrentWarehouseOnInteract: 0
-  warehouseZoneName: 
-  warehouseTileX: -1
-  warehouseTileZ: -1
+  setCurrentWarehouseOnInteract: 1
   warehouseIdentity: {fileID: 0}
 --- !u!114 &-3875827829131976008
 MonoBehaviour:

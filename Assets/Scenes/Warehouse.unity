@@ -2460,11 +2460,6 @@ MonoBehaviour:
   managerPanel: {fileID: 484530614}
   promptText: {fileID: 938077837}
   playerCapsule: {fileID: 7418109017113357998}
-  setCurrentWarehouseOnOpen: 0
-  warehouseZoneName: 
-  warehouseTileX: -1
-  warehouseTileZ: -1
-  warehouseIdentity: {fileID: 0}
   playerMovementScript: {fileID: 7418109017113358001}
   playerLookScript: {fileID: 7418109017113358000}
 --- !u!1 &166826736
@@ -12066,9 +12061,6 @@ MonoBehaviour:
   interactPromptText: {fileID: 1488576055}
   triggerCollider: {fileID: 924671597}
   setCurrentWarehouseOnInteract: 0
-  warehouseZoneName: 
-  warehouseTileX: -1
-  warehouseTileZ: -1
   warehouseIdentity: {fileID: 0}
 --- !u!65 &924671597
 BoxCollider:

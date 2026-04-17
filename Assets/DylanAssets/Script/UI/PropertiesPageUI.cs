@@ -103,7 +103,7 @@ public class PropertiesPageUI : MonoBehaviour
             return;
         }
 
-        currentTileText.text = $"Current Tile: {warehouse.zoneName} | {warehouse.tileX},{warehouse.tileZ}";
+        currentTileText.text = $"Current Tile: {warehouse.zoneName} | X = {warehouse.tileX},Y = {warehouse.tileZ}";
     }
 
     private void RefreshOwnedWarehouses()

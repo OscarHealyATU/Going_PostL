@@ -13,14 +13,16 @@ public class StarterWarehouseRegistrar : MonoBehaviour
     [SerializeField] private int starterTileX = 0;
     [SerializeField] private int starterTileZ = 0;
 
-    [Header("Optional Runtime Lookup")]
-    [SerializeField] private bool tryFindRuntimeWarehouseObject = false;
+    [Header("Runtime Starter Warehouse Lookup")]
+    [SerializeField] private bool tryFindRuntimeWarehouseObject = true;
     [SerializeField] private string runtimeWarehouseObjectName = "purchased_Warehouse1(Clone)";
     [SerializeField] private float lookupDelay = 0.25f;
 
     [Header("Behaviour")]
     [SerializeField] private bool registerOnStart = true;
-    [SerializeField] private bool setAsCurrentWarehouseAfterRegister = true;
+
+    [Tooltip("Usually leave this OFF. Current warehouse should change when the player enters it, not on scene load.")]
+    [SerializeField] private bool setAsCurrentWarehouseAfterRegister = false;
 
     private void Start()
     {
@@ -60,6 +62,8 @@ public class StarterWarehouseRegistrar : MonoBehaviour
             worldPos.z
         );
 
+        BindRuntimeWarehouseIdentityByTile(zoneName, starterTileX, starterTileZ);
+
         if (setAsCurrentWarehouseAfterRegister)
             WarehouseService.SetLastInteractedWarehouse(zoneName, starterTileX, starterTileZ);
     }
@@ -97,6 +101,8 @@ public class StarterWarehouseRegistrar : MonoBehaviour
                     worldPos.z
                 );
 
+                BindWarehouseIdentity(runtimeWarehouse, zoneName, tileX, tileZ);
+
                 if (setAsCurrentWarehouseAfterRegister)
                     WarehouseService.SetLastInteractedWarehouse(zoneName, tileX, tileZ);
 
@@ -106,6 +112,79 @@ public class StarterWarehouseRegistrar : MonoBehaviour
         }
 
         RegisterStarterWarehouseFromTile();
+    }
+
+    private void BindRuntimeWarehouseIdentityByTile(string targetZoneName, int tileX, int tileZ)
+    {
+        Warehouse starterWarehouse = WarehouseService.GetWarehouseAtTile(targetZoneName, tileX, tileZ);
+        if (starterWarehouse == null)
+        {
+            Debug.LogWarning(
+                $"[StarterWarehouseRegistrar] Could not find starter warehouse in DB for {targetZoneName} {tileX}, {tileZ}"
+            );
+            return;
+        }
+
+        WarehouseIdentity[] identities = FindObjectsOfType<WarehouseIdentity>(true);
+
+        for (int i = 0; i < identities.Length; i++)
+        {
+            WarehouseIdentity identity = identities[i];
+            if (identity == null)
+                continue;
+
+            identity.SetIdentity(
+                starterWarehouse.id,
+                starterWarehouse.zoneName,
+                starterWarehouse.tileX,
+                starterWarehouse.tileZ
+            );
+
+            Debug.Log(
+                $"[StarterWarehouseRegistrar] Bound starter WarehouseIdentity to '{identity.gameObject.name}' with ID {starterWarehouse.id} at {starterWarehouse.zoneName} {starterWarehouse.tileX}, {starterWarehouse.tileZ}"
+            );
+            return;
+        }
+
+        Debug.LogWarning("[StarterWarehouseRegistrar] No WarehouseIdentity found in scene to bind to starter warehouse.");
+    }
+
+    private void BindWarehouseIdentity(GameObject runtimeWarehouse, string targetZoneName, int tileX, int tileZ)
+    {
+        if (runtimeWarehouse == null)
+            return;
+
+        Warehouse starterWarehouse = WarehouseService.GetWarehouseAtTile(targetZoneName, tileX, tileZ);
+        if (starterWarehouse == null)
+        {
+            Debug.LogWarning(
+                $"[StarterWarehouseRegistrar] Could not find starter warehouse in DB for {targetZoneName} {tileX}, {tileZ}"
+            );
+            return;
+        }
+
+        WarehouseIdentity identity = runtimeWarehouse.GetComponent<WarehouseIdentity>();
+        if (identity == null)
+            identity = runtimeWarehouse.GetComponentInChildren<WarehouseIdentity>(true);
+
+        if (identity == null)
+        {
+            Debug.LogWarning(
+                $"[StarterWarehouseRegistrar] Runtime starter warehouse '{runtimeWarehouse.name}' has no WarehouseIdentity."
+            );
+            return;
+        }
+
+        identity.SetIdentity(
+            starterWarehouse.id,
+            starterWarehouse.zoneName,
+            starterWarehouse.tileX,
+            starterWarehouse.tileZ
+        );
+
+        Debug.Log(
+            $"[StarterWarehouseRegistrar] Bound starter WarehouseIdentity on '{runtimeWarehouse.name}' with ID {starterWarehouse.id} at {starterWarehouse.zoneName} {starterWarehouse.tileX}, {starterWarehouse.tileZ}"
+        );
     }
 
     private gridify GetGridForZone(string targetZoneName)
