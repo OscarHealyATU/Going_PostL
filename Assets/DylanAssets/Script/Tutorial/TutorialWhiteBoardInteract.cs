@@ -10,7 +10,7 @@ public class TutorialWhiteboardInteract : MonoBehaviour
     [Header("Prompt UI")]
     [SerializeField] private GameObject promptRoot;
     [SerializeField] private TMP_Text promptText;
-    [SerializeField] private string promptMessage = "Press E to Interact";
+    [SerializeField] private string promptMessage = "Press E for tutorial";
 
     [Header("Interaction")]
     [SerializeField] private Key interactKey = Key.E;
