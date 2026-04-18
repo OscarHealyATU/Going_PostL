@@ -973,11 +973,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -1897,7 +1897,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 974702920}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.49999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3863,9 +3863,9 @@ RectTransform:
   - {fileID: 153700389}
   m_Father: {fileID: 8335888067855134792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -254.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &848807129
@@ -4237,11 +4237,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -4540,7 +4540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 389.1, y: -157.20627}
+  m_AnchoredPosition: {x: 389.1, y: -166.6457}
   m_SizeDelta: {x: 760, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869750475
@@ -5105,11 +5105,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -5454,11 +5454,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -5898,67 +5898,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 723720162}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1151845453
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6489914747130643584, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_Name
-      value: truck
-      objectReference: {fileID: 0}
-    - target: {fileID: 6489914747130643584, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 100.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0035913587
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 719.9996
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
 --- !u!1 &1154236158
 GameObject:
   m_ObjectHideFlags: 0
@@ -6753,7 +6692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d10b5f50d230b1241a5f4c8fa394f097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniMapMarker
-  Player: {fileID: 3664108872227137299}
+  Player: {fileID: 2678207657083343380}
   miniMap: {fileID: 1377954456}
   minimapImage: {fileID: 6918683912230796542}
   playerMarker: {fileID: 427686230}
@@ -7741,11 +7680,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -9405,7 +9344,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1777178182
 Transform:
   m_ObjectHideFlags: 0
@@ -9710,67 +9649,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795297039}
   m_CullTransparentMesh: 1
---- !u!1001 &1842334204
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 104.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00089138746
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 719.9996
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703009269610895807, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8737043820637131933, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_Name
-      value: 3Wheeler
-      objectReference: {fileID: 0}
-    - target: {fileID: 8737043820637131933, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
 --- !u!1 &1843065093
 GameObject:
   m_ObjectHideFlags: 0
@@ -11101,67 +10979,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3343743564873230753, guid: d02532e43286abc438884c6b2926500d, type: 3}
   m_PrefabInstance: {fileID: 2874536230162921014}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2047864820
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4731195071043397597, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_Name
-      value: bike
-      objectReference: {fileID: 0}
-    - target: {fileID: 4731195071043397597, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 96.025604
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0026093423
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 719.9996
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 41798b058c918334594380771107524a, type: 3}
 --- !u!1 &2047951703
 GameObject:
   m_ObjectHideFlags: 0
@@ -11756,67 +11573,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2102707487}
   m_CullTransparentMesh: 1
---- !u!1001 &2120527783
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 91.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 719.9996
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4673565978087650942, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5340479684408835643, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_Name
-      value: eVan
-      objectReference: {fileID: 0}
-    - target: {fileID: 5340479684408835643, guid: caeb898b6468705408ee8a285df00312, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: caeb898b6468705408ee8a285df00312, type: 3}
 --- !u!1 &2124844094
 GameObject:
   m_ObjectHideFlags: 0
@@ -18034,11 +17790,11 @@ MonoBehaviour:
   endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
-  maxAliveTotal: 100
-  minWaypoints: 10
+  maxAliveTotal: 40
+  minWaypoints: 20
   minEndDistanceWorld: 120
   driveOnRight: 0
-  speedJitter: 0.15
+  speedJitter: 0
   laneWidth: 0.7
   laneJitter: 0.15
   despawnFarCars: 1
@@ -18719,7 +18475,3 @@ SceneRoots:
   - {fileID: 723720162}
   - {fileID: 392277992}
   - {fileID: 73599375}
-  - {fileID: 1151845453}
-  - {fileID: 2120527783}
-  - {fileID: 2047864820}
-  - {fileID: 1842334204}

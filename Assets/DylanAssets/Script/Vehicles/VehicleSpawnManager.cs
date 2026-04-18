@@ -115,18 +115,11 @@ public class VehicleSpawnManager : MonoBehaviour
         }
         else
         {
-            if (vehicle.spawnBay < 0 || vehicle.spawnBay >= spawnPoints.Length)
-                return false;
-
-            var point = spawnPoints[vehicle.spawnBay];
-            if (point == null)
+            if (!TryGetSpawnPointPose(vehicle.spawnBay, out spawnPosition, out spawnRotation))
                 return false;
 
             if (IsSpawnPointOccupiedByAnotherVehicle(vehicle.spawnBay, vehicle.id))
                 return false;
-
-            spawnPosition = point.transform.position;
-            spawnRotation = point.transform.rotation;
         }
 
         GameObject spawned = Instantiate(prefab, spawnPosition, spawnRotation);
@@ -166,6 +159,100 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             TrySpawnVehicle(vehiclesForScene[i].id);
         }
+    }
+
+    public bool TryRecoverVehicleToAssignedBay(int vehicleId, out string message)
+    {
+        message = "Vehicle recovery failed.";
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+        {
+            message = "Database not available.";
+            return false;
+        }
+
+        var db = DbBoot.Instance.Db;
+        var vehicle = db.Find<Vehicle>(vehicleId);
+
+        if (vehicle == null)
+        {
+            message = "Vehicle not found.";
+            return false;
+        }
+
+        if (!string.Equals(vehicle.spawnScene, SceneName, StringComparison.Ordinal))
+        {
+            message = $"This vehicle belongs to scene '{vehicle.spawnScene}', not '{SceneName}'.";
+            return false;
+        }
+
+        if (!TryGetSpawnPointPose(vehicle.spawnBay, out Vector3 spawnPosition, out Quaternion spawnRotation))
+        {
+            message = $"Assigned spawn point {vehicle.spawnBay + 1} is invalid or missing.";
+            return false;
+        }
+
+        var existingLink = FindExistingVehicle(vehicle.id);
+
+        db.RunInTransaction(() =>
+        {
+            vehicle.hasSavedLocation = 0;
+            vehicle.savedScene = null;
+            vehicle.savedX = 0f;
+            vehicle.savedY = 0f;
+            vehicle.savedZ = 0f;
+            vehicle.savedYaw = 0f;
+            vehicle.spawnPending = 0;
+            db.Update(vehicle);
+        });
+
+        if (existingLink != null)
+        {
+            Transform root = existingLink.transform.root;
+            Rigidbody rb = root.GetComponent<Rigidbody>();
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.position = spawnPosition;
+                rb.rotation = spawnRotation;
+            }
+            else
+            {
+                root.SetPositionAndRotation(spawnPosition, spawnRotation);
+            }
+
+            message = $"Vehicle returned to parking space {vehicle.spawnBay + 1}.";
+            return true;
+        }
+
+        bool spawned = TrySpawnVehicle(vehicle.id);
+        if (!spawned)
+        {
+            message = $"Could not respawn vehicle in parking space {vehicle.spawnBay + 1}.";
+            return false;
+        }
+
+        message = $"Vehicle returned to parking space {vehicle.spawnBay + 1}.";
+        return true;
+    }
+
+    public bool TryGetSpawnPointPose(int spawnPointIndex, out Vector3 position, out Quaternion rotation)
+    {
+        position = Vector3.zero;
+        rotation = Quaternion.identity;
+
+        if (spawnPointIndex < 0 || spawnPointIndex >= spawnPoints.Length)
+            return false;
+
+        var point = spawnPoints[spawnPointIndex];
+        if (point == null)
+            return false;
+
+        position = point.transform.position;
+        rotation = point.transform.rotation;
+        return true;
     }
 
     private void ApplyVehicleLinkData(GameObject spawned, Vehicle vehicle)
@@ -220,7 +307,8 @@ public class VehicleSpawnManager : MonoBehaviour
             if (link.vehicleId == vehicleId)
                 continue;
 
-            return IsVehicleAssignedToSpawnPoint(link.vehicleId, spawnPointIndex);
+            if (IsVehicleAssignedToSpawnPoint(link.vehicleId, spawnPointIndex))
+                return true;
         }
 
         if (spawnPointIndex >= 0 && spawnPointIndex < spawnPoints.Length)

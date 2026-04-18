@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class VehicleService
 {
@@ -255,6 +256,91 @@ public static class VehicleService
 
         message = $"{vehicleType.name} has been sold for €{sellPrice:0}";
         return true;
+    }
+
+    public static bool TryRecoverVehicleToAssignedBay(int vehicleId, out string message)
+    {
+        message = "Vehicle recovery failed.";
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+        {
+            message = "Database not available.";
+            return false;
+        }
+
+        var db = DbBoot.Instance.Db;
+        var player = PlayerService.Get();
+
+        if (player == null)
+        {
+            message = "Player not found.";
+            return false;
+        }
+
+        var vehicle = db.Find<Vehicle>(vehicleId);
+        if (vehicle == null)
+        {
+            message = "Vehicle not found.";
+            return false;
+        }
+
+        if (vehicle.ownedByPlayerId != player.id)
+        {
+            message = "You do not own this vehicle.";
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(vehicle.spawnScene))
+        {
+            message = "This vehicle has no assigned spawn scene.";
+            return false;
+        }
+
+        if (vehicle.spawnBay < 0)
+        {
+            message = "This vehicle has no valid assigned spawn bay.";
+            return false;
+        }
+
+        string activeSceneName = SceneManager.GetActiveScene().name;
+
+        // If player is not currently in the assigned scene, queue the vehicle for spawn there.
+        if (!string.Equals(activeSceneName, vehicle.spawnScene, StringComparison.Ordinal))
+        {
+            db.RunInTransaction(() =>
+            {
+                vehicle.hasSavedLocation = 0;
+                vehicle.savedScene = null;
+                vehicle.savedX = 0f;
+                vehicle.savedY = 0f;
+                vehicle.savedZ = 0f;
+                vehicle.savedYaw = 0f;
+                vehicle.spawnPending = 1;
+                db.Update(vehicle);
+            });
+
+            RemoveSpawnedVehicleFromScene(vehicleId);
+
+            message = $"Vehicle recovery queued for {vehicle.spawnScene} parking space {vehicle.spawnBay + 1}.";
+            return true;
+        }
+
+        var spawnManager = VehicleSpawnManager.Instance != null
+            ? VehicleSpawnManager.Instance
+            : UnityEngine.Object.FindFirstObjectByType<VehicleSpawnManager>();
+
+        if (spawnManager == null)
+        {
+            message = "No VehicleSpawnManager found in this scene.";
+            return false;
+        }
+
+        bool success = spawnManager.TryRecoverVehicleToAssignedBay(vehicleId, out message);
+
+        if (success)
+            PlayerService.RefreshAllUI();
+
+        return success;
     }
 
     private static void RemoveSpawnedVehicleFromScene(int vehicleId)

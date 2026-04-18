@@ -10,6 +10,7 @@ public class OwnedVehicleCardUI : MonoBehaviour
     [SerializeField] private TMP_Text sellInfoText;
     [SerializeField] private TMP_Text storageInfoText;
     [SerializeField] private Button sellButton;
+    [SerializeField] private Button recoverButton;
 
     private int vehicleId;
     private Action<string> onSold;
@@ -41,6 +42,16 @@ public class OwnedVehicleCardUI : MonoBehaviour
             if (buttonLabel != null)
                 buttonLabel.text = $"Sell for €{sellPrice:0}";
         }
+
+        if (recoverButton != null)
+        {
+            recoverButton.onClick.RemoveAllListeners();
+            recoverButton.onClick.AddListener(OnRecoverClicked);
+
+            TMP_Text buttonLabel = recoverButton.GetComponentInChildren<TMP_Text>(true);
+            if (buttonLabel != null)
+                buttonLabel.text = "Recover";
+        }
     }
 
     private void OnSellClicked()
@@ -50,6 +61,20 @@ public class OwnedVehicleCardUI : MonoBehaviour
             if (DayManager.Instance != null)
                 DayManager.Instance.RegisterMoneyEarned(sellPrice);
 
+            onSold?.Invoke(message);
+        }
+        else
+        {
+            Debug.LogError(message);
+            onSold?.Invoke(message);
+        }
+    }
+
+    private void OnRecoverClicked()
+    {
+        if (VehicleService.TryRecoverVehicleToAssignedBay(vehicleId, out string message))
+        {
+            Debug.Log(message);
             onSold?.Invoke(message);
         }
         else

@@ -85,7 +85,6 @@ public class enterCar : MonoBehaviour
         playerLook.cameraRoot.SetParent(currentCar.driverSeat);
         playerLook.cameraRoot.localPosition = Vector3.zero;
         playerLook.cameraRoot.localRotation = Quaternion.identity;
-        transform.position = new Vector3(0,-500,0);
     }
 
     void ExitCar()
