@@ -47,6 +47,9 @@ public class OwnedVehicleCardUI : MonoBehaviour
     {
         if (VehicleService.TrySellVehicle(vehicleId, out string message, out double sellPrice))
         {
+            if (DayManager.Instance != null)
+                DayManager.Instance.RegisterMoneyEarned(sellPrice);
+
             onSold?.Invoke(message);
         }
         else

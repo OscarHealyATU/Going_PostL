@@ -344,6 +344,20 @@ public class DayManager : MonoBehaviour
         RefreshSummaryIfOpen();
     }
 
+    public void RegisterMoneyEarned(double amountEarned)
+    {
+        if (state == null)
+            LoadOrCreateState();
+
+        if (state == null) return;
+
+        state.moneyEarnedToday += Math.Abs(amountEarned);
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+
+        SaveState();
+        RefreshSummaryIfOpen();
+    }
+
     public void RegisterMoneySpent(double amountSpent)
     {
         if (state == null)

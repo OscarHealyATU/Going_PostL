@@ -11,6 +11,7 @@ public class OwnedVehiclesPageUI : MonoBehaviour
     [SerializeField] private Transform contentRoot;
     [SerializeField] private OwnedVehicleCardUI cardPrefab;
     [SerializeField] private GameObject emptyState;
+    [SerializeField] private TMP_Text emptyStateText;
 
     [Header("Feedback")]
     [SerializeField] private TMP_Text errorText;
@@ -41,6 +42,22 @@ public class OwnedVehiclesPageUI : MonoBehaviour
         var db = DbBoot.Instance.Db;
         var vehicles = VehicleService.GetOwnedVehicles();
 
+        // SHOW EMPTY MESSAGE
+        if (vehicles.Count == 0)
+        {
+            if (emptyState != null)
+                emptyState.SetActive(true);
+
+            if (emptyStateText != null)
+                emptyStateText.text = "No vehicles currently owned";
+
+            return;
+        }
+
+        // HIDE EMPTY MESSAGE
+        if (emptyState != null)
+            emptyState.SetActive(false);
+
         foreach (var vehicle in vehicles)
         {
             var type = db.Find<VehicleType>(vehicle.vehicleTypeId);
@@ -50,9 +67,6 @@ public class OwnedVehiclesPageUI : MonoBehaviour
 
             spawnedCards.Add(card);
         }
-
-        if (emptyState != null)
-            emptyState.SetActive(vehicles.Count == 0);
     }
 
     private void OnVehicleSold(string message)
