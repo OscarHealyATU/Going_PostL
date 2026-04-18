@@ -77,7 +77,10 @@ public class DeliveryCompassUI : MonoBehaviour
 
         GameObject go = GameObject.FindGameObjectWithTag(playerTag);
         if (go != null)
-            player = go.transform;
+        {
+            Camera cam = go.GetComponentInChildren<Camera>();
+            player = cam != null ? cam.transform : go.transform;
+        }
     }
 
     private void UpdateCompassStrip()
