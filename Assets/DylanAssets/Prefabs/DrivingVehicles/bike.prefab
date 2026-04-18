@@ -620,6 +620,9 @@ GameObject:
   - component: {fileID: 8404159588272726775}
   - component: {fileID: 5457018750434320129}
   - component: {fileID: 6919160654266874585}
+  - component: {fileID: 5662218380710496399}
+  - component: {fileID: -7537837031223974007}
+  - component: {fileID: 8497276247551858473}
   m_Layer: 0
   m_Name: bike
   m_TagString: Untagged
@@ -636,7 +639,7 @@ Transform:
   m_GameObject: {fileID: 4731195071043397597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 105.43, y: 1, z: 705.42725}
+  m_LocalPosition: {x: 96.025604, y: 0.0026093423, z: 719.9996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -709,6 +712,59 @@ MonoBehaviour:
   useVehiclePrompt: {fileID: 376687777200048610}
   drivingInstructions: {fileID: 8690005270954974341}
   isBeingDriven: 0
+--- !u!114 &5662218380710496399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731195071043397597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50030ab98f7f37445b4024d2a244f0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleLink
+  vehicleId: 0
+  spawnPointIndex: 0
+  spawnScene: 
+--- !u!114 &-7537837031223974007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731195071043397597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4234bc8fac72a7645a627ae225f15af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleStorageInteract
+  vehicleLink: {fileID: 5662218380710496399}
+  promptRoot: {fileID: 0}
+  promptText: {fileID: 0}
+  promptRootObjectName: VehicleStoragePrompt
+  promptMessage: Press E to access storage
+--- !u!65 &8497276247551858473
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731195071043397597}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.83, y: 1, z: 2.57}
+  m_Center: {x: 0, y: 0.63, z: -1.49}
 --- !u!1 &5801389402322537786
 GameObject:
   m_ObjectHideFlags: 0

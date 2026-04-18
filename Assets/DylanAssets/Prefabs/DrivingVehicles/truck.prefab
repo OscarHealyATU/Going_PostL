@@ -578,7 +578,7 @@ Transform:
   m_GameObject: {fileID: 4075651840586448903}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 100, z: 11}
+  m_LocalPosition: {x: 0, y: 100, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1056,6 +1056,9 @@ GameObject:
   - component: {fileID: 7528103192593850183}
   - component: {fileID: 1098449920698974593}
   - component: {fileID: 3424705101828685301}
+  - component: {fileID: 1509545978567938025}
+  - component: {fileID: -6669360833285278029}
+  - component: {fileID: 8023497872476206140}
   m_Layer: 0
   m_Name: truck
   m_TagString: Untagged
@@ -1072,7 +1075,7 @@ Transform:
   m_GameObject: {fileID: 6489914747130643584}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 102.35834, y: 0.0035913587, z: 727.10443}
+  m_LocalPosition: {x: 100.42, y: 0.0035913587, z: 719.9996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1145,6 +1148,59 @@ MonoBehaviour:
   useVehiclePrompt: {fileID: 2225778504509913666}
   drivingInstructions: {fileID: 6085981491412438835}
   isBeingDriven: 0
+--- !u!114 &1509545978567938025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489914747130643584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50030ab98f7f37445b4024d2a244f0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleLink
+  vehicleId: 0
+  spawnPointIndex: 0
+  spawnScene: 
+--- !u!114 &-6669360833285278029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489914747130643584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4234bc8fac72a7645a627ae225f15af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleStorageInteract
+  vehicleLink: {fileID: 1509545978567938025}
+  promptRoot: {fileID: 0}
+  promptText: {fileID: 0}
+  promptRootObjectName: VehicleStoragePrompt
+  promptMessage: Press E to access storage
+--- !u!65 &8023497872476206140
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6489914747130643584}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 7.18, y: 4.52, z: 7.52}
+  m_Center: {x: 0, y: 2.33, z: -9.17}
 --- !u!1 &6652849830329823652
 GameObject:
   m_ObjectHideFlags: 0

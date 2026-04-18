@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: b25fa3cfd123f6c4aafa9f65abd1c903, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: cefff8247986fd943837a3c79805b95e, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 034ce00866fa6cd44a9cede588d3b5d6, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -4540,7 +4540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 389.1, y: -194.66756}
+  m_AnchoredPosition: {x: 389.1, y: -157.20627}
   m_SizeDelta: {x: 760, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869750475
@@ -5910,25 +5910,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: truck
       objectReference: {fileID: 0}
-    - target: {fileID: 6723803138763239376, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6723803138763239376, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6723803138763239376, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6723803138763239376, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6723803138763239376, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
+    - target: {fileID: 6489914747130643584, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7528103192593850183, guid: fdb1e17b1ed24bf4c9d8fd725b020aaf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9421,7 +9405,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1777178182
 Transform:
   m_ObjectHideFlags: 0
@@ -9774,41 +9758,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.92387956
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.38268343
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 3294954755927705248, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8737043820637131933, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
       propertyPath: m_Name
       value: 3Wheeler
+      objectReference: {fileID: 0}
+    - target: {fileID: 8737043820637131933, guid: 60c3a932db1d4484fa6d2aec24271249, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11157,6 +11113,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bike
       objectReference: {fileID: 0}
+    - target: {fileID: 4731195071043397597, guid: 41798b058c918334594380771107524a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8404159588272726775, guid: 41798b058c918334594380771107524a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 96.025604
@@ -11847,6 +11807,10 @@ PrefabInstance:
     - target: {fileID: 5340479684408835643, guid: caeb898b6468705408ee8a285df00312, type: 3}
       propertyPath: m_Name
       value: eVan
+      objectReference: {fileID: 0}
+    - target: {fileID: 5340479684408835643, guid: caeb898b6468705408ee8a285df00312, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

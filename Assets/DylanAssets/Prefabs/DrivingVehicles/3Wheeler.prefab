@@ -1238,6 +1238,9 @@ GameObject:
   - component: {fileID: 2703009269610895807}
   - component: {fileID: 8340270064539256953}
   - component: {fileID: 7076704177622867500}
+  - component: {fileID: -3686906631139053963}
+  - component: {fileID: 1991887179737763535}
+  - component: {fileID: 5641941536313064078}
   m_Layer: 0
   m_Name: 3Wheeler
   m_TagString: Untagged
@@ -1254,7 +1257,7 @@ Transform:
   m_GameObject: {fileID: 8737043820637131933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.33, y: 0.281, z: 710.4}
+  m_LocalPosition: {x: 104.3, y: 0.00089138746, z: 719.9996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1327,6 +1330,59 @@ MonoBehaviour:
   useVehiclePrompt: {fileID: 8755297788968617627}
   drivingInstructions: {fileID: 4143435758713369304}
   isBeingDriven: 0
+--- !u!114 &-3686906631139053963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8737043820637131933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50030ab98f7f37445b4024d2a244f0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleLink
+  vehicleId: 0
+  spawnPointIndex: 0
+  spawnScene: 
+--- !u!114 &1991887179737763535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8737043820637131933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4234bc8fac72a7645a627ae225f15af1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleStorageInteract
+  vehicleLink: {fileID: -3686906631139053963}
+  promptRoot: {fileID: 0}
+  promptText: {fileID: 0}
+  promptRootObjectName: VehicleStoragePrompt
+  promptMessage: Press E to access storage
+--- !u!65 &5641941536313064078
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8737043820637131933}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 8.78, y: 2.97, z: 4.36}
+  m_Center: {x: -2.94, y: 2.07, z: -0.36}
 --- !u!1 &8755297788968617627
 GameObject:
   m_ObjectHideFlags: 0
