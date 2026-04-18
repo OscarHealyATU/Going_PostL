@@ -5,7 +5,7 @@ using UnityEditor;
 #endif
 
 /// <summary>
-/// Adapter around your fixed gridify.
+/// Adapter around gridify.
 /// Treats gridify's spawned positions as LOT centers.
 /// Roads are BETWEEN lots, so road intersections live on CORNERS between tile centers.
 /// Includes editor-time gizmo preview.
@@ -22,14 +22,8 @@ public class GridifyRoadAdapter : MonoBehaviour
 
     [Header("Editor Preview")]
     public bool showPreview = true;
-
-    [Tooltip("Draw tile-center markers (lots).")]
     public bool drawLotCenters = true;
-
-    [Tooltip("Draw intersection markers (road nodes).")]
     public bool drawIntersections = true;
-
-    [Tooltip("Draw road grid lines (between tiles).")]
     public bool drawRoadLines = true;
 
     [Tooltip("Preview spacing size for lot center markers (in world units).")]
@@ -45,13 +39,21 @@ public class GridifyRoadAdapter : MonoBehaviour
     public int TilesZ { get; private set; }
     public float Dist { get; private set; }
     public Vector3 OriginCorner { get; private set; }
+    public Vector3 MaxCorner { get; private set; }
     public bool IsReady { get; private set; }
 
-    void OnEnable() => Refresh();
-    void Awake() => Refresh();
+    void OnEnable()
+    {
+        Refresh();
+    }
+
+    void Awake()
+    {
+        Refresh();
+    }
+
     void Update()
     {
-        // In play mode, we don't need to refresh constantly.
 #if UNITY_EDITOR
         if (!Application.isPlaying)
             Refresh();
@@ -60,20 +62,37 @@ public class GridifyRoadAdapter : MonoBehaviour
 
     public void Refresh()
     {
-        if (city == null) city = FindFirstObjectByType<gridify>();
+        if (city == null)
+            city = FindFirstObjectByType<gridify>();
+
         if (city == null)
         {
             IsReady = false;
             return;
         }
 
-        TilesX = Mathf.FloorToInt(city.noOfHousesX);
-        TilesZ = Mathf.FloorToInt(city.noOfHousesZ);
+        TilesX = Mathf.Max(0, Mathf.FloorToInt(city.noOfHousesX));
+        TilesZ = Mathf.Max(0, Mathf.FloorToInt(city.noOfHousesZ));
         Dist = city.distance;
 
-        // gridify uses tile centers at xStart + x*distance, zStart + z*distance
-        // corners are half a tile away from the first center
-        OriginCorner = new Vector3(city.xStartPosition - Dist * 0.5f, roadY, city.zStartPosition - Dist * 0.5f);
+        if (Dist <= 0f || TilesX <= 0 || TilesZ <= 0)
+        {
+            IsReady = false;
+            return;
+        }
+
+        // gridify places LOT CENTERS at:
+        // xStart + x * distance
+        // zStart + z * distance
+        //
+        // road intersections are half a tile outward from the first lot center
+        OriginCorner = new Vector3(
+            city.xStartPosition - Dist * 0.5f,
+            roadY,
+            city.zStartPosition - Dist * 0.5f
+        );
+
+        MaxCorner = OriginCorner + new Vector3(TilesX * Dist, 0f, TilesZ * Dist);
 
         IsReady = true;
     }
@@ -89,6 +108,9 @@ public class GridifyRoadAdapter : MonoBehaviour
 
     public Vector2Int WorldToIntersection(Vector3 pos)
     {
+        if (!IsReady || Dist <= 0f)
+            return Vector2Int.zero;
+
         float fx = (pos.x - OriginCorner.x) / Dist;
         float fz = (pos.z - OriginCorner.z) / Dist;
 
@@ -101,14 +123,23 @@ public class GridifyRoadAdapter : MonoBehaviour
         return new Vector2Int(ix, iz);
     }
 
+    public bool ContainsWorldXZ(Vector3 pos)
+    {
+        if (!IsReady) return false;
+
+        return pos.x >= OriginCorner.x && pos.x <= MaxCorner.x &&
+               pos.z >= OriginCorner.z && pos.z <= MaxCorner.z;
+    }
+
 #if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         if (!showPreview) return;
 
-        // Make sure values are up-to-date in edit mode
-        if (!Application.isPlaying) Refresh();
-        if (!IsReady) return;
+        if (!Application.isPlaying)
+            Refresh();
+
+        if (!IsReady || city == null) return;
 
         int sx = TilesX;
         int sz = TilesZ;
@@ -121,7 +152,6 @@ public class GridifyRoadAdapter : MonoBehaviour
 
         float y = roadY;
 
-        // --- Draw LOT CENTERS (tile centers) ---
         if (drawLotCenters)
         {
             Gizmos.color = new Color(1f, 0f, 0f, 0.25f);
@@ -134,17 +164,16 @@ public class GridifyRoadAdapter : MonoBehaviour
                         y + 0.02f,
                         city.zStartPosition + z * Dist
                     );
+
                     Gizmos.DrawCube(lotCenter, new Vector3(lotMarkerSize, 0.05f, lotMarkerSize));
                 }
             }
         }
 
-        // --- Draw ROAD LINES (the separators between tile centers) ---
         if (drawRoadLines)
         {
             Gizmos.color = new Color(0.35f, 0.35f, 0.35f, 0.9f);
 
-            // Vertical lines (constant X) along intersection lattice
             for (int ix = 0; ix <= sx; ix++)
             {
                 float wx = OriginCorner.x + ix * Dist;
@@ -153,7 +182,6 @@ public class GridifyRoadAdapter : MonoBehaviour
                 Gizmos.DrawLine(a, b);
             }
 
-            // Horizontal lines (constant Z)
             for (int iz = 0; iz <= sz; iz++)
             {
                 float wz = OriginCorner.z + iz * Dist;
@@ -163,7 +191,6 @@ public class GridifyRoadAdapter : MonoBehaviour
             }
         }
 
-        // --- Draw INTERSECTIONS (where traffic nodes sit) ---
         if (drawIntersections)
         {
             Gizmos.color = new Color(0f, 1f, 1f, 0.85f);
@@ -178,10 +205,11 @@ public class GridifyRoadAdapter : MonoBehaviour
             }
         }
 
-        // Labels (optional, light)
         Handles.color = new Color(1f, 1f, 1f, 0.8f);
-        Handles.Label(OriginCorner + Vector3.up * (y + 0.2f),
-            $"GridifyRoadAdapter Preview\nTiles: {TilesX}x{TilesZ}  Dist: {Dist}\nOriginCorner: {OriginCorner}");
+        Handles.Label(
+            OriginCorner + Vector3.up * (y + 0.2f),
+            $"GridifyRoadAdapter Preview\nTiles: {TilesX}x{TilesZ}  Dist: {Dist}\nOriginCorner: {OriginCorner}\nMaxCorner: {MaxCorner}"
+        );
     }
 #endif
 }

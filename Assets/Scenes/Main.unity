@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: cefff8247986fd943837a3c79805b95e, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: f68fa5f2ea5de3b4d8a142d7cd84bec9, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 034ce00866fa6cd44a9cede588d3b5d6, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -953,7 +953,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -970,8 +969,8 @@ MonoBehaviour:
   graph: {fileID: 6726430457921898049}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100
@@ -1898,7 +1897,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 974702920}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.5
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4218,7 +4217,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -4235,8 +4233,8 @@ MonoBehaviour:
   graph: {fileID: 8085122475125331212}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100
@@ -4542,7 +4540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 389.1, y: -158.12254}
+  m_AnchoredPosition: {x: 389.1, y: -181.68602}
   m_SizeDelta: {x: 760, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &869750475
@@ -5087,7 +5085,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -5104,8 +5101,8 @@ MonoBehaviour:
   graph: {fileID: 342115108460865938}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100
@@ -5437,7 +5434,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -5454,8 +5450,8 @@ MonoBehaviour:
   graph: {fileID: 776558429966099492}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100
@@ -7664,7 +7660,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -7681,8 +7676,8 @@ MonoBehaviour:
   graph: {fileID: 7852496641500973043}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100
@@ -12260,6 +12255,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!1 &426213035009462242
 GameObject:
   m_ObjectHideFlags: 0
@@ -12440,6 +12436,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!4 &861609957084304728
 Transform:
   m_ObjectHideFlags: 0
@@ -13835,6 +13832,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!224 &2804115093421944546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16741,6 +16739,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!4 &6814612471454320433
 Transform:
   m_ObjectHideFlags: 0
@@ -17321,6 +17320,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!114 &7867910423592955831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17539,6 +17539,7 @@ MonoBehaviour:
   nodeEveryNIntersections: 1
   preferStraight: 0.65
   nodeHeight: 0
+  maxWaitForRoad: 10
 --- !u!143 &8137647916560247712
 CharacterController:
   m_ObjectHideFlags: 0
@@ -17769,7 +17770,6 @@ MonoBehaviour:
   carPrefabs:
   - {fileID: 5019861551608907864, guid: cf5ec03d0a7f60c40a3ce83d57e7a085, type: 3}
   - {fileID: 1008755487058625302, guid: 5d60a65536195234ca04ae2a985f116f, type: 3}
-  - {fileID: 3395331236176240714, guid: 86e4f668292bcf84ebe61fd23cd74d61, type: 3}
   - {fileID: 335079790939036215, guid: a09f900196195db4792411ce52ac4a1a, type: 3}
   - {fileID: 6102839886344155474, guid: 034b4615895df644398d36b47d69972e, type: 3}
   - {fileID: 1489996559214736372, guid: b980865185d16fd44a93c7b681aacf79, type: 3}
@@ -17786,8 +17786,8 @@ MonoBehaviour:
   graph: {fileID: 2791473252472277239}
   player: {fileID: 3664108872227137299}
   playerTag: Player
-  startNodeRadius: 100
-  endNodeRadius: 200
+  startNodeRadius: 300
+  endNodeRadius: 500
   spawnInterval: 0.3
   spawnJitter: 0.75
   maxAliveTotal: 100

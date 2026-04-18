@@ -98,6 +98,30 @@ public class CarSpawner : MonoBehaviour
             graph.GetNodesNear(player.position, endNodeRadius, nearEndNodes);
             hasBuiltNearCache = true;
 
+            Transform closest = graph.GetClosestNode(player.position);
+
+            if (closest != null)
+            {
+                Vector3 a = player.position;
+                Vector3 b = closest.position;
+                a.y = 0f;
+                b.y = 0f;
+
+                float closestDist = Vector3.Distance(a, b);
+
+                Debug.Log(
+                    $"[CarSpawner] player={player.position} " +
+                    $"graphMin={graph.MinBounds} graphMax={graph.MaxBounds} " +
+                    $"insideGraph={graph.ContainsWorldXZ(player.position)} " +
+                    $"startNear={nearStartNodes.Count} endNear={nearEndNodes.Count} " +
+                    $"closestNode={closest.position} closestDist={closestDist}"
+                );
+            }
+            else
+            {
+                Debug.LogWarning("[CarSpawner] Graph has no nodes.");
+            }
+
             if (!warnedNoNodes && (nearStartNodes.Count == 0 || nearEndNodes.Count == 0))
             {
                 Debug.LogWarning($"CarSpawner: near node lists empty. startNear={nearStartNodes.Count} endNear={nearEndNodes.Count}.");
