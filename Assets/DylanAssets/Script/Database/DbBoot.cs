@@ -38,6 +38,7 @@ public class DbBoot : MonoBehaviour
         EnsureStartingZonesUnlocked();
         EnsureWarehouseSchema();
         EnsureStarterWarehouseRegisteredAtBoot();
+        EnsureVehicleSchema();
 
         VehicleTypeStore.LoadOrSeedDefaults(Db);
         Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
@@ -381,6 +382,57 @@ public class DbBoot : MonoBehaviour
         });
 
         Debug.Log($"[DbBoot] Registered starter warehouse in '{zoneName}' at tile ({tileX}, {tileZ})");
+    }
+
+        private void EnsureVehicleSchema()
+    {
+        if (Db == null)
+        {
+            Debug.LogError("[DbBoot] Database connection is null in EnsureVehicleSchema.");
+            return;
+        }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN hasSavedLocation INTEGER NOT NULL DEFAULT 0");
+            Debug.Log("[DbBoot] Added hasSavedLocation column to Vehicle");
+        }
+        catch (Exception) { }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedScene TEXT");
+            Debug.Log("[DbBoot] Added savedScene column to Vehicle");
+        }
+        catch (Exception) { }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedX REAL NOT NULL DEFAULT 0");
+            Debug.Log("[DbBoot] Added savedX column to Vehicle");
+        }
+        catch (Exception) { }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedY REAL NOT NULL DEFAULT 0");
+            Debug.Log("[DbBoot] Added savedY column to Vehicle");
+        }
+        catch (Exception) { }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedZ REAL NOT NULL DEFAULT 0");
+            Debug.Log("[DbBoot] Added savedZ column to Vehicle");
+        }
+        catch (Exception) { }
+
+        try
+        {
+            Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedYaw REAL NOT NULL DEFAULT 0");
+            Debug.Log("[DbBoot] Added savedYaw column to Vehicle");
+        }
+        catch (Exception) { }
     }
 
     private void OnApplicationQuit()

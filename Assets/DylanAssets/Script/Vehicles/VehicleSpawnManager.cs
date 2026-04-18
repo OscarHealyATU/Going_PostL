@@ -71,14 +71,18 @@ public class VehicleSpawnManager : MonoBehaviour
             return false;
 
         var db = DbBoot.Instance.Db;
+        if (db == null)
+            return false;
+
         var vehicle = db.Find<Vehicle>(vehicleId);
         if (vehicle == null)
             return false;
 
-        if (!string.Equals(vehicle.spawnScene, SceneName, StringComparison.Ordinal))
-            return false;
+        bool shouldSpawnInThisScene =
+            string.Equals(vehicle.spawnScene, SceneName, StringComparison.Ordinal) ||
+            (vehicle.hasSavedLocation != 0 && string.Equals(vehicle.savedScene, SceneName, StringComparison.Ordinal));
 
-        if (vehicle.spawnBay < 0 || vehicle.spawnBay >= spawnPoints.Length)
+        if (!shouldSpawnInThisScene)
             return false;
 
         if (spawnedVehicleIds.Contains(vehicle.id))
@@ -90,13 +94,6 @@ public class VehicleSpawnManager : MonoBehaviour
             return true;
         }
 
-        var point = spawnPoints[vehicle.spawnBay];
-        if (point == null)
-            return false;
-
-        if (IsSpawnPointOccupiedByAnotherVehicle(vehicle.spawnBay, vehicle.id))
-            return false;
-
         var type = db.Find<VehicleType>(vehicle.vehicleTypeId);
         if (type == null)
             return false;
@@ -104,7 +101,35 @@ public class VehicleSpawnManager : MonoBehaviour
         if (!catalog.TryGetPrefab(type.name, out GameObject prefab) || prefab == null)
             return false;
 
-        GameObject spawned = Instantiate(prefab, point.transform.position, point.transform.rotation);
+        Vector3 spawnPosition;
+        Quaternion spawnRotation;
+
+        bool useSavedLocation =
+            vehicle.hasSavedLocation != 0 &&
+            string.Equals(vehicle.savedScene, SceneName, StringComparison.Ordinal);
+
+        if (useSavedLocation)
+        {
+            spawnPosition = new Vector3(vehicle.savedX, vehicle.savedY, vehicle.savedZ);
+            spawnRotation = Quaternion.Euler(0f, vehicle.savedYaw, 0f);
+        }
+        else
+        {
+            if (vehicle.spawnBay < 0 || vehicle.spawnBay >= spawnPoints.Length)
+                return false;
+
+            var point = spawnPoints[vehicle.spawnBay];
+            if (point == null)
+                return false;
+
+            if (IsSpawnPointOccupiedByAnotherVehicle(vehicle.spawnBay, vehicle.id))
+                return false;
+
+            spawnPosition = point.transform.position;
+            spawnRotation = point.transform.rotation;
+        }
+
+        GameObject spawned = Instantiate(prefab, spawnPosition, spawnRotation);
         spawned.name = $"Vehicle_{vehicle.id}_{type.name}";
 
         ApplyVehicleLinkData(spawned, vehicle);
@@ -126,18 +151,20 @@ public class VehicleSpawnManager : MonoBehaviour
             return;
 
         var db = DbBoot.Instance.Db;
+        if (db == null)
+            return;
 
         var vehiclesForScene = db.Table<Vehicle>()
-            .Where(v => v.spawnScene == SceneName)
-            .Where(v => v.spawnBay >= 0)
+            .Where(v =>
+                v.spawnScene == SceneName ||
+                (v.hasSavedLocation != 0 && v.savedScene == SceneName))
             .OrderBy(v => v.spawnBay)
             .ThenBy(v => v.id)
             .ToList();
 
         for (int i = 0; i < vehiclesForScene.Count; i++)
         {
-            var vehicle = vehiclesForScene[i];
-            TrySpawnVehicle(vehicle.id);
+            TrySpawnVehicle(vehiclesForScene[i].id);
         }
     }
 
@@ -152,8 +179,6 @@ public class VehicleSpawnManager : MonoBehaviour
         {
             var rootLink = spawned.AddComponent<VehicleLink>();
             rootLink.vehicleId = vehicle.id;
-            rootLink.spawnPointIndex = vehicle.spawnBay;
-            rootLink.spawnScene = vehicle.spawnScene;
 
             Debug.Log($"[VehicleSpawnManager] Added VehicleLink to '{spawned.name}' with vehicleId={vehicle.id}");
             return;
@@ -165,8 +190,6 @@ public class VehicleSpawnManager : MonoBehaviour
                 continue;
 
             links[i].vehicleId = vehicle.id;
-            links[i].spawnPointIndex = vehicle.spawnBay;
-            links[i].spawnScene = vehicle.spawnScene;
         }
 
         Debug.Log($"[VehicleSpawnManager] Applied vehicleId={vehicle.id} to {links.Length} VehicleLink component(s) on '{spawned.name}'");
@@ -197,24 +220,34 @@ public class VehicleSpawnManager : MonoBehaviour
             if (link.vehicleId == vehicleId)
                 continue;
 
-            if (!string.Equals(link.spawnScene, SceneName, StringComparison.Ordinal))
-                continue;
-
-            if (link.spawnPointIndex == spawnPointIndex)
-                return true;
+            return IsVehicleAssignedToSpawnPoint(link.vehicleId, spawnPointIndex);
         }
 
         if (spawnPointIndex >= 0 && spawnPointIndex < spawnPoints.Length)
         {
             var point = spawnPoints[spawnPointIndex];
-            if (point != null)
-            {
-                var pointOccupied = point.IsOccupied();
-                if (pointOccupied)
-                    return true;
-            }
+            if (point != null && point.IsOccupied())
+                return true;
         }
 
         return false;
+    }
+
+    private bool IsVehicleAssignedToSpawnPoint(int vehicleId, int spawnPointIndex)
+    {
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+            return false;
+
+        var otherVehicle = DbBoot.Instance.Db.Find<Vehicle>(vehicleId);
+        if (otherVehicle == null)
+            return false;
+
+        if (!string.Equals(otherVehicle.spawnScene, SceneName, StringComparison.Ordinal))
+            return false;
+
+        if (otherVehicle.hasSavedLocation != 0 && string.Equals(otherVehicle.savedScene, SceneName, StringComparison.Ordinal))
+            return false;
+
+        return otherVehicle.spawnBay == spawnPointIndex;
     }
 }

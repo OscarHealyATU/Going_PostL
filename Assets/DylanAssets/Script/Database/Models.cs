@@ -55,6 +55,14 @@ public class Vehicle
     public string spawnScene { get; set; }
     public int spawnBay { get; set; }
     public int spawnPending { get; set; }
+
+    // Saved parked location
+    public int hasSavedLocation { get; set; }
+    public string savedScene { get; set; }
+    public float savedX { get; set; }
+    public float savedY { get; set; }
+    public float savedZ { get; set; }
+    public float savedYaw { get; set; }
 }
 
 [Table("StoredDelivery")]

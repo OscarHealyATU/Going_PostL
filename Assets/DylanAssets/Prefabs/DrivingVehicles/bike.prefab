@@ -623,6 +623,7 @@ GameObject:
   - component: {fileID: 5662218380710496399}
   - component: {fileID: -7537837031223974007}
   - component: {fileID: 8497276247551858473}
+  - component: {fileID: -2128899076526150940}
   m_Layer: 0
   m_Name: bike
   m_TagString: Untagged
@@ -765,6 +766,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.83, y: 1, z: 2.57}
   m_Center: {x: 0, y: 0.63, z: -1.49}
+--- !u!114 &-2128899076526150940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731195071043397597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11767451460427d47a4683c17f2df926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleLocationSaver
 --- !u!1 &5801389402322537786
 GameObject:
   m_ObjectHideFlags: 0
