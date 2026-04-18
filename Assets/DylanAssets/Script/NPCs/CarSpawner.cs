@@ -20,10 +20,10 @@ public class CarSpawner : MonoBehaviour
     [Header("Spawn Timing")]
     public float spawnInterval = 0.3f;
     public float spawnJitter = 0.75f;
-    public int maxAliveTotal = 100;
+    public int maxAliveTotal = 40;
 
     [Header("Trip Length")]
-    public int minWaypoints = 10;
+    public int minWaypoints = 20;
     public float minEndDistanceWorld = 120f;
 
     [Header("Driving Style")]
