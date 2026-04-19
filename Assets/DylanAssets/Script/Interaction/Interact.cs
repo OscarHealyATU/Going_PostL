@@ -140,7 +140,7 @@ public class Interact : MonoBehaviour
         playerTransform = other.transform;
         ShowPrompt();
 
-        Debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
+        // Debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
     }
 
     private void OnTriggerExit(Collider other)
@@ -152,7 +152,7 @@ public class Interact : MonoBehaviour
         playerTransform = null;
         HidePrompt();
 
-        Debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
+        // Debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
     }
 
     private void OnDisable()

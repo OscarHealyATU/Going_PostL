@@ -109,13 +109,13 @@ public class CarSpawner : MonoBehaviour
 
                 float closestDist = Vector3.Distance(a, b);
 
-                Debug.Log(
-                    $"[CarSpawner] player={player.position} " +
-                    $"graphMin={graph.MinBounds} graphMax={graph.MaxBounds} " +
-                    $"insideGraph={graph.ContainsWorldXZ(player.position)} " +
-                    $"startNear={nearStartNodes.Count} endNear={nearEndNodes.Count} " +
-                    $"closestNode={closest.position} closestDist={closestDist}"
-                );
+                // Debug.Log(
+                //     $"[CarSpawner] player={player.position} " +
+                //     $"graphMin={graph.MinBounds} graphMax={graph.MaxBounds} " +
+                //     $"insideGraph={graph.ContainsWorldXZ(player.position)} " +
+                //     $"startNear={nearStartNodes.Count} endNear={nearEndNodes.Count} " +
+                //     $"closestNode={closest.position} closestDist={closestDist}"
+                // );
             }
             else
             {

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class gridify : MonoBehaviour
@@ -34,19 +36,33 @@ public class gridify : MonoBehaviour
     public Vector3 houseScale = new Vector3(500f, 500f, 500f);
 
 
-    void Start()
+    IEnumerator Start()
     {
         previousSeed = randomizeSeed ? System.DateTime.Now.GetHashCode() : seed;
         Random.InitState(previousSeed);
-        // store houses to swap them out for warehouses when purchased.
-        GameObject[,] houses = new GameObject[(int)noOfHousesX, (int)noOfHousesZ];
+        // WarehouseLocations pulls from database, to let us know what to skip when building the city
+        WarehouseLocations whData = GetComponent<WarehouseLocations>();
+        if (whData != null) yield return new WaitUntil(() => whData.isReady);
+
+        int skipped = 0;
+
+        // // store houses to swap them out for warehouses when purchased.
+        // GameObject[,] houses = new GameObject[(int)noOfHousesX, (int)noOfHousesZ];
 
         // tiles loop
+        
         for (float x = 0; x < noOfHousesX; x++)
         {
             for (float z = 0; z < noOfHousesZ; z++)
             {
-                bool isWarehousePosition = hasWarehouse && (x == warehouseXPosition) && (z == warehouseZPosition);
+
+                if (whData != null && whData.hasWarehouseAtLocation((int)x,(int)z))
+                {
+                    skipped++;
+                    continue;
+                }
+
+                // bool isWarehousePosition = hasWarehouse && (x == warehouseXPosition) && (z == warehouseZPosition);
                 Vector3 position = new Vector3(xStartPosition + x * distance, 0, zStartPosition + z * distance);
                 // instanciates tiles
                 Instantiate(groundSquare, position, Quaternion.Euler(-90, 0, 0), transform);
@@ -55,32 +71,27 @@ public class gridify : MonoBehaviour
                 GameObject housePrefab = housePrefabs[Random.Range(0, housePrefabs.Length)];
 
                 GameObject streetProp = Instantiate(streetPropPrefab, position, Quaternion.Euler(-90, 0, 0), transform);
+                GameObject house = Instantiate(housePrefab, position, Quaternion.Euler(-90, 0, 0), transform);
 
-                if (!isWarehousePosition)
-                {
-                    GameObject house = Instantiate(housePrefab, position, Quaternion.Euler(-90, 0, 0), transform);
-                    // random scale & rotation
-                    house.transform.rotation = Quaternion.Euler(-90, 90 * Random.Range(0, 4), 0);
-                    // scale was off
-                    house.transform.localScale = houseScale * Random.Range(0.8f, 1.2f);
-                    houses[(int)x, (int)z] = house;
-                }
+                house.transform.rotation = Quaternion.Euler(-90, 90 * Random.Range(0, 4), 0);
+                house.transform.localScale = houseScale * Random.Range(0.8f, 1.2f);
                 groundSquare.transform.localScale = houseScale;
                 streetProp.transform.localScale = houseScale;
+                house.transform.localScale = houseScale;
 
             }
 
 
         }
-        if (hasWarehouse && warehousePrefab != null)
-        {
-            Vector3 warehousePos = new Vector3(
-                xStartPosition + warehouseXPosition * distance, 0,
-                zStartPosition + warehouseZPosition * distance);
+        // if (hasWarehouse && warehousePrefab != null)
+        // {
+        //     Vector3 warehousePos = new Vector3(
+        //         xStartPosition + warehouseXPosition * distance, 0,
+        //         zStartPosition + warehouseZPosition * distance);
 
-            GameObject warehouse = Instantiate(warehousePrefab, warehousePos, Quaternion.Euler(-90, 0, 0), transform);
-            warehouse.transform.localScale = houseScale;
-        }
+        //     GameObject warehouse = Instantiate(warehousePrefab, warehousePos, Quaternion.Euler(-90, 0, 0), transform);
+        //     warehouse.transform.localScale = houseScale;
+        // }
 
 
 

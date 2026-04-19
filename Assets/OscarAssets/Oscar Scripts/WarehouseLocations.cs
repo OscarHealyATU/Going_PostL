@@ -1,54 +1,77 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(gridify))]
 public class WarehouseLocations : MonoBehaviour
 {
-    public bool [,] warehouseLocations;
-    public int gridX = 25;
-    public int gridZ = 25;
+    [Header("Zone Identity")]
+    [Tooltip("Must match the zoneName string stored in the Warehouse DB rows for this zone.")]
+    public string zoneName = "Zone 1";
 
-    public void Awake()
-    {
-        initWarehouseLocations();
-    }
-    // allows for testing in unity editor without needing to run the game
-    public void initWarehouseLocations()
-    {
-        warehouseLocations = new bool[gridX, gridZ];
+    [Header("Debug Override")]
+    [Tooltip("If true, ignore the DB and place a single warehouse at the coords below.")]
+    public bool useDebugSingleton = false;
+    public int debugTileX = 12;
+    public int debugTileZ = 12;
 
-    /*
-    * test array values
-    */
-    // Test warehouses - remove later when SQLite is ready
-    // 2x2 warehouse cluster at (5,5)
-    SetWarehouseLocation(5, 5, true);
-    SetWarehouseLocation(5, 6, true);
-    SetWarehouseLocation(6, 5, true);
-    SetWarehouseLocation(6, 6, true);
-    
-    // L-shaped warehouse at (12,10)
-    SetWarehouseLocation(12, 10, true);
-    SetWarehouseLocation(12, 11, true);
-    SetWarehouseLocation(12, 12, true);
-    SetWarehouseLocation(13, 10, true);
-    
-    // Single standalone warehouse
-    SetWarehouseLocation(20, 20, true);
+    public bool[,] warehouseLocations;
+    [HideInInspector] public bool isReady = false;
+
+    private gridify sourceGrid;
+
+    void Awake()
+    {
+        sourceGrid = GetComponent<gridify>();
+        StartCoroutine(LoadWhenReady());
     }
 
-
-    public void SetWarehouseLocation(int x, int z, bool hasWarehouse)
+    private IEnumerator LoadWhenReady()
     {
-        if (x >= 0 && x < gridX && z >= 0 && z < gridZ)
+        yield return new WaitUntil(() =>
+            DbBoot.Instance != null &&
+            DbBoot.Instance.Db != null);
+
+        int gridW = (int)sourceGrid.noOfHousesX;
+        int gridH = (int)sourceGrid.noOfHousesZ;
+        warehouseLocations = new bool[gridW, gridH];
+
+        if (useDebugSingleton)
         {
-            warehouseLocations[x, z] = hasWarehouse;
+            if (debugTileX >= 0 && debugTileX < gridW && debugTileZ >= 0 && debugTileZ < gridH)
+            {
+                warehouseLocations[debugTileX, debugTileZ] = true;
+                Debug.Log($"[WarehouseLocations:{zoneName}] DEBUG singleton at ({debugTileX}, {debugTileZ})");
+            }
+            isReady = true;
+            yield break;
         }
+
+        // Query the DB directly for warehouses in this zone.
+        var rows = DbBoot.Instance.Db
+            .Table<Warehouse>()
+            .Where(w => w.zoneName == zoneName)
+            .ToList();
+
+        int count = 0;
+        foreach (var w in rows)
+        {
+            if (w.tileX >= 0 && w.tileX < gridW && w.tileZ >= 0 && w.tileZ < gridH)
+            {
+                warehouseLocations[w.tileX, w.tileZ] = true;
+                count++;
+            }
+        }
+
+        Debug.Log($"[WarehouseLocations:{zoneName}] Loaded {count}/{rows.Count} warehouses from DB");
+        isReady = true;
     }
+
     public bool hasWarehouseAtLocation(int x, int z)
     {
-        if (x >= 0 && x < gridX && z >= 0 && z < gridZ)
-        {
+        if (warehouseLocations == null) return false;
+        if (x >= 0 && x < warehouseLocations.GetLength(0) && z >= 0 && z < warehouseLocations.GetLength(1))
             return warehouseLocations[x, z];
-        }
         return false;
     }
 }

@@ -21,7 +21,7 @@ public class JaywalkerReaction : MonoBehaviour
     // Update is called once per frame
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log($"Hit by: {collision.gameObject.name}");
+        // Debug.Log($"Hit by: {collision.gameObject.name}");
         if (!collision.gameObject.CompareTag("Vehicle")) return;
 
         Vector3 vehicleVelocity;

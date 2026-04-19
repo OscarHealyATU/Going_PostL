@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(WarehouseLocations))]
-public class WarehousesGridify : MonoBehaviour
+public class InteriorWarehouses : MonoBehaviour
 {
     [Header("Wall Prefabs")]
     public GameObject warehouseMediumWallPrefab;
@@ -54,9 +54,6 @@ public class WarehousesGridify : MonoBehaviour
                 bool bottom = warehouseLocations.hasWarehouseAtLocation(x, z - 1);
                 bool top    = warehouseLocations.hasWarehouseAtLocation(x, z + 1);
 
-                // Footpath on every warehouse tile
-                PlaceFootpath(position, scale);
-
                 // Perimeter walls
                 if (!top)    PlaceSide(position,   0f, left,   right,  scale);
                 if (!right)  PlaceSide(position,  90f, top,    bottom, scale);
@@ -76,17 +73,6 @@ public class WarehousesGridify : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void PlaceFootpath(Vector3 position, Vector3 scale)
-    {
-        if (sourceGrid.streetPropPrefabs == null || sourceGrid.streetPropPrefabs.Length == 0) return;
-
-        GameObject footpathPrefab = sourceGrid.streetPropPrefabs[Random.Range(0, sourceGrid.streetPropPrefabs.Length)];
-        if (footpathPrefab == null) return;
-
-        GameObject footpath = Instantiate(footpathPrefab, position, Quaternion.Euler(-90, 0, 0), transform);
-        footpath.transform.localScale = scale;
     }
 
     private void PlaceRoof(Vector3 position, Vector3 scale)
