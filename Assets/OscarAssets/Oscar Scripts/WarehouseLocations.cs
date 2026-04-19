@@ -63,7 +63,7 @@ public class WarehouseLocations : MonoBehaviour
             }
         }
 
-        Debug.Log($"[WarehouseLocations:{zoneName}] Loaded {count}/{rows.Count} warehouses from DB");
+        //Debug.Log($"[WarehouseLocations:{zoneName}] Loaded {count}/{rows.Count} warehouses from DB");
         isReady = true;
     }
 

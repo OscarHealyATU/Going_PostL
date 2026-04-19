@@ -19,7 +19,7 @@ public class SwitchSceneTrigger : MonoBehaviour
 
         if (triggerCollider == null)
         {
-            Debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' could not find a trigger BoxCollider.");
+            //debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' could not find a trigger BoxCollider.");
         }
     }
 
@@ -35,13 +35,13 @@ public class SwitchSceneTrigger : MonoBehaviour
     {
         if (string.IsNullOrWhiteSpace(sceneName))
         {
-            Debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' has no scene name assigned.");
+            //debug.LogError($"❌ SwitchSceneTrigger on '{gameObject.name}' has no scene name assigned.");
             return;
         }
 
         if (!Application.CanStreamedLevelBeLoaded(sceneName))
         {
-            Debug.LogError($"❌ Scene '{sceneName}' cannot be loaded. Check Build Settings.");
+            //debug.LogError($"❌ Scene '{sceneName}' cannot be loaded. Check Build Settings.");
             return;
         }
 

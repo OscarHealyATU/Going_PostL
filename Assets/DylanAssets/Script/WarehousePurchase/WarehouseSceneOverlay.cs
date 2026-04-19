@@ -16,8 +16,6 @@ public class WarehouseSceneOverlay : MonoBehaviour
     [SerializeField] private float positionTolerance = 0.35f;
 
     private readonly List<GameObject> spawnedWarehouses = new List<GameObject>();
-
-    private bool hasBuilt;
     private Coroutine buildRoutine;
 
     private void Start()
@@ -30,7 +28,6 @@ public class WarehouseSceneOverlay : MonoBehaviour
     {
         yield return new WaitUntil(IsReadyToBuild);
         RebuildWarehouses();
-        hasBuilt = true;
         buildRoutine = null;
     }
 
@@ -69,13 +66,13 @@ public class WarehouseSceneOverlay : MonoBehaviour
     {
         if (warehousePrefab == null)
         {
-            Debug.LogWarning("[WarehouseSceneOverlay] Warehouse prefab is not assigned.");
+            //debug.LogWarning("[WarehouseSceneOverlay] Warehouse prefab is not assigned.");
             return;
         }
 
         if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
         {
-            Debug.LogWarning("[WarehouseSceneOverlay] Database is not ready yet.");
+            //debug.LogWarning("[WarehouseSceneOverlay] Database is not ready yet.");
             return;
         }
 
@@ -115,7 +112,7 @@ public class WarehouseSceneOverlay : MonoBehaviour
         gridify zoneGrid = GetGridForZone(warehouse.zoneName);
         if (zoneGrid == null)
         {
-            Debug.LogWarning("[WarehouseSceneOverlay] No grid found for zone: " + warehouse.zoneName);
+            //debug.LogWarning("[WarehouseSceneOverlay] No grid found for zone: " + warehouse.zoneName);
             return;
         }
 
@@ -157,23 +154,12 @@ public class WarehouseSceneOverlay : MonoBehaviour
         if (identity == null)
             identity = warehouseGo.GetComponentInChildren<WarehouseIdentity>(true);
 
-        if (identity == null)
-        {
-            Debug.LogWarning(
-                $"[WarehouseSceneOverlay] Spawned warehouse prefab '{warehouseGo.name}' has no WarehouseIdentity component."
-            );
-            return;
-        }
 
         identity.SetIdentity(
             warehouse.id,
             warehouse.zoneName,
             warehouse.tileX,
             warehouse.tileZ
-        );
-
-        Debug.Log(
-            $"[WarehouseSceneOverlay] Assigned WarehouseIdentity for warehouse ID {warehouse.id} at {warehouse.zoneName} {warehouse.tileX}, {warehouse.tileZ}"
         );
     }
 

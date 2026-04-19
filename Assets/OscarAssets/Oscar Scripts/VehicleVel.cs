@@ -15,6 +15,6 @@ public class VehicleVel : MonoBehaviour
         Velocity = (transform.position - lastPos) / Time.deltaTime;
         lastPos = transform.position;
 
-        // Debug.Log($"Rail car velocity: {velocity.magnitude}");
+        // //debug.Log($"Rail car velocity: {velocity.magnitude}");
     }
 }

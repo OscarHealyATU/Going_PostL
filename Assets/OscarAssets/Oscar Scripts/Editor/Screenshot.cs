@@ -15,7 +15,7 @@ public class ScreenshotCapture : MonoBehaviour
 
         string filename = Path.Combine(folderPath, "screenshot_" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png");
         ScreenCapture.CaptureScreenshot(filename);
-        Debug.Log("Screenshot saved: " + filename);
+        //debug.Log("Screenshot saved: " + filename);
     }
 }
 #endif

@@ -56,7 +56,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
                 out string message
             );
 
-            Debug.Log(message);
+            //debug.Log(message);
 
             if (stored)
                 VehicleStorageUI.Instance.RefreshUI();

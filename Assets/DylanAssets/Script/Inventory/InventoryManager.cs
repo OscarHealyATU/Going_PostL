@@ -30,7 +30,7 @@ public class InventoryManager : MonoBehaviour
 
         ApplyCapacityFromPlayer();
 
-        Debug.Log($"[InventoryManager] Awake maxSlots={maxSlots}, items.Length={(items != null ? items.Length : 0)}");
+        //debug.Log($"[InventoryManager] Awake maxSlots={maxSlots}, items.Length={(items != null ? items.Length : 0)}");
     }
 
     private IEnumerator Start()
@@ -86,7 +86,7 @@ public class InventoryManager : MonoBehaviour
 
         ApplyCapacityFromPlayer();
 
-        Debug.Log($"[InventoryManager] Capacity refreshed from {oldMaxSlots} to {maxSlots}");
+        //debug.Log($"[InventoryManager] Capacity refreshed from {oldMaxSlots} to {maxSlots}");
 
         SaveToDatabase();
         RefreshUI();
@@ -108,11 +108,11 @@ public class InventoryManager : MonoBehaviour
             SaveToDatabase();
             RefreshUI();
 
-            Debug.Log($"[InventoryManager] Added '{item.itemName}' to slot {i}");
+            //debug.Log($"[InventoryManager] Added '{item.itemName}' to slot {i}");
             return true;
         }
 
-        Debug.Log($"[InventoryManager] Inventory full, could not add '{item.itemName}'");
+        //debug.Log($"[InventoryManager] Inventory full, could not add '{item.itemName}'");
         return false;
     }
 
@@ -387,14 +387,14 @@ public class InventoryManager : MonoBehaviour
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("[InventoryManager] DbBoot not found.");
+            //debug.LogWarning("[InventoryManager] DbBoot not found.");
             return;
         }
 
         var player = PlayerService.Get();
         if (player == null)
         {
-            Debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
+            //debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
             return;
         }
 
@@ -418,7 +418,7 @@ public class InventoryManager : MonoBehaviour
 
             if (string.IsNullOrWhiteSpace(items[i].itemKey))
             {
-                Debug.LogWarning($"[InventoryManager] Slot {i}: itemKey blank, skipping insert.");
+                //debug.LogWarning($"[InventoryManager] Slot {i}: itemKey blank, skipping insert.");
                 continue;
             }
 
@@ -433,27 +433,27 @@ public class InventoryManager : MonoBehaviour
             insertedCount++;
         }
 
-        Debug.Log($"[InventoryManager] Saved inventory. Capacity={maxSlots}, Inserted={insertedCount}");
+        //debug.Log($"[InventoryManager] Saved inventory. Capacity={maxSlots}, Inserted={insertedCount}");
     }
 
     public void LoadFromDatabase()
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("[InventoryManager] DbBoot not found.");
+            //debug.LogWarning("[InventoryManager] DbBoot not found.");
             return;
         }
 
         if (ItemCatalog.Instance == null)
         {
-            Debug.LogWarning("[InventoryManager] ItemCatalog not found.");
+            //debug.LogWarning("[InventoryManager] ItemCatalog not found.");
             return;
         }
 
         var player = PlayerService.Get();
         if (player == null)
         {
-            Debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
+            //debug.LogWarning("[InventoryManager] PlayerService.Get() returned null.");
             return;
         }
 
@@ -475,7 +475,7 @@ public class InventoryManager : MonoBehaviour
 
             if (item == null)
             {
-                Debug.LogWarning($"[InventoryManager] No ItemData found for key '{row.itemKey}'");
+                //debug.LogWarning($"[InventoryManager] No ItemData found for key '{row.itemKey}'");
                 continue;
             }
 
@@ -484,7 +484,7 @@ public class InventoryManager : MonoBehaviour
 
         SaveToDatabase();
 
-        Debug.Log($"[InventoryManager] Loaded inventory. Capacity={maxSlots}");
+        //debug.Log($"[InventoryManager] Loaded inventory. Capacity={maxSlots}");
     }
 
     public void RefreshUI()

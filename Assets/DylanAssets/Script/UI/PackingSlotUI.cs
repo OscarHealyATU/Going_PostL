@@ -56,12 +56,12 @@ public class PackingSlotUI : MonoBehaviour, IPointerClickHandler, IPointerDownHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("POINTER DOWN on " + name + " button: " + eventData.button);
+        //debug.Log("POINTER DOWN on " + name + " button: " + eventData.button);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("POINTER CLICK on " + name + " button: " + eventData.button);
+        //debug.Log("POINTER CLICK on " + name + " button: " + eventData.button);
 
         if (eventData.button != PointerEventData.InputButton.Left)
             return;

@@ -54,19 +54,19 @@ public class VehicleStorageInteract : MonoBehaviour
 
         if (vehicleLink == null)
         {
-            Debug.LogWarning("[VehicleStorageInteract] VehicleLink missing.");
+            //debug.LogWarning("[VehicleStorageInteract] VehicleLink missing.");
             return;
         }
 
         if (vehicleLink.vehicleId <= 0)
         {
-            Debug.LogWarning("[VehicleStorageInteract] Invalid vehicleId.");
+            //debug.LogWarning("[VehicleStorageInteract] Invalid vehicleId.");
             return;
         }
 
         if (VehicleStorageUI.Instance == null)
         {
-            Debug.LogWarning("[VehicleStorageInteract] VehicleStorageUI instance not found.");
+            //debug.LogWarning("[VehicleStorageInteract] VehicleStorageUI instance not found.");
             return;
         }
 

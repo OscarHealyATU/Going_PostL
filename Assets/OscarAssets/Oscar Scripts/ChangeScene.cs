@@ -11,6 +11,6 @@ public class ChangeScene : MonoBehaviour
     public void quitGame()
     {
         Application.Quit();
-        Debug.Log("GAME CLOSED");
+        //debug.Log("GAME CLOSED");
     }
 }

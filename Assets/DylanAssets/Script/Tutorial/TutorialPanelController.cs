@@ -68,7 +68,7 @@ public class TutorialPanelController : MonoBehaviour
     {
         if (pages == null || pages.Count == 0)
         {
-            Debug.LogWarning("TutorialPanelController: No tutorial pages have been assigned.");
+            //debug.LogWarning("TutorialPanelController: No tutorial pages have been assigned.");
             return;
         }
 

@@ -76,7 +76,7 @@ public class DayManager : MonoBehaviour
         {
             if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
             {
-                Debug.LogError("[DayManager] DbBoot/Db is missing.");
+                //debug.LogError("[DayManager] DbBoot/Db is missing.");
                 return null;
             }
 
@@ -105,7 +105,7 @@ public class DayManager : MonoBehaviour
         SaveState();
         RefreshUIImmediate();
 
-        Debug.Log("[DayManager] Started. Day = " + CurrentDayNumber + ", Time = " + FormatTime(CurrentMinuteOfDay));
+        //debug.Log("[DayManager] Started. Day = " + CurrentDayNumber + ", Time = " + FormatTime(CurrentMinuteOfDay));
     }
 
     private void Update()
@@ -174,7 +174,7 @@ public class DayManager : MonoBehaviour
         CachePlayerControlScripts();
         RefreshUIImmediate();
 
-        Debug.Log("[DayManager] Scene loaded: " + scene.name);
+        //debug.Log("[DayManager] Scene loaded: " + scene.name);
     }
 
     private void OnDestroy()
@@ -239,7 +239,7 @@ public class DayManager : MonoBehaviour
             }
         }
 
-        Debug.Log("[DayManager] Scene UI bound.");
+        //debug.Log("[DayManager] Scene UI bound.");
     }
 
     private void WireButtons()
@@ -286,7 +286,7 @@ public class DayManager : MonoBehaviour
             };
 
             db.Insert(state);
-            Debug.Log("[DayManager] Created new DayState row.");
+            //debug.Log("[DayManager] Created new DayState row.");
         }
     }
 
@@ -325,7 +325,7 @@ public class DayManager : MonoBehaviour
         SaveState();
         RefreshUIImmediate();
 
-        Debug.Log("[DayManager] Work day ended. End Day button should now be visible.");
+        //debug.Log("[DayManager] Work day ended. End Day button should now be visible.");
     }
 
     public void RegisterDelivery(double moneyEarned, int experienceEarned)
@@ -374,26 +374,26 @@ public class DayManager : MonoBehaviour
 
     public void OpenDaySummary()
     {
-        Debug.Log("[DayManager] OpenDaySummary called.");
+        //debug.Log("[DayManager] OpenDaySummary called.");
 
         if (state == null)
             LoadOrCreateState();
 
         if (state == null)
         {
-            Debug.LogWarning("[DayManager] OpenDaySummary failed: state is null.");
+            //debug.LogWarning("[DayManager] OpenDaySummary failed: state is null.");
             return;
         }
 
         if (state.isDayEnded == 0)
         {
-            Debug.LogWarning("[DayManager] OpenDaySummary blocked: day has not ended yet.");
+            //debug.LogWarning("[DayManager] OpenDaySummary blocked: day has not ended yet.");
             return;
         }
 
         if (daySummaryPanel == null)
         {
-            Debug.LogWarning("[DayManager] OpenDaySummary failed: daySummaryPanel is null.");
+            //debug.LogWarning("[DayManager] OpenDaySummary failed: daySummaryPanel is null.");
             return;
         }
 
@@ -401,7 +401,7 @@ public class DayManager : MonoBehaviour
         PopulateSummary();
         SetSummaryMovementLock(true);
 
-        Debug.Log("[DayManager] Summary panel opened.");
+        //debug.Log("[DayManager] Summary panel opened.");
     }
 
     public void CloseDaySummary()
@@ -410,7 +410,7 @@ public class DayManager : MonoBehaviour
         {
             daySummaryPanel.SetActive(false);
             SetSummaryMovementLock(false);
-            Debug.Log("[DayManager] Summary panel closed.");
+            //debug.Log("[DayManager] Summary panel closed.");
         }
     }
 
@@ -419,14 +419,14 @@ public class DayManager : MonoBehaviour
         if (isTransitioningDay)
             return;
 
-        Debug.Log("[DayManager] StartNextDay called.");
+        //debug.Log("[DayManager] StartNextDay called.");
 
         if (state == null)
             LoadOrCreateState();
 
         if (state == null)
         {
-            Debug.LogWarning("[DayManager] StartNextDay failed: state is null.");
+            //debug.LogWarning("[DayManager] StartNextDay failed: state is null.");
             return;
         }
 
@@ -494,7 +494,7 @@ public class DayManager : MonoBehaviour
         SaveState();
         CloseDaySummary();
 
-        Debug.Log("[DayManager] Starting Day " + state.dayNumber + ". Loading scene: " + warehouseSceneName);
+        //debug.Log("[DayManager] Starting Day " + state.dayNumber + ". Loading scene: " + warehouseSceneName);
     }
 
     private IEnumerator FadeCanvasGroup(CanvasGroup group, float from, float to, float duration)
@@ -528,7 +528,7 @@ public class DayManager : MonoBehaviour
 
     public void ForceEndDayNow()
     {
-        Debug.Log("[DayManager] ForceEndDayNow called.");
+        //debug.Log("[DayManager] ForceEndDayNow called.");
         EndWorkDayInternal();
     }
 

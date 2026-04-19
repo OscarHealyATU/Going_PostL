@@ -820,7 +820,7 @@ namespace AAMAP
 
                 if (mapRectTransform == null)
                 {
-                    Debug.LogError("Rect Transform component on the \"Map\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError("Rect Transform component on the \"Map\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -837,7 +837,7 @@ namespace AAMAP
 
                 if (maskImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Image component on the \"Map > Map Mask\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Image component on the \"Map > Map Mask\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -854,7 +854,7 @@ namespace AAMAP
 
                 if (displayImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Raw Image component on the \"Map > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Raw Image component on the \"Map > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -871,7 +871,7 @@ namespace AAMAP
 
                 if (backgroundFillerImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Image component on the \"Map > Map Mask > Map Background Filler\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Image component on the \"Map > Map Mask > Map Background Filler\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -888,7 +888,7 @@ namespace AAMAP
 
                 if (mapDirectionsObject == null)
                 {
-                    Debug.LogError("\"Map > Map Directions\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError("\"Map > Map Directions\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -905,7 +905,7 @@ namespace AAMAP
 
                 if (mapBorderObject == null)
                 {
-                    Debug.LogWarning("\"Map Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("\"Map Border\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -917,7 +917,7 @@ namespace AAMAP
 
                     if (borderImage == null)
                     {
-                        Debug.LogError("Image component on the \"Map > Map Border\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Map > Map Border\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -930,7 +930,7 @@ namespace AAMAP
 
                     if (borderRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Map > Map Border\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Map > Map Border\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -943,7 +943,7 @@ namespace AAMAP
 
                     if (mapDirectionsRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Map > Map Directions\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Map > Map Directions\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -989,82 +989,82 @@ namespace AAMAP
 
                     if (northObject == null)
                     {
-                        Debug.LogError("\"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("\"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastObject == null)
                     {
-                        Debug.LogError("\"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("\"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southObject == null)
                     {
-                        Debug.LogError("\"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("\"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westObject == null)
                     {
-                        Debug.LogError("\"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("\"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northText == null)
                     {
-                        Debug.LogError("Text component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Text component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastText == null)
                     {
-                        Debug.LogError("Text component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Text component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southText == null)
                     {
-                        Debug.LogError("Text component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Text component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westText == null)
                     {
-                        Debug.LogError("Text component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Text component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northImage == null)
                     {
-                        Debug.LogError("Image component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastImage == null)
                     {
-                        Debug.LogError("Image component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southImage == null)
                     {
-                        Debug.LogError("Image component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westImage == null)
                     {
-                        Debug.LogError("Image component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1077,7 +1077,7 @@ namespace AAMAP
 
                     if (mapCameraComp == null)
                     {
-                        Debug.LogError("Camera component on the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Camera component on the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1095,7 +1095,7 @@ namespace AAMAP
 
                 if (mapBorderObject == null)
                 {
-                    Debug.LogWarning("\"Map > Map Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("\"Map > Map Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -1114,7 +1114,7 @@ namespace AAMAP
 
                     if (zoomInButton == null)
                     {
-                        Debug.LogWarning("\"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogWarning("\"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1134,7 +1134,7 @@ namespace AAMAP
 
                     if (zoomOutButton == null)
                     {
-                        Debug.LogWarning("\"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogWarning("\"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1148,12 +1148,12 @@ namespace AAMAP
 
                     if (zoomInRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (zoomInImage == null)
                     {
-                        Debug.LogError("Image component on the \"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Map > Map Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
 
@@ -1164,12 +1164,12 @@ namespace AAMAP
 
                     if (zoomOutRect == null)
                     {
-                        Debug.LogError("Rect Transform component on the \"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Rect Transform component on the \"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (zoomOutImage == null)
                     {
-                        Debug.LogError("Image component on the \"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Map > Map Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1203,7 +1203,7 @@ namespace AAMAP
 
                 if (backgroundObject == null)
                 {
-                    Debug.LogWarning("\"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("\"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -1215,7 +1215,7 @@ namespace AAMAP
 
                     if (backgroundImage == null)
                     {
-                        Debug.LogError("Image component on the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Image component on the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1235,17 +1235,17 @@ namespace AAMAP
 
                 if (mapExitButtonObject == null)
                 {
-                    Debug.LogWarning("\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                 }
 
                 if (exitButtonImage == null)
                 {
-                    Debug.LogWarning("Image component on the\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("Image component on the\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                 }
 
                 if (exitButtonRect == null)
                 {
-                    Debug.LogWarning("Rect Transform component on the\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogWarning("Rect Transform component on the\"Map > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -1263,7 +1263,7 @@ namespace AAMAP
 
                     if (mapDisplayImage == null)
                     {
-                        Debug.LogError("Raw Image component on the \"Map > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Raw Image component on the \"Map > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1283,7 +1283,7 @@ namespace AAMAP
 
                     if (gridObject == null)
                     {
-                        Debug.LogError("\"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("\"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                     }
                     else
                     {
@@ -1292,12 +1292,12 @@ namespace AAMAP
 
                         if (gridImage == null)
                         {
-                            Debug.LogError("Failed to generate the Map because the Image component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                            //debug.LogError("Failed to generate the Map because the Image component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                         }
 
                         if (gridRect == null)
                         {
-                            Debug.LogError("Failed to generate the Map because the Rect Transform component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                            //debug.LogError("Failed to generate the Map because the Rect Transform component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                         }
                     }
                 }

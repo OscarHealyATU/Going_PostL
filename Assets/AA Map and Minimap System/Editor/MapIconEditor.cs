@@ -186,7 +186,7 @@ namespace AAMAP
 
                 if (meshRenderer == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "Mesh Renderer component on the \"" + mapIcon.gameObject.name + " > Visuals\" GameObject could not be found.\n");
+                    //debug.LogWarning(errorMessagePrefix + "Mesh Renderer component on the \"" + mapIcon.gameObject.name + " > Visuals\" GameObject could not be found.\n");
                 }
             }
 
@@ -201,7 +201,7 @@ namespace AAMAP
 
                 if (iconMaterial == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "Material on the map icon mesh renderer could not be found.\n");
+                    //debug.LogWarning(errorMessagePrefix + "Material on the map icon mesh renderer could not be found.\n");
                 }
             }
         }

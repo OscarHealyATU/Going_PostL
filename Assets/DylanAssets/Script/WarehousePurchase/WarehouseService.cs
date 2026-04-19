@@ -141,7 +141,7 @@ public static class WarehouseService
         player.lastWarehouseId = warehouse.id;
         db.Update(player);
 
-        Debug.Log($"[WarehouseService] Set last interacted warehouse to ID {warehouse.id}");
+        //debug.Log($"[WarehouseService] Set last interacted warehouse to ID {warehouse.id}");
         return true;
     }
 
@@ -164,13 +164,13 @@ public static class WarehouseService
     {
         if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
         {
-            Debug.LogWarning("[WarehouseService] DB unavailable.");
+            //debug.LogWarning("[WarehouseService] DB unavailable.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(zoneName))
         {
-            Debug.LogWarning("[WarehouseService] zoneName is invalid.");
+            //debug.LogWarning("[WarehouseService] zoneName is invalid.");
             return;
         }
 
@@ -178,7 +178,7 @@ public static class WarehouseService
         var player = GetPlayerOrNull();
         if (player == null)
         {
-            Debug.LogWarning("[WarehouseService] No player row found.");
+            //debug.LogWarning("[WarehouseService] No player row found.");
             return;
         }
 
@@ -235,7 +235,7 @@ public static class WarehouseService
             db.Update(player);
         }
 
-        Debug.Log($"[WarehouseService] Starter warehouse saved at zone '{zoneName}' tile ({tileX}, {tileZ})");
+        //debug.Log($"[WarehouseService] Starter warehouse saved at zone '{zoneName}' tile ({tileX}, {tileZ})");
     }
 
     public static WarehousePurchaseResult TryPurchaseWarehouse(

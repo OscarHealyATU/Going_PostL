@@ -57,14 +57,14 @@ public class VehicleStorageUI : MonoBehaviour
         if (panelRoot != gameObject)
             panelRoot.SetActive(false);
 
-        Debug.Log("[VehicleStorageUI] Instance ready.");
+        //debug.Log("[VehicleStorageUI] Instance ready.");
     }
 
     public void ShowForVehicle(int vehicleId)
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("[VehicleStorageUI] DbBoot not available.");
+            //debug.LogWarning("[VehicleStorageUI] DbBoot not available.");
             return;
         }
 
@@ -73,14 +73,14 @@ public class VehicleStorageUI : MonoBehaviour
         currentVehicle = db.Find<Vehicle>(vehicleId);
         if (currentVehicle == null)
         {
-            Debug.LogWarning($"[VehicleStorageUI] Vehicle not found for id={vehicleId}");
+            //debug.LogWarning($"[VehicleStorageUI] Vehicle not found for id={vehicleId}");
             return;
         }
 
         currentVehicleType = db.Find<VehicleType>(currentVehicle.vehicleTypeId);
         if (currentVehicleType == null)
         {
-            Debug.LogWarning($"[VehicleStorageUI] VehicleType not found for id={currentVehicle.vehicleTypeId}");
+            //debug.LogWarning($"[VehicleStorageUI] VehicleType not found for id={currentVehicle.vehicleTypeId}");
             return;
         }
 
@@ -181,13 +181,13 @@ public class VehicleStorageUI : MonoBehaviour
 
         if (slotsRoot == null)
         {
-            Debug.LogWarning("[VehicleStorageUI] slotsRoot is not assigned.");
+            //debug.LogWarning("[VehicleStorageUI] slotsRoot is not assigned.");
             return;
         }
 
         if (slotPrefab == null)
         {
-            Debug.LogWarning("[VehicleStorageUI] slotPrefab is not assigned.");
+            //debug.LogWarning("[VehicleStorageUI] slotPrefab is not assigned.");
             return;
         }
 
@@ -217,12 +217,12 @@ public class VehicleStorageUI : MonoBehaviour
 
         if (InventoryManager.Instance == null)
         {
-            Debug.LogWarning("[VehicleStorageUI] InventoryManager not available.");
+            //debug.LogWarning("[VehicleStorageUI] InventoryManager not available.");
             return;
         }
 
         bool moved = InventoryManager.Instance.TryMoveStoredDeliveryToInventory(slotUi.StoredDelivery.id, out string message);
-        Debug.Log($"[VehicleStorageUI] {message}");
+        //debug.Log($"[VehicleStorageUI] {message}");
 
         if (moved)
         {

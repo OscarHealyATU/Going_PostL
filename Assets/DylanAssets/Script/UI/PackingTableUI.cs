@@ -154,47 +154,47 @@ public class PackingTableUI : MonoBehaviour
     {
         if (slot == null)
         {
-            Debug.LogWarning("ReturnSlotToInventory: slot was null");
+            //debug.LogWarning("ReturnSlotToInventory: slot was null");
             return;
         }
 
         if (slot.CurrentItem == null)
         {
-            Debug.LogWarning("ReturnSlotToInventory: slot.CurrentItem was null");
+            //debug.LogWarning("ReturnSlotToInventory: slot.CurrentItem was null");
             return;
         }
 
         if (InventoryManager.Instance == null)
         {
-            Debug.LogWarning("ReturnSlotToInventory: InventoryManager.Instance was null");
+            //debug.LogWarning("ReturnSlotToInventory: InventoryManager.Instance was null");
             return;
         }
 
         ItemData itemToReturn = slot.CurrentItem;
 
-        Debug.Log($"ReturnSlotToInventory: returning {itemToReturn.itemName} ({itemToReturn.itemKey}) from slot {slot.name}");
+        //debug.Log($"ReturnSlotToInventory: returning {itemToReturn.itemName} ({itemToReturn.itemKey}) from slot {slot.name}");
 
         bool added = InventoryManager.Instance.AddItem(itemToReturn);
         if (!added)
         {
-            Debug.LogWarning("ReturnSlotToInventory: failed to add item back to inventory");
+            //debug.LogWarning("ReturnSlotToInventory: failed to add item back to inventory");
             SetError("Inventory is full.");
             return;
         }
 
-        Debug.Log("ReturnSlotToInventory: item added to inventory successfully");
+        //debug.Log("ReturnSlotToInventory: item added to inventory successfully");
 
         if (slot == resultSlot)
         {
-            Debug.Log("ReturnSlotToInventory: this is the RESULT SLOT");
+            //debug.Log("ReturnSlotToInventory: this is the RESULT SLOT");
 
             if (DeliveryManager.Instance == null)
             {
-                Debug.LogWarning("ReturnSlotToInventory: DeliveryManager.Instance is NULL");
+                //debug.LogWarning("ReturnSlotToInventory: DeliveryManager.Instance is NULL");
             }
             else
             {
-                Debug.Log("ReturnSlotToInventory: calling DeliveryManager.AddDelivery()");
+                //debug.Log("ReturnSlotToInventory: calling DeliveryManager.AddDelivery()");
                 DeliveryManager.Instance.AddDelivery(itemToReturn.itemKey, itemToReturn.itemName);
             }
         }

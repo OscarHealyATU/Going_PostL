@@ -111,7 +111,7 @@ public class OwnedVehiclesPageUI : MonoBehaviour
         if (errorText != null)
             errorText.text = message;
 
-        Debug.LogError(message);
+        //debug.LogError(message);
     }
 
     private void ClearError()

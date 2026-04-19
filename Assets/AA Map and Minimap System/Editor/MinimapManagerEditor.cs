@@ -654,7 +654,7 @@ namespace AAMAP
 
                 if (minimapRectTransform == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -671,7 +671,7 @@ namespace AAMAP
 
                 if (maskImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Image component on the \"" + minimapManager.gameObject.name + " > Minimap Mask\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Image component on the \"" + minimapManager.gameObject.name + " > Minimap Mask\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -688,7 +688,7 @@ namespace AAMAP
 
                 if (displayImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Raw Image component on the \"" + minimapManager.gameObject.name + " > Minimap Mask > Minimap Display\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Raw Image component on the \"" + minimapManager.gameObject.name + " > Minimap Mask > Minimap Display\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -705,7 +705,7 @@ namespace AAMAP
 
                 if (backgroundFillerImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Mask > Minimap Background Filler\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Mask > Minimap Background Filler\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -722,7 +722,7 @@ namespace AAMAP
 
                 if (minimapDirectionsObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -739,7 +739,7 @@ namespace AAMAP
 
                 if (minimapBorderObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -751,7 +751,7 @@ namespace AAMAP
 
                     if (borderImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -764,7 +764,7 @@ namespace AAMAP
 
                     if (borderRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"" + minimapManager.gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"" + minimapManager.gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -777,7 +777,7 @@ namespace AAMAP
 
                     if (minimapDirectionsRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"" + minimapManager.gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"" + minimapManager.gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -820,82 +820,82 @@ namespace AAMAP
 
                     if (northObject == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastObject == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southObject == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westObject == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Text component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (northImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > North\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (eastImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > East\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (southImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > South\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (westImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Directions > West\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -906,7 +906,7 @@ namespace AAMAP
 
                 if (minimapCamera == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Camera component on the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Camera component on the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -923,7 +923,7 @@ namespace AAMAP
 
                 if (minimapZoomButtons == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "\"" + minimapManager.gameObject.name + " > Minimap Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
                 }
             }
 
@@ -942,7 +942,7 @@ namespace AAMAP
 
                     if (zoomInButton == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -962,7 +962,7 @@ namespace AAMAP
 
                     if (zoomOutButton == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -976,12 +976,12 @@ namespace AAMAP
 
                     if (zoomInRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (zoomInImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Zoom Buttons > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
 
@@ -992,12 +992,12 @@ namespace AAMAP
 
                     if (zoomOutRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
 
                     if (zoomOutImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Zoom Buttons > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     }
                 }
             }
@@ -1025,7 +1025,7 @@ namespace AAMAP
 
                     if (gridObject == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "\"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                     }
                     else
                     {
@@ -1034,12 +1034,12 @@ namespace AAMAP
 
                         if (gridImage == null)
                         {
-                            Debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                            //debug.LogError(errorMessagePrefix + "Image component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                         }
 
                         if (gridRect == null)
                         {
-                            Debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                            //debug.LogError(errorMessagePrefix + "Rect Transform component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                         }
                     }
                 }

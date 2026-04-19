@@ -21,7 +21,7 @@ public class JaywalkerReaction : MonoBehaviour
     // Update is called once per frame
     void OnCollisionEnter(Collision collision)
     {
-        // Debug.Log($"Hit by: {collision.gameObject.name}");
+        // //debug.Log($"Hit by: {collision.gameObject.name}");
         if (!collision.gameObject.CompareTag("Vehicle")) return;
 
         Vector3 vehicleVelocity;
@@ -47,10 +47,10 @@ public class JaywalkerReaction : MonoBehaviour
         }
 
         float vehicleSpeed = vehicleVelocity.magnitude;
-        Debug.Log($"Speed: {vehicleSpeed}, Min: {minVehicleSpeed}, Force: {vehicleMass * vehicleSpeed * funMultiplier}");
+        //debug.Log($"Speed: {vehicleSpeed}, Min: {minVehicleSpeed}, Force: {vehicleMass * vehicleSpeed * funMultiplier}");
 
         if (vehicleSpeed < minVehicleSpeed) return;
-        Debug.Log("Launching player!");
+        //debug.Log("Launching player!");
 
         Vector3 impactDirection = (transform.position - collision.transform.position).normalized;
         Vector3 impactUpward = (impactDirection + Vector3.up * upwardMotion).normalized;

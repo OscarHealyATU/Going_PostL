@@ -93,7 +93,7 @@ public class ZoneUnlockUI : MonoBehaviour
     public void OnUnlockPressed()
     {
         var result = ZoneService.TryUnlockZone(zoneId);
-        Debug.Log("[ZoneUnlockUI] " + result.message);
+        //debug.Log("[ZoneUnlockUI] " + result.message);
 
         RefreshAllZonePanels();
         PlayerService.RefreshAllUI();

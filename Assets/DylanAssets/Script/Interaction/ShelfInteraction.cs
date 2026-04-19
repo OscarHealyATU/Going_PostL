@@ -36,13 +36,13 @@ public class ShelfInteract : MonoBehaviour
     {
         if (itemToGive == null)
         {
-            Debug.LogWarning("ShelfInteract: No item assigned.");
+            //debug.LogWarning("ShelfInteract: No item assigned.");
             return;
         }
 
         if (InventoryManager.Instance == null)
         {
-            Debug.LogWarning("ShelfInteract: InventoryManager not found.");
+            //debug.LogWarning("ShelfInteract: InventoryManager not found.");
             return;
         }
 
@@ -50,7 +50,7 @@ public class ShelfInteract : MonoBehaviour
 
         if (added)
         {
-            Debug.Log($"Added {itemToGive.name} to inventory from shelf.");
+            //debug.Log($"Added {itemToGive.name} to inventory from shelf.");
 
             alreadyUsed = true;
 
@@ -59,7 +59,7 @@ public class ShelfInteract : MonoBehaviour
         }
         else
         {
-            Debug.Log("Inventory full, could not add item.");
+            //debug.Log("Inventory full, could not add item.");
         }
     }
 
@@ -67,18 +67,18 @@ public class ShelfInteract : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        Debug.Log("Shelf trigger entered");
+        //debug.Log("Shelf trigger entered");
 
         playerInRange = true;
 
         if (interactPromptText != null)
         {
             interactPromptText.SetActive(true);
-            Debug.Log("Shelf prompt shown");
+            //debug.Log("Shelf prompt shown");
         }
         else
         {
-            Debug.LogWarning("Shelf prompt not assigned");
+            //debug.LogWarning("Shelf prompt not assigned");
         }
     }
 
@@ -86,7 +86,7 @@ public class ShelfInteract : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        Debug.Log("Shelf trigger exited");
+        //debug.Log("Shelf trigger exited");
 
         playerInRange = false;
 

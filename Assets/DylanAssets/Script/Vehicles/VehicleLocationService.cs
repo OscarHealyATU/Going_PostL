@@ -13,12 +13,6 @@ public class VehicleLocationSaver : MonoBehaviour
     {
         controller = GetComponent<carController>();
         vehicleLink = GetComponent<VehicleLink>();
-
-        if (controller == null)
-            Debug.LogWarning($"[VehicleLocationSaver] No carController found on '{name}'");
-
-        if (vehicleLink == null)
-            Debug.LogWarning($"[VehicleLocationSaver] No VehicleLink found on '{name}'");
     }
 
     private void Start()
@@ -73,7 +67,7 @@ public class VehicleLocationSaver : MonoBehaviour
 
         if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
         {
-            Debug.LogWarning("[VehicleLocationSaver] DB unavailable, cannot save vehicle location.");
+            //debug.LogWarning("[VehicleLocationSaver] DB unavailable, cannot save vehicle location.");
             return;
         }
 
@@ -82,7 +76,7 @@ public class VehicleLocationSaver : MonoBehaviour
 
         if (vehicle == null)
         {
-            Debug.LogWarning($"[VehicleLocationSaver] Vehicle row not found for vehicleId={vehicleLink.vehicleId}");
+            //debug.LogWarning($"[VehicleLocationSaver] Vehicle row not found for vehicleId={vehicleLink.vehicleId}");
             return;
         }
 
@@ -99,7 +93,7 @@ public class VehicleLocationSaver : MonoBehaviour
 
         db.Update(vehicle);
 
-        Debug.Log($"[VehicleLocationSaver] Saved vehicle {vehicle.id} at ({pos.x:0.00}, {pos.y:0.00}, {pos.z:0.00}) yaw {yaw:0.0} in scene '{activeScene}'");
+        //debug.Log($"[VehicleLocationSaver] Saved vehicle {vehicle.id} at ({pos.x:0.00}, {pos.y:0.00}, {pos.z:0.00}) yaw {yaw:0.0} in scene '{activeScene}'");
     }
 
     [ContextMenu("Save Vehicle Location Now")]

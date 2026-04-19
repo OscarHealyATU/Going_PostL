@@ -57,7 +57,7 @@ public static class DeliveryService
 
     public static DeliveryJob Create(string itemId, string itemName, Vector3 targetPosition, int zoneId)
     {
-        Debug.Log($"DeliveryService.Create called: itemId={itemId}, itemName={itemName}, target={targetPosition}, zoneId={zoneId}");
+        //debug.Log($"DeliveryService.Create called: itemId={itemId}, itemName={itemName}, target={targetPosition}, zoneId={zoneId}");
 
         var db = DbBoot.Instance.Db;
 
@@ -75,7 +75,7 @@ public static class DeliveryService
 
         db.Insert(job);
 
-        Debug.Log("DeliveryService.Create inserted row with id=" + job.id);
+        //debug.Log("DeliveryService.Create inserted row with id=" + job.id);
         return job;
     }
 
@@ -97,13 +97,13 @@ public static class DeliveryService
         var job = db.Table<DeliveryJob>().FirstOrDefault(j => j.id == id);
         if (job == null)
         {
-            Debug.LogWarning($"DeliveryService.Complete ignored: job {id} was already completed or does not exist.");
+            //debug.LogWarning($"DeliveryService.Complete ignored: job {id} was already completed or does not exist.");
             return;
         }
 
         db.Delete(job);
 
-        Debug.Log($"DeliveryService.Complete succeeded for job {id}.");
+        //debug.Log($"DeliveryService.Complete succeeded for job {id}.");
     }
 
     public static bool DeleteJob(int id)
@@ -116,12 +116,12 @@ public static class DeliveryService
 
         if (job == null)
         {
-            Debug.LogWarning($"DeliveryService.DeleteJob could not find job {id}.");
+            //debug.LogWarning($"DeliveryService.DeleteJob could not find job {id}.");
             return false;
         }
 
         db.Delete(job);
-        Debug.Log($"DeliveryService.DeleteJob removed job {id}.");
+        //debug.Log($"DeliveryService.DeleteJob removed job {id}.");
         return true;
     }
 
@@ -133,7 +133,7 @@ public static class DeliveryService
         var job = GetByItemId(itemId);
         if (job == null)
         {
-            Debug.LogWarning($"DeliveryService.DeleteJobByItemId could not find active job for itemId '{itemId}'.");
+            //debug.LogWarning($"DeliveryService.DeleteJobByItemId could not find active job for itemId '{itemId}'.");
             return false;
         }
 

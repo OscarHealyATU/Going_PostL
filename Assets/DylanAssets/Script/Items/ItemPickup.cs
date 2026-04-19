@@ -21,13 +21,13 @@ public class ItemPickup : MonoBehaviour
 
         if (worldItem == null || worldItem.itemData == null)
         {
-            Debug.LogWarning("ItemPickup: Missing WorldItem or ItemData.");
+            //debug.LogWarning("ItemPickup: Missing WorldItem or ItemData.");
             return;
         }
 
         if (InventoryManager.Instance == null)
         {
-            Debug.LogWarning("ItemPickup: InventoryManager not found.");
+            //debug.LogWarning("ItemPickup: InventoryManager not found.");
             return;
         }
 
@@ -42,7 +42,7 @@ public class ItemPickup : MonoBehaviour
         }
         else
         {
-            Debug.Log("Inventory is full.");
+            //debug.Log("Inventory is full.");
         }
     }
 

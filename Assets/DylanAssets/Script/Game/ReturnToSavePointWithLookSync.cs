@@ -64,6 +64,6 @@ public class ReturnToSavedPointWithLookSync : MonoBehaviour
         if (clearReturnPointAfterUse)
             PlayerService.ClearReturnPoint();
 
-        Debug.Log($"[ReturnPoint] Restored player to {savedPosition} with yaw {restoredYaw}");
+        //debug.Log($"[ReturnPoint] Restored player to {savedPosition} with yaw {restoredYaw}");
     }
 }

@@ -57,7 +57,7 @@ public class Interact : MonoBehaviour
             playerTransform = player.transform;
             playerInRange = true;
             ShowPrompt();
-            Debug.Log($"🟨 Interact: Player was already inside trigger '{gameObject.name}' after scene load.");
+            //debug.Log($"🟨 Interact: Player was already inside trigger '{gameObject.name}' after scene load.");
         }
     }
 
@@ -67,11 +67,11 @@ public class Interact : MonoBehaviour
         if (!playerInRange || kb == null || !kb.eKey.wasPressedThisFrame)
             return;
 
-        Debug.Log($"✅ Interact: E pressed on '{gameObject.name}'. Loading scene: {sceneToLoad}");
+        //debug.Log($"✅ Interact: E pressed on '{gameObject.name}'. Loading scene: {sceneToLoad}");
 
         if (!Application.CanStreamedLevelBeLoaded(sceneToLoad))
         {
-            Debug.LogError($"❌ Scene '{sceneToLoad}' cannot be loaded. Check spelling and Build Settings!");
+            //debug.LogError($"❌ Scene '{sceneToLoad}' cannot be loaded. Check spelling and Build Settings!");
             return;
         }
 
@@ -81,7 +81,7 @@ public class Interact : MonoBehaviour
         if (saveReturnPointBeforeSceneLoad && playerTransform != null)
         {
             PlayerService.SaveReturnPoint(playerTransform.position, playerTransform.eulerAngles.y);
-            Debug.Log($"📌 Saved return position: {playerTransform.position} yaw={playerTransform.eulerAngles.y}");
+            //debug.Log($"📌 Saved return position: {playerTransform.position} yaw={playerTransform.eulerAngles.y}");
         }
 
         HidePrompt();
@@ -104,19 +104,19 @@ public class Interact : MonoBehaviour
 
             if (success)
             {
-                Debug.Log($"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}");
+                //debug.Log($"[Interact] Current warehouse set from WarehouseIdentity ID {warehouseIdentity.WarehouseId}");
                 return;
             }
         }
 
         // Fallback for starter warehouse
-        Debug.Log("[Interact] No warehouse identity found. Falling back to starter warehouse ID 1.");
+        //debug.Log("[Interact] No warehouse identity found. Falling back to starter warehouse ID 1.");
 
         bool starterSuccess = WarehouseService.SetLastInteractedWarehouse(1);
 
         if (!starterSuccess)
         {
-            Debug.LogWarning("[Interact] Failed to set starter warehouse as current.");
+            //debug.LogWarning("[Interact] Failed to set starter warehouse as current.");
         }
     }
 
@@ -140,7 +140,7 @@ public class Interact : MonoBehaviour
         playerTransform = other.transform;
         ShowPrompt();
 
-        // Debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
+        // //debug.Log($"🟦 Interact: Player entered trigger '{gameObject.name}'.");
     }
 
     private void OnTriggerExit(Collider other)
@@ -152,7 +152,7 @@ public class Interact : MonoBehaviour
         playerTransform = null;
         HidePrompt();
 
-        // Debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
+        // //debug.Log($"🟥 Interact: Player exited trigger '{gameObject.name}'.");
     }
 
     private void OnDisable()

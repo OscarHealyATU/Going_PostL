@@ -267,7 +267,7 @@ public class VehicleSpawnManager : MonoBehaviour
             var rootLink = spawned.AddComponent<VehicleLink>();
             rootLink.vehicleId = vehicle.id;
 
-            Debug.Log($"[VehicleSpawnManager] Added VehicleLink to '{spawned.name}' with vehicleId={vehicle.id}");
+            //debug.Log($"[VehicleSpawnManager] Added VehicleLink to '{spawned.name}' with vehicleId={vehicle.id}");
             return;
         }
 
@@ -279,7 +279,7 @@ public class VehicleSpawnManager : MonoBehaviour
             links[i].vehicleId = vehicle.id;
         }
 
-        Debug.Log($"[VehicleSpawnManager] Applied vehicleId={vehicle.id} to {links.Length} VehicleLink component(s) on '{spawned.name}'");
+        //debug.Log($"[VehicleSpawnManager] Applied vehicleId={vehicle.id} to {links.Length} VehicleLink component(s) on '{spawned.name}'");
     }
 
     private VehicleLink FindExistingVehicle(int vehicleId)

@@ -27,8 +27,8 @@ namespace AAMAP
         [Tooltip("\"Visuals\" GameObject.")] private GameObject visualsObject = null;
         [Tooltip("Mesh Renderer component on the \"Map Icon > Visuals\" GameObject.")] private MeshRenderer meshRenderer = null;
 
-        private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
-        private readonly string errorMessageSuffix = " Please delete and re-create the icon.\n";
+        //private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
+        //private readonly string errorMessageSuffix = " Please delete and re-create the icon.\n";
 
         private void Start()
         {
@@ -102,7 +102,7 @@ namespace AAMAP
 
             if (visualsObject == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "\"" + gameObject.name + " > Visuals \" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogWarning(errorMessagePrefix + "\"" + gameObject.name + " > Visuals \" GameObject could not be found." + errorMessageSuffix);
                 DisableIcon();
             }
         }
@@ -116,7 +116,7 @@ namespace AAMAP
 
             if (meshRenderer == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "Failed to generate the map icon because the Mesh Renderer component on the \"" + gameObject.name + " > Visuals\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogWarning(errorMessagePrefix + "Failed to generate the map icon because the Mesh Renderer component on the \"" + gameObject.name + " > Visuals\" GameObject could not be found." + errorMessageSuffix);
                 DisableIcon();
             }
         }
@@ -137,7 +137,7 @@ namespace AAMAP
         {
             if (texture == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new texture of the map icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new texture of the map icon.\n");
             }
             else
             {
@@ -191,7 +191,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map icon.\n");
             }
             else
             {
@@ -235,7 +235,7 @@ namespace AAMAP
         {
             if (offset == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new local offset position of the map icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new local offset position of the map icon.\n");
             }
             else
             {
@@ -260,7 +260,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the Map Icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the Map Icon.\n");
             }
             else
             {
@@ -317,13 +317,13 @@ namespace AAMAP
         {
             if (minimapCamera == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the Minimap Camera on the Map Icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the Minimap Camera on the Map Icon.\n");
                 return;
             }
 
             if (minimapCamera.GetComponent<Camera>() == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the Minimap Camera on the Map Icon doesn't have a Camera component on it.\n");
+                //debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the Minimap Camera on the Map Icon doesn't have a Camera component on it.\n");
             }
             else
             {
@@ -394,13 +394,13 @@ namespace AAMAP
         {
             if (mapCamera == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the Map Camera on the Map Icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the Map Camera on the Map Icon.\n");
                 return;
             }
 
             if (mapCamera.GetComponent<Camera>() == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the Map Camera on the Map Icon doesn't have a Camera component on it.\n");
+                //debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the Map Camera on the Map Icon doesn't have a Camera component on it.\n");
             }
             else
             {
@@ -481,7 +481,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new material of the map icon.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new material of the map icon.\n");
             }
         }
 

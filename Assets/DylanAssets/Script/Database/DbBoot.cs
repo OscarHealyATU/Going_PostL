@@ -30,7 +30,7 @@ public class DbBoot : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         GameDb = new GameDb();
-        Debug.Log("DB path: " + GameDb.DbPath);
+        //debug.Log("DB path: " + GameDb.DbPath);
 
         EnsurePlayerSchema();
         EnsurePlayerExists();
@@ -41,21 +41,21 @@ public class DbBoot : MonoBehaviour
         EnsureVehicleSchema();
 
         VehicleTypeStore.LoadOrSeedDefaults(Db);
-        Debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
+        //debug.Log("[DbBoot] VehicleType rows now: " + Db.Table<VehicleType>().Count());
     }
 
     private void EnsurePlayerSchema()
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsurePlayerSchema.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsurePlayerSchema.");
             return;
         }
 
         try
         {
             Db.Execute("ALTER TABLE Player ADD COLUMN inventorySlotCount INTEGER NOT NULL DEFAULT 3");
-            Debug.Log("[DbBoot] Added inventorySlotCount column to Player");
+            //debug.Log("[DbBoot] Added inventorySlotCount column to Player");
         }
         catch (Exception)
         {
@@ -65,23 +65,17 @@ public class DbBoot : MonoBehaviour
         {
             var players = Db.Table<Player>().ToList();
 
-            bool anyUpdated = false;
             foreach (var player in players)
             {
                 if (player.inventorySlotCount <= 0)
                 {
                     player.inventorySlotCount = 3;
                     Db.Update(player);
-                    anyUpdated = true;
                 }
             }
-
-            if (anyUpdated)
-                Debug.Log("[DbBoot] Backfilled inventorySlotCount for existing players");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debug.LogWarning("[DbBoot] EnsurePlayerSchema backfill skipped: " + ex.Message);
         }
     }
 
@@ -89,7 +83,6 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsurePlayerExists.");
             return;
         }
 
@@ -120,7 +113,7 @@ public class DbBoot : MonoBehaviour
                 savedYaw = 0f
             });
 
-            Debug.Log("[DbBoot] Created Player row");
+            //debug.Log("[DbBoot] Created Player row");
         }
         else
         {
@@ -128,10 +121,10 @@ public class DbBoot : MonoBehaviour
             {
                 player.inventorySlotCount = 3;
                 Db.Update(player);
-                Debug.Log("[DbBoot] Fixed Player inventorySlotCount to default 3");
+                //debug.Log("[DbBoot] Fixed Player inventorySlotCount to default 3");
             }
 
-            Debug.Log("[DbBoot] Player exists id=" + player.id);
+            //debug.Log("[DbBoot] Player exists id=" + player.id);
         }
     }
 
@@ -139,7 +132,7 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureDeliveryZonesSeeded.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureDeliveryZonesSeeded.");
             return;
         }
 
@@ -152,7 +145,7 @@ public class DbBoot : MonoBehaviour
             if (existingZone == null)
             {
                 Db.Insert(desiredZone);
-                Debug.Log($"[DbBoot] Inserted DeliveryZone '{desiredZone.name}'");
+                //debug.Log($"[DbBoot] Inserted DeliveryZone '{desiredZone.name}'");
             }
             else
             {
@@ -164,11 +157,11 @@ public class DbBoot : MonoBehaviour
                 existingZone.startsUnlocked = desiredZone.startsUnlocked;
 
                 Db.Update(existingZone);
-                Debug.Log($"[DbBoot] Updated DeliveryZone '{existingZone.name}'");
+                //debug.Log($"[DbBoot] Updated DeliveryZone '{existingZone.name}'");
             }
         }
 
-        Debug.Log("[DbBoot] DeliveryZone rows now: " + Db.Table<DeliveryZone>().Count());
+        //debug.Log("[DbBoot] DeliveryZone rows now: " + Db.Table<DeliveryZone>().Count());
     }
 
     private List<DeliveryZone> GetDesiredDeliveryZones()
@@ -222,7 +215,7 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureStartingZonesUnlocked.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureStartingZonesUnlocked.");
             return;
         }
 
@@ -249,7 +242,7 @@ public class DbBoot : MonoBehaviour
                 unlockedAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
             });
 
-            Debug.Log($"[DbBoot] Auto-unlocked starting zone '{zone.name}'");
+            //debug.Log($"[DbBoot] Auto-unlocked starting zone '{zone.name}'");
         }
     }
 
@@ -257,18 +250,18 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureWarehouseSchema.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureWarehouseSchema.");
             return;
         }
 
         try
         {
             Db.CreateTable<Warehouse>();
-            Debug.Log("[DbBoot] Ensured Warehouse table exists");
+            //debug.Log("[DbBoot] Ensured Warehouse table exists");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Debug.LogWarning("[DbBoot] EnsureWarehouseSchema failed: " + ex.Message);
+            //debug.LogWarning("[DbBoot] EnsureWarehouseSchema failed: " + ex.Message);
         }
     }
 
@@ -276,20 +269,20 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseRegisteredAtBoot.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseRegisteredAtBoot.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(starterWarehouseZoneName))
         {
-            Debug.LogWarning("[DbBoot] Starter warehouse zone name is empty.");
+            //debug.LogWarning("[DbBoot] Starter warehouse zone name is empty.");
             return;
         }
 
         var player = Db.Table<Player>().FirstOrDefault();
         if (player == null)
         {
-            Debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse at boot.");
+            //debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse at boot.");
             return;
         }
 
@@ -322,7 +315,7 @@ public class DbBoot : MonoBehaviour
             createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
         });
 
-        Debug.Log($"[DbBoot] Registered starter warehouse at boot in '{starterWarehouseZoneName}' at tile ({starterWarehouseTileX}, {starterWarehouseTileZ})");
+        //debug.Log($"[DbBoot] Registered starter warehouse at boot in '{starterWarehouseZoneName}' at tile ({starterWarehouseTileX}, {starterWarehouseTileZ})");
     }
 
     public void EnsureStarterWarehouseExists(
@@ -335,20 +328,20 @@ public class DbBoot : MonoBehaviour
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseExists.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureStarterWarehouseExists.");
             return;
         }
 
         if (string.IsNullOrWhiteSpace(zoneName))
         {
-            Debug.LogWarning("[DbBoot] zoneName is invalid when trying to create starter warehouse.");
+            //debug.LogWarning("[DbBoot] zoneName is invalid when trying to create starter warehouse.");
             return;
         }
 
         var player = Db.Table<Player>().FirstOrDefault();
         if (player == null)
         {
-            Debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse.");
+            //debug.LogWarning("[DbBoot] No player found when trying to create starter warehouse.");
             return;
         }
 
@@ -381,56 +374,56 @@ public class DbBoot : MonoBehaviour
             createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
         });
 
-        Debug.Log($"[DbBoot] Registered starter warehouse in '{zoneName}' at tile ({tileX}, {tileZ})");
+        //debug.Log($"[DbBoot] Registered starter warehouse in '{zoneName}' at tile ({tileX}, {tileZ})");
     }
 
         private void EnsureVehicleSchema()
     {
         if (Db == null)
         {
-            Debug.LogError("[DbBoot] Database connection is null in EnsureVehicleSchema.");
+            //debug.LogError("[DbBoot] Database connection is null in EnsureVehicleSchema.");
             return;
         }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN hasSavedLocation INTEGER NOT NULL DEFAULT 0");
-            Debug.Log("[DbBoot] Added hasSavedLocation column to Vehicle");
+            //debug.Log("[DbBoot] Added hasSavedLocation column to Vehicle");
         }
         catch (Exception) { }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedScene TEXT");
-            Debug.Log("[DbBoot] Added savedScene column to Vehicle");
+            //debug.Log("[DbBoot] Added savedScene column to Vehicle");
         }
         catch (Exception) { }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedX REAL NOT NULL DEFAULT 0");
-            Debug.Log("[DbBoot] Added savedX column to Vehicle");
+            //debug.Log("[DbBoot] Added savedX column to Vehicle");
         }
         catch (Exception) { }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedY REAL NOT NULL DEFAULT 0");
-            Debug.Log("[DbBoot] Added savedY column to Vehicle");
+            //debug.Log("[DbBoot] Added savedY column to Vehicle");
         }
         catch (Exception) { }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedZ REAL NOT NULL DEFAULT 0");
-            Debug.Log("[DbBoot] Added savedZ column to Vehicle");
+            //debug.Log("[DbBoot] Added savedZ column to Vehicle");
         }
         catch (Exception) { }
 
         try
         {
             Db.Execute("ALTER TABLE Vehicle ADD COLUMN savedYaw REAL NOT NULL DEFAULT 0");
-            Debug.Log("[DbBoot] Added savedYaw column to Vehicle");
+            //debug.Log("[DbBoot] Added savedYaw column to Vehicle");
         }
         catch (Exception) { }
     }

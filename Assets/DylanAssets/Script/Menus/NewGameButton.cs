@@ -47,7 +47,7 @@ public class NewGameButton : MonoBehaviour
         if (File.Exists(dbPath))
         {
             File.Delete(dbPath);
-            Debug.Log("[NewGameButton] Deleted DB: " + dbPath);
+            //debug.Log("[NewGameButton] Deleted DB: " + dbPath);
         }
 
         // Delete possible SQLite sidecar files too
@@ -63,7 +63,7 @@ public class NewGameButton : MonoBehaviour
         {
             PlayerPrefs.DeleteAll();
             PlayerPrefs.Save();
-            Debug.Log("[NewGameButton] Cleared PlayerPrefs.");
+            //debug.Log("[NewGameButton] Cleared PlayerPrefs.");
         }
 
         SceneManager.LoadScene(firstSceneName);

@@ -39,13 +39,13 @@ namespace AAMAP
         {
             if (Selection.activeGameObject == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "Failed to create the minimap. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Minimap</b>.\n");
+                //debug.LogWarning(errorMessagePrefix + "Failed to create the minimap. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Minimap</b>.\n");
             }
             else
             {
                 if (Selection.activeGameObject.GetComponent<Canvas>() == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "Failed to create the minimap. Selected GameObject does not have a Canvas component on it. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Minimap</b>.\n");
+                    //debug.LogWarning(errorMessagePrefix + "Failed to create the minimap. Selected GameObject does not have a Canvas component on it. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Minimap</b>.\n");
                 }
                 else
                 {
@@ -131,12 +131,12 @@ namespace AAMAP
                         }
                         else
                         {
-                            Debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Minimap Camera.prefab</b> could not be found. Please delete and re-download the asset.\n");
+                            //debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Minimap Camera.prefab</b> could not be found. Please delete and re-download the asset.\n");
                         }
                     }
                     else
                     {
-                        Debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Minimap.prefab</b> could not be found. Please delete and re-download the asset.\n");
+                        //debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Minimap.prefab</b> could not be found. Please delete and re-download the asset.\n");
                     }
                 }
             }
@@ -150,13 +150,13 @@ namespace AAMAP
         {
             if (Selection.activeGameObject == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "Failed to create the map. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Map</b>.\n");
+                //debug.LogWarning(errorMessagePrefix + "Failed to create the map. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Map</b>.\n");
             }
             else
             {
                 if (Selection.activeGameObject.GetComponent<Canvas>() == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "Failed to create the map. Selected GameObject does not have a Canvas component on it. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Map</b>.\n");
+                    //debug.LogWarning(errorMessagePrefix + "Failed to create the map. Selected GameObject does not have a Canvas component on it. Please right click on the Canvas and select <b>AA Map and Minimap System > Create Map</b>.\n");
                 }
                 else
                 {
@@ -263,12 +263,12 @@ namespace AAMAP
                         }
                         else
                         {
-                            Debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Map Camera.prefab</b> could not be found. Please delete and re-download the asset.\n");
+                            //debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Map Camera.prefab</b> could not be found. Please delete and re-download the asset.\n");
                         }
                     }
                     else
                     {
-                        Debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Map.prefab</b> could not be found. Please delete and re-download the asset.\n");
+                        //debug.LogError(errorMessagePrefix + "<b>Assets > AA Map and Minimap System > Map.prefab</b> could not be found. Please delete and re-download the asset.\n");
                     }
                 }
             }

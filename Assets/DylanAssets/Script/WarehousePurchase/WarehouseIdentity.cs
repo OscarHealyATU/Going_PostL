@@ -20,6 +20,6 @@ public class WarehouseIdentity : MonoBehaviour
         tileX = newTileX;
         tileZ = newTileZ;
 
-        Debug.Log($"[WarehouseIdentity] Assigned warehouse ID {warehouseId} at {zoneName} {tileX}, {tileZ}");
+        //debug.Log($"[WarehouseIdentity] Assigned warehouse ID {warehouseId} at {zoneName} {tileX}, {tileZ}");
     }
 }

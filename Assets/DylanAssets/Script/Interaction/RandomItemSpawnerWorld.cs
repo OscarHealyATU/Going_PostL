@@ -104,7 +104,7 @@ public class RandomItemSpawnerWorld : MonoBehaviour
 
     private void SetFeedback(string message)
     {
-        Debug.Log("[RandomItemSpawnerWorld] " + message);
+        //debug.Log("[RandomItemSpawnerWorld] " + message);
         if (feedbackText != null)
             feedbackText.text = message;
     }

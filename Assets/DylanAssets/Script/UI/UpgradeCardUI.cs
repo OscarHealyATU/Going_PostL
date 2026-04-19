@@ -146,7 +146,7 @@ public class UpgradeCardUI : MonoBehaviour
             case UpgradeType.ZoneLicense:
             {
                 var result = ZoneService.TryUnlockZone(boundUpgrade.zoneId);
-                Debug.Log("[UpgradeCardUI] " + result.message);
+                //debug.Log("[UpgradeCardUI] " + result.message);
 
                 if (result.success && DeliveryGridProvider.Instance != null)
                     DeliveryGridProvider.Instance.RefreshUnlockedZones();
@@ -158,19 +158,19 @@ public class UpgradeCardUI : MonoBehaviour
             {
                 if (IsOwned())
                 {
-                    Debug.Log("[UpgradeCardUI] Storage upgrade already owned.");
+                    //debug.Log("[UpgradeCardUI] Storage upgrade already owned.");
                     break;
                 }
 
                 if (PlayerService.GetLevel() < boundUpgrade.requiredLevel)
                 {
-                    Debug.Log("[UpgradeCardUI] Player level too low for storage upgrade.");
+                    //debug.Log("[UpgradeCardUI] Player level too low for storage upgrade.");
                     break;
                 }
 
                 if (!PlayerService.TrySpendMoney(boundUpgrade.price))
                 {
-                    Debug.Log("[UpgradeCardUI] Not enough money for storage upgrade.");
+                    //debug.Log("[UpgradeCardUI] Not enough money for storage upgrade.");
                     break;
                 }
 
@@ -182,7 +182,7 @@ public class UpgradeCardUI : MonoBehaviour
                 if (InventoryManager.Instance != null)
                     InventoryManager.Instance.RefreshCapacityFromPlayer();
 
-                Debug.Log("[UpgradeCardUI] Purchased Delivery Satchel. Inventory expanded to 5 slots.");
+                //debug.Log("[UpgradeCardUI] Purchased Delivery Satchel. Inventory expanded to 5 slots.");
                 break;
             }
         }

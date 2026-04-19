@@ -51,7 +51,7 @@ public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
 
         if (road == null)
         {
-            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: GridifyRoadAdapter not found.");
+            //debug.LogError("TrafficGridGraph_RoadBetweenTiles: GridifyRoadAdapter not found.");
             yield break;
         }
 
@@ -65,7 +65,7 @@ public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
 
         if (!road.IsReady)
         {
-            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: Road adapter never became ready.");
+            //debug.LogError("TrafficGridGraph_RoadBetweenTiles: Road adapter never became ready.");
             yield break;
         }
 
@@ -77,7 +77,7 @@ public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
     {
         if (road == null)
         {
-            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: road adapter missing.");
+            //debug.LogError("TrafficGridGraph_RoadBetweenTiles: road adapter missing.");
             ready = false;
             return;
         }
@@ -85,7 +85,7 @@ public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
         road.Refresh();
         if (!road.IsReady)
         {
-            Debug.LogError("TrafficGridGraph_RoadBetweenTiles: road adapter is not ready.");
+            //debug.LogError("TrafficGridGraph_RoadBetweenTiles: road adapter is not ready.");
             ready = false;
             return;
         }
@@ -141,10 +141,6 @@ public class TrafficGridGraph_RoadBetweenTiles : MonoBehaviour
 
         ready = true;
 
-        Debug.Log(
-            $"TrafficGridGraph_RoadBetweenTiles: Built nodes={NodeCount} " +
-            $"size=({nodeSizeX},{nodeSizeZ}) dist={dist} min={MinBounds} max={MaxBounds}"
-        );
     }
 
     public void GetNodesNear(Vector3 center, float radius, List<Transform> results)

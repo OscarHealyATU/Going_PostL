@@ -45,7 +45,7 @@ public class StarterWarehouseRegistrar : MonoBehaviour
         gridify zoneGrid = GetGridForZone(zoneName);
         if (zoneGrid == null)
         {
-            Debug.LogWarning("[StarterWarehouseRegistrar] No grid found for zone: " + zoneName);
+            //debug.LogWarning("[StarterWarehouseRegistrar] No grid found for zone: " + zoneName);
             return;
         }
 
@@ -70,7 +70,7 @@ public class StarterWarehouseRegistrar : MonoBehaviour
         gridify zoneGrid = GetGridForZone(zoneName);
         if (zoneGrid == null)
         {
-            Debug.LogWarning("[StarterWarehouseRegistrar] No grid found for zone: " + zoneName);
+            //debug.LogWarning("[StarterWarehouseRegistrar] No grid found for zone: " + zoneName);
             return;
         }
 
@@ -100,7 +100,7 @@ public class StarterWarehouseRegistrar : MonoBehaviour
                 if (setAsCurrentWarehouseAfterRegister)
                     WarehouseService.SetLastInteractedWarehouse(zoneName, tileX, tileZ);
 
-                Debug.Log($"[StarterWarehouseRegistrar] Registered starter warehouse from runtime object at tile ({tileX}, {tileZ})");
+                //debug.Log($"[StarterWarehouseRegistrar] Registered starter warehouse from runtime object at tile ({tileX}, {tileZ})");
                 return;
             }
         }

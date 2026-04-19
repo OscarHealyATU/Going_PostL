@@ -102,7 +102,7 @@ public class SettingsUILogic : MonoBehaviour
         PlayerPrefs.SetFloat("MouseSensitivity", sensSlide.value);
 
         PlayerPrefs.Save();
-        Debug.Log("Saved Player Settings");
+        //debug.Log("Saved Player Settings");
     }
 
     private void SetMixerVolume(string paramName, float sliderVal)

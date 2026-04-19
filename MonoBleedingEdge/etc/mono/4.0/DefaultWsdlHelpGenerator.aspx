@@ -32,7 +32,7 @@
 <%@ Import Namespace="System.Text.RegularExpressions" %>
 <%@ Import Namespace="System.Security.Cryptography.X509Certificates" %>
 <%@ Assembly name="System.Web.Services" %>
-<%@ Page debug="true" %>
+<%@ Page //debug="true" %>
 
 <html>
 <script language="C#" runat="server">

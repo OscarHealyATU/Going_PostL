@@ -223,7 +223,7 @@ public static class PlayerService
 
         if (newLevel > oldLevel)
         {
-            Debug.Log($"[PlayerService] Level Up! {oldLevel} -> {newLevel}");
+            //debug.Log($"[PlayerService] Level Up! {oldLevel} -> {newLevel}");
         }
 
         if (notifyDayManager && DayManager.Instance != null)

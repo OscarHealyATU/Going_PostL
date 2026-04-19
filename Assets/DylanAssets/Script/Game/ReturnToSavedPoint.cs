@@ -17,11 +17,11 @@ public class ReturnToSavedPoint : MonoBehaviour
 
         if (!PlayerService.TryGetReturnPoint(out Vector3 position, out float yaw))
         {
-            Debug.Log("[ReturnPoint] No saved return point found.");
+            //debug.Log("[ReturnPoint] No saved return point found.");
             yield break;
         }
 
-        Debug.Log("[ReturnPoint] Applying saved return point...");
+        //debug.Log("[ReturnPoint] Applying saved return point...");
 
         CharacterController cc = GetComponent<CharacterController>();
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -49,6 +49,6 @@ public class ReturnToSavedPoint : MonoBehaviour
 
         PlayerService.ClearReturnPoint();
 
-        Debug.Log($"[ReturnPoint] Restored player to {position} with yaw {yaw + 180f}");
+        //debug.Log($"[ReturnPoint] Restored player to {position} with yaw {yaw + 180f}");
     }
 }

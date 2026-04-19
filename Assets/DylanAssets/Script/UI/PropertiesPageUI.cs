@@ -273,7 +273,7 @@ public class PropertiesPageUI : MonoBehaviour
                 return 7000.0;
 
             default:
-                Debug.LogWarning($"[PropertiesPageUI] No custom warehouse price set for zone '{zoneName}'. Using Zone 1 default.");
+                //debug.LogWarning($"[PropertiesPageUI] No custom warehouse price set for zone '{zoneName}'. Using Zone 1 default.");
                 return 1500.0;
         }
     }
@@ -283,7 +283,7 @@ public class PropertiesPageUI : MonoBehaviour
         if (feedbackText != null)
             feedbackText.text = message;
 
-        Debug.Log("[PropertiesPageUI] " + message);
+        //debug.Log("[PropertiesPageUI] " + message);
     }
 
     private void ClearFeedback()

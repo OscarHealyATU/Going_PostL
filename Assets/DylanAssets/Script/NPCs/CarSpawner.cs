@@ -73,7 +73,7 @@ public class CarSpawner : MonoBehaviour
         {
             if (!warnedNoPlayer)
             {
-                Debug.LogWarning("CarSpawner: player not found. Assign 'player' or set correct Player tag.");
+                //debug.LogWarning("CarSpawner: player not found. Assign 'player' or set correct Player tag.");
                 warnedNoPlayer = true;
             }
             return;
@@ -83,7 +83,7 @@ public class CarSpawner : MonoBehaviour
         {
             if (!warnedNoGraph)
             {
-                Debug.LogWarning("CarSpawner: graph missing or not ready yet.");
+                //debug.LogWarning("CarSpawner: graph missing or not ready yet.");
                 warnedNoGraph = true;
             }
             return;
@@ -109,7 +109,7 @@ public class CarSpawner : MonoBehaviour
 
                 float closestDist = Vector3.Distance(a, b);
 
-                // Debug.Log(
+                // //debug.Log(
                 //     $"[CarSpawner] player={player.position} " +
                 //     $"graphMin={graph.MinBounds} graphMax={graph.MaxBounds} " +
                 //     $"insideGraph={graph.ContainsWorldXZ(player.position)} " +
@@ -119,12 +119,12 @@ public class CarSpawner : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("[CarSpawner] Graph has no nodes.");
+                //debug.LogWarning("[CarSpawner] Graph has no nodes.");
             }
 
             if (!warnedNoNodes && (nearStartNodes.Count == 0 || nearEndNodes.Count == 0))
             {
-                Debug.LogWarning($"CarSpawner: near node lists empty. startNear={nearStartNodes.Count} endNear={nearEndNodes.Count}.");
+                //debug.LogWarning($"CarSpawner: near node lists empty. startNear={nearStartNodes.Count} endNear={nearEndNodes.Count}.");
                 warnedNoNodes = true;
             }
         }

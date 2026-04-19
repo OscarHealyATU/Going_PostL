@@ -53,7 +53,7 @@ public class DeliveryGridProvider : MonoBehaviour
     [Tooltip("If true, zones are split along Z. If false, zones are split along X. Used in legacy single-grid mode.")]
     [SerializeField] private bool splitAlongZ = true;
 
-    [Header("Debug")]
+    [Header("//debug")]
     public bool rebuildOnStart = true;
     public bool drawGizmos = false;
     public float gizmoSphereSize = 1.5f;
@@ -88,12 +88,12 @@ public class DeliveryGridProvider : MonoBehaviour
         if (!builtFromZoneGrids)
             BuildFromLegacySingleGrid();
 
-        Debug.Log($"DeliveryGridProvider built {cachedPoints.Count} delivery points.");
+        //debug.Log($"DeliveryGridProvider built {cachedPoints.Count} delivery points.");
 
         foreach (var kvp in cachedPointsByZone)
         {
             int count = kvp.Value != null ? kvp.Value.Count : 0;
-            Debug.Log($"DeliveryGridProvider Zone {kvp.Key}: {count} points");
+            //debug.Log($"DeliveryGridProvider Zone {kvp.Key}: {count} points");
         }
     }
 
@@ -165,7 +165,7 @@ public class DeliveryGridProvider : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("DeliveryGridProvider: no assigned zone grids and no cityGrid found, using fallback values.");
+            //debug.LogWarning("DeliveryGridProvider: no assigned zone grids and no cityGrid found, using fallback values.");
 
             startX = xStartPosition;
             startZ = zStartPosition;
@@ -320,7 +320,7 @@ public class DeliveryGridProvider : MonoBehaviour
     {
         if (cachedPoints.Count == 0)
         {
-            Debug.LogWarning("DeliveryGridProvider: no delivery points available. Rebuilding now.");
+            //debug.LogWarning("DeliveryGridProvider: no delivery points available. Rebuilding now.");
             BuildPoints();
 
             if (cachedPoints.Count == 0)
@@ -334,7 +334,7 @@ public class DeliveryGridProvider : MonoBehaviour
     {
         if (cachedPoints.Count == 0 || cachedPointsByZone.Count == 0)
         {
-            Debug.LogWarning("DeliveryGridProvider: no cached zone points available. Rebuilding now.");
+            //debug.LogWarning("DeliveryGridProvider: no cached zone points available. Rebuilding now.");
             BuildPoints();
         }
 
@@ -346,7 +346,7 @@ public class DeliveryGridProvider : MonoBehaviour
                 return zonePoints[Random.Range(0, zonePoints.Count)];
         }
 
-        Debug.LogWarning($"DeliveryGridProvider: zone {safeZoneId} has no points. Falling back to any available zone.");
+        //debug.LogWarning($"DeliveryGridProvider: zone {safeZoneId} has no points. Falling back to any available zone.");
         return GetRandomPoint();
     }
 

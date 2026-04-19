@@ -105,8 +105,8 @@ namespace AAMAP
 
         [Tooltip("Render Texture of the minimap.")] public RenderTexture renderTexture;
 
-        private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
-        private readonly string errorMessageSuffix = " Please delete and re-create the minimap.\n";
+        //private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
+        //private readonly string errorMessageSuffix = " Please delete and re-create the minimap.\n";
 
         private void Start()
         {
@@ -197,7 +197,7 @@ namespace AAMAP
 
             if (maskImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Mask\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Mask\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -226,7 +226,7 @@ namespace AAMAP
 
             if (displayImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Raw Image component on the \"" + gameObject.name + " > Minimap Mask > Minimap Display\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Raw Image component on the \"" + gameObject.name + " > Minimap Mask > Minimap Display\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -255,7 +255,7 @@ namespace AAMAP
 
             if (backgroundFillerImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Mask > Minimap Background Filler\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Mask > Minimap Background Filler\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -276,7 +276,7 @@ namespace AAMAP
         {
             if (shape == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the shape of the minimap.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the shape of the minimap.\n");
                 return;
             }
 
@@ -342,7 +342,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap inner display.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap inner display.\n");
             }
             else
             {
@@ -376,7 +376,7 @@ namespace AAMAP
 
             if (minimapDirectionsObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -392,7 +392,7 @@ namespace AAMAP
 
                 if (minimapDirectionsRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > Minimap Directions\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -548,104 +548,104 @@ namespace AAMAP
 
             if (northObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
             else
             {
                 if (northRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (northText == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North > Text\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North > Text\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (northImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
 
             if (eastObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
             else
             {
                 if (eastRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (eastText == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East > Text\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East > Text\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (eastImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
 
             if (southObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
             else
             {
                 if (southRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (southText == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South > Text\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South > Text\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (southImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
 
             if (westObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
             else
             {
                 if (westRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (westText == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West > Text\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Text component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West > Text\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (westImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -735,7 +735,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new text font of the minimap direction signs.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new text font of the minimap direction signs.\n");
             }
         }
 
@@ -791,7 +791,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new text color of the minimap direction signs.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new text color of the minimap direction signs.\n");
             }
         }
 
@@ -862,7 +862,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the directions background images.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the directions background images.\n");
             }
         }
 
@@ -891,7 +891,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the directions background images.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the directions background images.\n");
             }
         }
 
@@ -920,7 +920,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the directions background images.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the directions background images.\n");
             }
         }
 
@@ -1044,7 +1044,7 @@ namespace AAMAP
 
             if (minimapBorderObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -1060,7 +1060,7 @@ namespace AAMAP
 
                 if (minimapBorderRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -1077,7 +1077,7 @@ namespace AAMAP
 
                 if (minimapBorderImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > Minimap Border\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -1132,7 +1132,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the minimap border.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the minimap border.\n");
             }
         }
 
@@ -1157,7 +1157,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap border.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap border.\n");
             }
         }
 
@@ -1256,7 +1256,7 @@ namespace AAMAP
 
             if (minimapZoomButtons == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"" + gameObject.name + " > Minimap Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -1284,25 +1284,25 @@ namespace AAMAP
 
                 if (zoomInRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (zoomInImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (zoomOutRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (zoomOutImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"" + gameObject.name + " > " + minimapZoomButtons.name + " > " + "Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -1406,7 +1406,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom in button.\n");
             }
         }
 
@@ -1431,7 +1431,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom out button.\n");
             }
         }
 
@@ -1456,7 +1456,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom in button.\n");
             }
         }
 
@@ -1481,7 +1481,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom in button.\n");
             }
         }
 
@@ -1506,7 +1506,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom out button.\n");
             }
         }
 
@@ -1531,7 +1531,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom out button.\n");
             }
         }
 
@@ -1562,7 +1562,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom in button.\n");
             }
         }
 
@@ -1593,7 +1593,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom out button.\n");
             }
         }
 
@@ -1734,7 +1734,7 @@ namespace AAMAP
 
             if (gridObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
             else
@@ -1744,13 +1744,13 @@ namespace AAMAP
 
                 if (gridImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Image component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
 
                 if (gridRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Rect Transform component on the \"Minimap > Minimap Mask > Minimap Grid\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
@@ -1803,7 +1803,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the minimap grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the minimap grid.\n");
             }
         }
 
@@ -1828,7 +1828,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the minimap grid.\n");
             }
         }
 
@@ -1876,7 +1876,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the minimap grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the minimap grid.\n");
             }
             else
             {
@@ -2063,13 +2063,13 @@ namespace AAMAP
 
                 if (minimapCameraComponent == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Camera component on the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the Camera component on the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
                     DisableMinimap();
                 }
             }
             else
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the minimap because the \"Minimap Camera\" GameObject could not be found." + errorMessageSuffix);
                 DisableMinimap();
             }
         }
@@ -2090,13 +2090,13 @@ namespace AAMAP
         {
             if (camera == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the new minimap camera.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null GameObject as the new minimap camera.\n");
             }
             else
             {
                 if (camera.GetComponent<Camera>() == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "The GameObject you want to assign as the new minimap camera doesn't have a Camera component on it.\n");
+                    //debug.LogWarning(errorMessagePrefix + "The GameObject you want to assign as the new minimap camera doesn't have a Camera component on it.\n");
                 }
                 else
                 {
@@ -2265,7 +2265,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background color of the minimap camera.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background color of the minimap camera.\n");
             }
         }
 

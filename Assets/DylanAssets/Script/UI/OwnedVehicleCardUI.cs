@@ -65,7 +65,7 @@ public class OwnedVehicleCardUI : MonoBehaviour
         }
         else
         {
-            Debug.LogError(message);
+            //debug.LogError(message);
             onSold?.Invoke(message);
         }
     }
@@ -74,12 +74,12 @@ public class OwnedVehicleCardUI : MonoBehaviour
     {
         if (VehicleService.TryRecoverVehicleToAssignedBay(vehicleId, out string message))
         {
-            Debug.Log(message);
+            //debug.Log(message);
             onSold?.Invoke(message);
         }
         else
         {
-            Debug.LogError(message);
+            //debug.LogError(message);
             onSold?.Invoke(message);
         }
     }

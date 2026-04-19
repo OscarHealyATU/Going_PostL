@@ -21,7 +21,7 @@ public class ResumeSpawnApplier : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag(playerTag);
         if (player == null)
         {
-            Debug.LogWarning("[ResumeSpawnApplier] No player found with tag: " + playerTag);
+            //debug.LogWarning("[ResumeSpawnApplier] No player found with tag: " + playerTag);
             yield break;
         }
 

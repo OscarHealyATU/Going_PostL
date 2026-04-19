@@ -11,20 +11,20 @@ public static class VehicleTypeStore
         db.CreateTable<VehicleType>();
 
         int before = db.Table<VehicleType>().Count();
-        Debug.Log("[VehicleTypeStore] rows BEFORE load = " + before);
+        //debug.Log("[VehicleTypeStore] rows BEFORE load = " + before);
 
         All = db.Table<VehicleType>()
             .OrderBy(v => v.baseCost)
             .ToList();
 
-        Debug.Log("[VehicleTypeStore] Loaded into All = " + All.Count);
+        //debug.Log("[VehicleTypeStore] Loaded into All = " + All.Count);
     }
 
     public static void Load()
     {
         if (DbBoot.Instance == null)
         {
-            Debug.LogWarning("[VehicleTypeStore] DbBoot.Instance is null - cannot Load()");
+            //debug.LogWarning("[VehicleTypeStore] DbBoot.Instance is null - cannot Load()");
             All = new List<VehicleType>();
             return;
         }

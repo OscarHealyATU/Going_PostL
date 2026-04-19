@@ -126,8 +126,8 @@ namespace AAMAP
 
         [Tooltip("Render Texture of the map.")] public RenderTexture renderTexture;
 
-        private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
-        private readonly string errorMessageSuffix = "Please delete and re-create the map.\n";
+        //private readonly string errorMessagePrefix = "<color=orange>AA Map and Minimap System : </color>";
+        //private readonly string errorMessageSuffix = "Please delete and re-create the map.\n";
 
         private void Start()
         {
@@ -330,7 +330,7 @@ namespace AAMAP
 
             if (maskImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Mask\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Mask\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -356,7 +356,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new shape of the map inner display.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new shape of the map inner display.\n");
             }
         }
 
@@ -384,7 +384,7 @@ namespace AAMAP
 
             if (displayImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Raw Image component on the \"" + gameObject.name + " > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Raw Image component on the \"" + gameObject.name + " > Map Mask > Map Display\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -413,7 +413,7 @@ namespace AAMAP
 
             if (backgroundFillerImage == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Mask > Map Background Filler\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Mask > Map Background Filler\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -473,7 +473,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new inner display color of the map.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new inner display color of the map.\n");
             }
         }
 
@@ -494,14 +494,14 @@ namespace AAMAP
 
             if (mapDirectionsObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Directions\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Directions\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
             else
             {
                 if (mapDirectionsRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > Map Directions\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > Map Directions\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
@@ -548,104 +548,104 @@ namespace AAMAP
 
                 if (northObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
                 else
                 {
                     if (northRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (northText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North > Text\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North > Text\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (northImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > North\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
 
                 if (eastObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
                 else
                 {
                     if (eastRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (eastText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East > Text\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East > Text\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (eastImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > East\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
 
                 if (southObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
                 else
                 {
                     if (southRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (southText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South > Text\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South > Text\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (southImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > South\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
 
                 if (westObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
                 else
                 {
                     if (westRect == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (westText == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West > Text\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Text component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West > Text\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (westImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapDirectionsObject.name + " > West\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
@@ -694,7 +694,7 @@ namespace AAMAP
         {
             if (position == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map directions.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map directions.\n");
             }
             else
             {
@@ -822,7 +822,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the font color of the map directions.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the font color of the map directions.\n");
             }
             else
             {
@@ -892,7 +892,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map directions background images.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map directions background images.\n");
             }
             else
             {
@@ -920,7 +920,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background image of the map directions.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background image of the map directions.\n");
             }
             else
             {
@@ -948,7 +948,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background color of the directions.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new background color of the directions.\n");
             }
             else
             {
@@ -1131,14 +1131,14 @@ namespace AAMAP
 
             if (mapBorderObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
             else
             {
                 if (mapBorderRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
@@ -1155,7 +1155,7 @@ namespace AAMAP
 
                 if (mapBorderImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > Map Border\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
@@ -1204,7 +1204,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new map border sprite.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new map border sprite.\n");
             }
             else
             {
@@ -1229,7 +1229,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map border.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map border.\n");
             }
             else
             {
@@ -1304,7 +1304,7 @@ namespace AAMAP
 
             if (mapZoomButtonsObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Zoom Buttons\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -1334,37 +1334,37 @@ namespace AAMAP
 
                 if (zoomInObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (zoomInImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (zoomInRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom In Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (zoomOutObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (zoomOutImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (zoomOutRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"" + gameObject.name + " > " + mapZoomButtonsObject.name + " > Zoom Out Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
@@ -1468,7 +1468,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom in button.\n");
             }
             else
             {
@@ -1493,7 +1493,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the zoom out button.\n");
             }
             else
             {
@@ -1518,7 +1518,7 @@ namespace AAMAP
         {
             if (position == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom in button.\n");
             }
             else
             {
@@ -1543,7 +1543,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom in button.\n");
             }
             else
             {
@@ -1568,7 +1568,7 @@ namespace AAMAP
         {
             if (position == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the zoom out button.\n");
             }
             else
             {
@@ -1593,7 +1593,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the zoom out button.\n");
             }
             else
             {
@@ -1618,7 +1618,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom in button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom in button.\n");
             }
             else
             {
@@ -1643,7 +1643,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom out button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the zoom out button.\n");
             }
             else
             {
@@ -1772,7 +1772,7 @@ namespace AAMAP
 
                 if (gridObject == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
                 else
@@ -1782,13 +1782,13 @@ namespace AAMAP
 
                     if (gridImage == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
 
                     if (gridRect == null)
                     {
-                        Debug.LogError("Failed to generate the map because the Rect Transform component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError("Failed to generate the map because the Rect Transform component on the \"Map > Map Mask > Map Grid\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
@@ -1837,7 +1837,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map grid.\n");
             }
             else
             {
@@ -1867,7 +1867,7 @@ namespace AAMAP
             }
             else
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map grid.\n");
             }
         }
 
@@ -1914,7 +1914,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map grid.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map grid.\n");
             }
             else
             {
@@ -1991,13 +1991,13 @@ namespace AAMAP
 
                 if (mapCameraComponent == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Camera component on the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Camera component on the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
             else
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map Camera\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -2018,13 +2018,13 @@ namespace AAMAP
         {
             if (camera == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new map camera.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new map camera.\n");
             }
             else
             {
                 if (camera.GetComponent<Camera>() == null)
                 {
-                    Debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the new map camera doesn't have a Camera component on it.\n");
+                    //debug.LogWarning(errorMessagePrefix + "The GameObject you have assigned as the new map camera doesn't have a Camera component on it.\n");
                 }
                 else
                 {
@@ -2056,7 +2056,7 @@ namespace AAMAP
         {
             if (position == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map camera.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map camera.\n");
             }
             else
             {
@@ -2218,7 +2218,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the camera background.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the camera background.\n");
             }
             else
             {
@@ -2259,7 +2259,7 @@ namespace AAMAP
 
             if (backgroundObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -2277,7 +2277,7 @@ namespace AAMAP
 
                     if (backgroundImageComp == null)
                     {
-                        Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
+                        //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map > Map Mask > Map Background\" GameObject could not be found." + errorMessageSuffix);
                         DisableMapOnStart();
                     }
                 }
@@ -2330,7 +2330,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map background image.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map background image.\n");
             }
             else
             {
@@ -2355,7 +2355,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map background image.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map background image.\n");
             }
             else
             {
@@ -2412,7 +2412,7 @@ namespace AAMAP
 
             if (exitButtonObject == null)
             {
-                Debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                //debug.LogError(errorMessagePrefix + "Failed to generate the map because the \"" + gameObject.name + " > Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                 DisableMapOnStart();
             }
         }
@@ -2429,13 +2429,13 @@ namespace AAMAP
 
                 if (exitButtonImage == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Image component on the \"Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
 
                 if (exitButtonRect == null)
                 {
-                    Debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
+                    //debug.LogError(errorMessagePrefix + "Failed to generate the map because the Rect Transform component on the \"Map Exit Button\" GameObject could not be found." + errorMessageSuffix);
                     DisableMapOnStart();
                 }
             }
@@ -2485,7 +2485,7 @@ namespace AAMAP
         {
             if (sprite == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map exit button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new sprite of the map exit button.\n");
             }
             else
             {
@@ -2510,7 +2510,7 @@ namespace AAMAP
         {
             if (color == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map exit button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new color of the map exit button.\n");
             }
             else
             {
@@ -2535,7 +2535,7 @@ namespace AAMAP
         {
             if (position == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map exit button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new position of the map exit button.\n");
             }
             else
             {
@@ -2560,7 +2560,7 @@ namespace AAMAP
         {
             if (scale == null)
             {
-                Debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map exit button.\n");
+                //debug.LogWarning(errorMessagePrefix + "You cannot assign a null value as the new scale of the map exit button.\n");
             }
             else
             {
@@ -2648,7 +2648,7 @@ namespace AAMAP
                 }
                 else
                 {
-                    Debug.LogWarning(errorMessagePrefix + "The GameObject you tried to assign as the Minimap reference doesn't have a Minimap Manager component on it.\n");
+                    //debug.LogWarning(errorMessagePrefix + "The GameObject you tried to assign as the Minimap reference doesn't have a Minimap Manager component on it.\n");
                 }
             }
         }

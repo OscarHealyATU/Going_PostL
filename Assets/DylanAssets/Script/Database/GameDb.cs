@@ -347,7 +347,7 @@ public sealed class GameDb : IDisposable
         if (exists) return;
 
         Db.Execute($"ALTER TABLE {table} ADD COLUMN {column} {columnSql};");
-        Debug.Log($"[GameDb] Added missing column {table}.{column}");
+        //debug.Log($"[GameDb] Added missing column {table}.{column}");
     }
 
     private class PragmaColumn
@@ -389,7 +389,7 @@ public sealed class GameDb : IDisposable
                 baseHealth = baseHealth
             });
 
-            Debug.Log($"[GameDb] Seeded VehicleType '{name}'");
+            //debug.Log($"[GameDb] Seeded VehicleType '{name}'");
             return;
         }
 
@@ -416,7 +416,7 @@ public sealed class GameDb : IDisposable
         if (changed)
         {
             Db.Update(existing);
-            Debug.Log($"[GameDb] Updated VehicleType '{name}'");
+            //debug.Log($"[GameDb] Updated VehicleType '{name}'");
         }
     }
 
@@ -426,7 +426,7 @@ public sealed class GameDb : IDisposable
         if (existing == null) return;
 
         Db.Delete(existing);
-        Debug.Log($"[GameDb] Removed old VehicleType '{name}'");
+        //debug.Log($"[GameDb] Removed old VehicleType '{name}'");
     }
 
     private void SeedItemTypes()
@@ -484,7 +484,7 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
                 startsUnlocked = startsUnlocked
             });
 
-            Debug.Log($"[GameDb] Seeded DeliveryZone '{name}'");
+            //debug.Log($"[GameDb] Seeded DeliveryZone '{name}'");
             return;
         }
 
@@ -500,7 +500,7 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
         if (changed)
         {
             Db.Update(existing);
-            Debug.Log($"[GameDb] Updated DeliveryZone '{name}'");
+            //debug.Log($"[GameDb] Updated DeliveryZone '{name}'");
         }
     }
 
@@ -522,7 +522,7 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
             experienceEarnedToday = 0
         });
 
-        Debug.Log("[GameDb] Created default DayState row");
+        //debug.Log("[GameDb] Created default DayState row");
     }
 
     public void Dispose()

@@ -128,11 +128,11 @@ public class DeliveryManager : MonoBehaviour
 
     public void AddDelivery(string itemId, string itemName)
     {
-        Debug.Log($"AddDelivery called with itemId={itemId}, itemName={itemName}");
+        //debug.Log($"AddDelivery called with itemId={itemId}, itemName={itemName}");
 
         if (DeliveryGridProvider.Instance == null)
         {
-            Debug.LogWarning("DeliveryManager: DeliveryGridProvider missing.");
+            //debug.LogWarning("DeliveryManager: DeliveryGridProvider missing.");
             return;
         }
 
@@ -141,18 +141,18 @@ public class DeliveryManager : MonoBehaviour
 
         if (!TryGetRandomUnlockedDelivery(out zoneId, out point))
         {
-            Debug.LogWarning("DeliveryManager: could not find any valid unlocked delivery zone with points.");
+            //debug.LogWarning("DeliveryManager: could not find any valid unlocked delivery zone with points.");
             return;
         }
 
         int finalPay = DeliveryRewardService.GetFinalPay(basePay, zoneId);
         int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
 
-        Debug.Log($"AddDelivery: zone={zoneId}, point={point}, finalPay={finalPay}, finalXp={finalXp}");
+        //debug.Log($"AddDelivery: zone={zoneId}, point={point}, finalPay={finalPay}, finalXp={finalXp}");
 
         var job = DeliveryService.Create(itemId, itemName, point, zoneId);
 
-        Debug.Log($"Created delivery job #{job.id} for {itemName} at {point} in zone {zoneId}");
+        //debug.Log($"Created delivery job #{job.id} for {itemName} at {point} in zone {zoneId}");
 
         if (currentJob == null)
             RefreshCurrentJob();
@@ -208,7 +208,7 @@ public class DeliveryManager : MonoBehaviour
 
         if (deliveryPointPrefab == null)
         {
-            Debug.LogWarning("DeliveryManager: deliveryPointPrefab is not assigned.");
+            //debug.LogWarning("DeliveryManager: deliveryPointPrefab is not assigned.");
             return;
         }
 
@@ -219,7 +219,7 @@ public class DeliveryManager : MonoBehaviour
         {
             activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            Debug.Log($"Spawned delivery point for job #{currentJob.id} at {spawnPosition}");
+            //debug.Log($"Spawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
@@ -229,7 +229,7 @@ public class DeliveryManager : MonoBehaviour
             Destroy(activeDeliveryPoint.gameObject);
             activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            Debug.Log($"Respawned delivery point for job #{currentJob.id} at {spawnPosition}");
+            //debug.Log($"Respawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
@@ -279,18 +279,18 @@ public class DeliveryManager : MonoBehaviour
 
         if (currentJob.id != job.id)
         {
-            Debug.LogWarning("DeliveryManager: attempted to complete the wrong delivery job.");
+            //debug.LogWarning("DeliveryManager: attempted to complete the wrong delivery job.");
             return false;
         }
 
-        Debug.Log($"Completed delivery #{currentJob.id} ({currentJob.itemName})");
+        //debug.Log($"Completed delivery #{currentJob.id} ({currentJob.itemName})");
 
         if (InventoryManager.Instance != null)
         {
             bool removed = InventoryManager.Instance.RemoveFirstMatchingItem(currentJob.itemId);
 
-            if (!removed)
-                Debug.LogWarning("Delivery completed, but matching item was not found in inventory: " + currentJob.itemId);
+            //if (!removed)
+                //debug.LogWarning("Delivery completed, but matching item was not found in inventory: " + currentJob.itemId);
         }
 
         int zoneId = DeliveryService.GetZoneId(currentJob);
@@ -300,8 +300,8 @@ public class DeliveryManager : MonoBehaviour
         DeliveryService.Complete(currentJob.id, finalPay, finalXp);
         PlayerService.RewardDelivery(finalPay, finalXp);
 
-        Debug.Log($"+€{finalPay} earned from delivery in zone {zoneId}");
-        Debug.Log($"+{finalXp} XP earned from delivery in zone {zoneId}");
+        //debug.Log($"+€{finalPay} earned from delivery in zone {zoneId}");
+        //debug.Log($"+{finalXp} XP earned from delivery in zone {zoneId}");
 
         if (activeDeliveryPoint != null)
         {
@@ -381,7 +381,7 @@ public class DeliveryManager : MonoBehaviour
         zoneId = 1;
         point = fallbackPoint;
 
-        Debug.LogWarning("DeliveryManager: falling back to any available delivery point.");
+        //debug.LogWarning("DeliveryManager: falling back to any available delivery point.");
         return true;
     }
 
