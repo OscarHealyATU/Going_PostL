@@ -14232,7 +14232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa51bebc57d434445a3d07527dde436c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  runSpeed: 120
+  runSpeed: 12
   groundCheck: {fileID: 9001547620958088141}
   groundLayer:
     serializedVersion: 2
@@ -15478,19 +15478,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &4972978369635887226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15503,7 +15492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac8dc02ef8e89e4aa5e56d8dd33353f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseLocations
-  zoneName: Zone 1
+  zoneName: Zone 4
   useDebugSingleton: 0
   debugTileX: 12
   debugTileZ: 12
@@ -15662,19 +15651,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &5182596993797745781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15687,7 +15665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac8dc02ef8e89e4aa5e56d8dd33353f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseLocations
-  zoneName: Zone 1
+  zoneName: Zone 2(1)
   useDebugSingleton: 0
   debugTileX: 12
   debugTileZ: 12
@@ -16461,63 +16439,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1001 &6364052684352273816
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 242631798342758928, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_Name
-      value: medium_wall
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 88.91774
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.000029683288
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 618.44183
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1308861904492016087, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 11c64f88de0d7034aa19e2d5a5cb2f16, type: 3}
 --- !u!23 &6373184126723629116
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -17330,19 +17251,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &7407175508656800411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17355,7 +17265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac8dc02ef8e89e4aa5e56d8dd33353f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseLocations
-  zoneName: Zone 1
+  zoneName: Zone 2
   useDebugSingleton: 0
   debugTileX: 12
   debugTileZ: 12
@@ -17743,19 +17653,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &8203570962686262998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17768,7 +17667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac8dc02ef8e89e4aa5e56d8dd33353f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseLocations
-  zoneName: Zone 1
+  zoneName: Zone 1(1)
   useDebugSingleton: 0
   debugTileX: 12
   debugTileZ: 12
@@ -18239,19 +18138,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &8781840118306515338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18264,7 +18152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac8dc02ef8e89e4aa5e56d8dd33353f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WarehouseLocations
-  zoneName: Zone 1
+  zoneName: Zone 3
   useDebugSingleton: 0
   debugTileX: 12
   debugTileZ: 12
@@ -18508,19 +18396,8 @@ MonoBehaviour:
   warehouseLargeWallExtendRightPrefab: {fileID: 919132149155446097, guid: f61ccee09c4ff884b88133c053faf3d7, type: 3}
   warehouseDoubleExtendWallPrefab: {fileID: 919132149155446097, guid: a9287beebd67df048b3e47c3b93f36e0, type: 3}
   warehouseInsideCornerPrefab: {fileID: 919132149155446097, guid: 3323579900e6f354ba08e85b3a0da1de, type: 3}
-  debugColorWalls: 1
-  debugDrawArrows: 1
-  debugArrowDuration: 60
-  topRotation: 0
-  rightRotation: 90
-  bottomRotation: 180
-  leftRotation: 270
-  insideCornerRotationOffset: 0
-  swapTop: 0
-  swapRight: 0
-  swapBottom: 0
-  swapLeft: 0
-  rebuildNow: 0
+  warehouseRoofPrefab: {fileID: 919132149155446097, guid: 6966a9c37d5ec534a8a8890d013507ae, type: 3}
+  roofRotationY: 0
 --- !u!114 &9092516730962492238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18779,4 +18656,3 @@ SceneRoots:
   - {fileID: 8335888067855134792}
   - {fileID: 73599375}
   - {fileID: 512795629}
-  - {fileID: 6364052684352273816}
