@@ -93,7 +93,8 @@ public class gridify : MonoBehaviour
         //     warehouse.transform.localScale = houseScale;
         // }
 
-
+    
 
     }
+    public bool IsBuilt { get; private set; }
 }
