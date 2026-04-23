@@ -368,10 +368,10 @@ public sealed class GameDb : IDisposable
 
     private void SeedVehicleTypes()
     {
-        UpsertVehicleType("Bicycle", 1500.0, 5, 80.0);
-        UpsertVehicleType("3Wheeler", 4000.0, 15, 120.0);
-        UpsertVehicleType("eVan", 15000.0, 30, 250.0);
-        UpsertVehicleType("Lorry", 50000.0, 60, 400.0);
+        UpsertVehicleType("Bicycle", 500.0, 5, 80.0);
+        UpsertVehicleType("3Wheeler", 2000.0, 15, 120.0);
+        UpsertVehicleType("eVan", 8000.0, 30, 250.0);
+        UpsertVehicleType("Lorry", 30000.0, 60, 400.0);
 
         DeleteVehicleTypeIfExists("Zone 1");
         DeleteVehicleTypeIfExists("Zone 2");
