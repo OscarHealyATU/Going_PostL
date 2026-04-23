@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7791855235764514776}
   - component: {fileID: 2125847820773754244}
   - component: {fileID: 1640895357684801677}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: bike
-  m_TagString: Untagged
+  m_TagString: Vehicle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 2960117400598771159}
   - component: {fileID: 6295456668520839267}
   - component: {fileID: 8492151622134153806}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bike.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 7661438132735161038}
   - component: {fileID: 7591278520965478916}
   - component: {fileID: 6796994014168616248}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bike.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +282,7 @@ GameObject:
   - component: {fileID: 3855256420721785900}
   - component: {fileID: 2555012510179090662}
   - component: {fileID: 9097301816534193560}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bike
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2622525228716954318}
   - component: {fileID: 2862300574368019010}
   - component: {fileID: 240252088499295302}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: eVan
-  m_TagString: Untagged
+  m_TagString: Vehicle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 5171200538840691310}
   - component: {fileID: 840339934462624080}
   - component: {fileID: 2206840978252904584}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ev_frontLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 2598863385123015991}
   - component: {fileID: 3834990858756387484}
   - component: {fileID: 4100566821347861407}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: eVanBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 5638372988424756644}
   - component: {fileID: 5907470426594787908}
   - component: {fileID: 6791871534434282254}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: evRearRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 1839179431207253437}
   - component: {fileID: 2946045935604510696}
   - component: {fileID: 6219495729592321750}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: evRearLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 7286535882812292158}
   - component: {fileID: 8015679817246927174}
   - component: {fileID: 1983508629721412557}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ev_frontRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
