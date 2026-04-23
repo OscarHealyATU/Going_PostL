@@ -40,7 +40,8 @@ public sealed class GameDb : IDisposable
           money REAL NOT NULL DEFAULT 0.0,
           totalExperience INTEGER NOT NULL DEFAULT 0,
           createdAt TEXT NOT NULL DEFAULT (datetime('now')),
-          lastWarehouseId INTEGER NOT NULL DEFAULT 0
+          lastWarehouseId INTEGER NOT NULL DEFAULT 0,
+          finesToday REAL NOT NULL DEFAULT 0.0
         );");
 
         Db.Execute(@"
@@ -149,7 +150,8 @@ public sealed class GameDb : IDisposable
           moneyEarnedToday REAL NOT NULL DEFAULT 0.0,
           moneySpentToday REAL NOT NULL DEFAULT 0.0,
           totalRevenueToday REAL NOT NULL DEFAULT 0.0,
-          experienceEarnedToday INTEGER NOT NULL DEFAULT 0
+          experienceEarnedToday INTEGER NOT NULL DEFAULT 0,
+          finesReceivedToday REAL NOT NULL DEFAULT 0.0
         );");
 
         Db.Execute(@"
@@ -213,6 +215,7 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("Player", "returnZ", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "returnYaw", "REAL NOT NULL DEFAULT 0");
         AddColumnIfMissing("Player", "lastWarehouseId", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("Player", "finesToday", "REAL NOT NULL DEFAULT 0.0");
     }
 
     private void EnsurePlayerResumeColumns()
@@ -248,6 +251,7 @@ public sealed class GameDb : IDisposable
         AddColumnIfMissing("DayState", "moneySpentToday", "REAL NOT NULL DEFAULT 0.0");
         AddColumnIfMissing("DayState", "totalRevenueToday", "REAL NOT NULL DEFAULT 0.0");
         AddColumnIfMissing("DayState", "experienceEarnedToday", "INTEGER NOT NULL DEFAULT 0");
+        AddColumnIfMissing("DayState", "finesReceivedToday", "REAL NOT NULL DEFAULT 0.0");
     }
 
     private void EnsureDeliveryJobColumns()
@@ -389,7 +393,6 @@ public sealed class GameDb : IDisposable
                 baseHealth = baseHealth
             });
 
-            //debug.Log($"[GameDb] Seeded VehicleType '{name}'");
             return;
         }
 
@@ -416,7 +419,6 @@ public sealed class GameDb : IDisposable
         if (changed)
         {
             Db.Update(existing);
-            //debug.Log($"[GameDb] Updated VehicleType '{name}'");
         }
     }
 
@@ -426,7 +428,6 @@ public sealed class GameDb : IDisposable
         if (existing == null) return;
 
         Db.Delete(existing);
-        //debug.Log($"[GameDb] Removed old VehicleType '{name}'");
     }
 
     private void SeedItemTypes()
@@ -484,7 +485,6 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
                 startsUnlocked = startsUnlocked
             });
 
-            //debug.Log($"[GameDb] Seeded DeliveryZone '{name}'");
             return;
         }
 
@@ -500,7 +500,6 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
         if (changed)
         {
             Db.Update(existing);
-            //debug.Log($"[GameDb] Updated DeliveryZone '{name}'");
         }
     }
 
@@ -519,10 +518,9 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
             moneyEarnedToday = 0.0,
             moneySpentToday = 0.0,
             totalRevenueToday = 0.0,
-            experienceEarnedToday = 0
+            experienceEarnedToday = 0,
+            finesReceivedToday = 0.0
         });
-
-        //debug.Log("[GameDb] Created default DayState row");
     }
 
     public void Dispose()

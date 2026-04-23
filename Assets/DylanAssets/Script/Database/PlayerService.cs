@@ -48,6 +48,12 @@ public static class PlayerService
         db.Update(player);
 
         OnMoneyChanged?.Invoke(player.money);
+
+        if (player.money <= -1000.0)
+        {
+            if (GameOverManager.Instance != null)
+                GameOverManager.Instance.TriggerGameOver();
+        }
     }
 
     public static void AddMoney(double amount)
@@ -80,6 +86,9 @@ public static class PlayerService
 
     public static bool SpendMoney(double amount, bool trackAsDayExpense)
     {
+        if (amount < 0)
+            amount = Math.Abs(amount);
+
         if (!TrySpendMoney(amount))
             return false;
 
@@ -89,10 +98,45 @@ public static class PlayerService
         return true;
     }
 
+    public static void ApplyFine(double amount)
+    {
+        ApplyFine(amount, false);
+    }
+
+    public static void ApplyFine(double amount, bool trackAsDayExpense)
+    {
+        if (amount <= 0)
+            return;
+
+        var db = GetDbOrNull();
+        if (db == null)
+            return;
+
+        var player = Get();
+        if (player == null)
+            return;
+
+        double newMoney = player.money - amount;
+
+        player.finesToday += amount;
+        db.Update(player);
+
+        SetMoney(newMoney);
+
+        if (trackAsDayExpense && DayManager.Instance != null)
+            DayManager.Instance.RegisterMoneySpent(amount);
+    }
+
     public static double GetMoney()
     {
         var player = Get();
         return player != null ? player.money : 0.0;
+    }
+
+    public static double GetFinesToday()
+    {
+        var player = Get();
+        return player != null ? player.finesToday : 0.0;
     }
 
     // ----------------------------
@@ -220,16 +264,6 @@ public static class PlayerService
         int newLevel = (newTotalExp / ExpPerLevel) + 1;
         int newExpIntoLevel = newTotalExp % ExpPerLevel;
         int newExpNeeded = ExpPerLevel;
-
-        if (newLevel > oldLevel)
-        {
-            //debug.Log($"[PlayerService] Level Up! {oldLevel} -> {newLevel}");
-        }
-
-        if (notifyDayManager && DayManager.Instance != null)
-        {
-            // Reserved for future non-delivery XP sources if needed.
-        }
 
         OnExperienceChangedDetailed?.Invoke(
             oldLevel,
@@ -413,6 +447,7 @@ public static class PlayerService
         player.money = startingMoney;
         player.totalExperience = 0;
         player.inventorySlotCount = DefaultInventorySlotCount;
+        player.finesToday = 0.0;
 
         player.returnValid = 0;
         player.returnX = 0f;
@@ -428,6 +463,13 @@ public static class PlayerService
         player.savedYaw = 0f;
 
         db.Update(player);
+
+        var dayState = db.Table<DayState>().FirstOrDefault();
+        if (dayState != null)
+        {
+            dayState.finesReceivedToday = 0.0;
+            db.Update(dayState);
+        }
 
         OnMoneyChanged?.Invoke(player.money);
 

@@ -15,6 +15,7 @@ public class DayManager : MonoBehaviour
     [SerializeField] private int endHour24 = 17;
     [SerializeField] private float realMinutesPerWorkDay = 20f;
     [SerializeField] private string warehouseSceneName = "Warehouse";
+    [SerializeField] private double endOfDayBusinessCharge = 500.0;
 
     [Header("Player Lock While Summary Open")]
     [SerializeField] private PlayerMovementInside playerMovementInsideScript;
@@ -42,6 +43,7 @@ public class DayManager : MonoBehaviour
     private TMP_Text packagesDeliveredText;
     private TMP_Text moneyEarnedText;
     private TMP_Text moneySpentText;
+    private TMP_Text finesReceivedText;
     private TMP_Text totalRevenueText;
     private TMP_Text experienceEarnedText;
 
@@ -57,6 +59,7 @@ public class DayManager : MonoBehaviour
     private bool previousOutsideMovementEnabled;
     private bool previousPlayerLookEnabled;
     private bool previousFlyoverLookEnabled;
+    private bool hasAppliedEndOfDayBusinessCharge;
 
     private int StartMinute => startHour24 * 60;
     private int EndMinute => endHour24 * 60;
@@ -75,10 +78,7 @@ public class DayManager : MonoBehaviour
         get
         {
             if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
-            {
-                //debug.LogError("[DayManager] DbBoot/Db is missing.");
                 return null;
-            }
 
             return DbBoot.Instance.Db;
         }
@@ -104,8 +104,6 @@ public class DayManager : MonoBehaviour
         ClampState();
         SaveState();
         RefreshUIImmediate();
-
-        //debug.Log("[DayManager] Started. Day = " + CurrentDayNumber + ", Time = " + FormatTime(CurrentMinuteOfDay));
     }
 
     private void Update()
@@ -165,6 +163,7 @@ public class DayManager : MonoBehaviour
         packagesDeliveredText = null;
         moneyEarnedText = null;
         moneySpentText = null;
+        finesReceivedText = null;
         totalRevenueText = null;
         experienceEarnedText = null;
 
@@ -173,8 +172,6 @@ public class DayManager : MonoBehaviour
 
         CachePlayerControlScripts();
         RefreshUIImmediate();
-
-        //debug.Log("[DayManager] Scene loaded: " + scene.name);
     }
 
     private void OnDestroy()
@@ -205,6 +202,7 @@ public class DayManager : MonoBehaviour
         packagesDeliveredText = ui.PackagesDeliveredText;
         moneyEarnedText = ui.MoneyEarnedText;
         moneySpentText = ui.MoneySpentText;
+        finesReceivedText = ui.FinesReceivedText;
         totalRevenueText = ui.TotalRevenueText;
         experienceEarnedText = ui.ExperienceEarnedText;
 
@@ -230,24 +228,19 @@ public class DayManager : MonoBehaviour
             }
         }
 
-        if (dayTransitionText != null)
+        if (dayTransitionText != null && !isTransitioningDay)
         {
-            if (!isTransitioningDay)
-            {
-                dayTransitionText.gameObject.SetActive(false);
-                dayTransitionText.text = string.Empty;
-            }
+            dayTransitionText.gameObject.SetActive(false);
+            dayTransitionText.text = string.Empty;
         }
-
-        //debug.Log("[DayManager] Scene UI bound.");
     }
 
     private void WireButtons()
     {
         if (endDayButton != null)
         {
-            endDayButton.onClick.RemoveListener(OpenDaySummary);
-            endDayButton.onClick.AddListener(OpenDaySummary);
+            endDayButton.onClick.RemoveListener(OnEndDayButtonPressed);
+            endDayButton.onClick.AddListener(OnEndDayButtonPressed);
         }
 
         if (startNextDayButton != null)
@@ -282,11 +275,11 @@ public class DayManager : MonoBehaviour
                 moneyEarnedToday = 0.0,
                 moneySpentToday = 0.0,
                 totalRevenueToday = 0.0,
-                experienceEarnedToday = 0
+                experienceEarnedToday = 0,
+                finesReceivedToday = 0.0
             };
 
             db.Insert(state);
-            //debug.Log("[DayManager] Created new DayState row.");
         }
     }
 
@@ -310,7 +303,7 @@ public class DayManager : MonoBehaviour
         var db = Db;
         if (db == null || state == null) return;
 
-        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
         db.Update(state);
     }
 
@@ -321,11 +314,10 @@ public class DayManager : MonoBehaviour
         state.currentMinuteOfDay = EndMinute;
         state.isDayEnded = 1;
         hasTriggeredEndOfDayRefresh = true;
+        hasAppliedEndOfDayBusinessCharge = false;
 
         SaveState();
         RefreshUIImmediate();
-
-        //debug.Log("[DayManager] Work day ended. End Day button should now be visible.");
     }
 
     public void RegisterDelivery(double moneyEarned, int experienceEarned)
@@ -338,7 +330,7 @@ public class DayManager : MonoBehaviour
         state.packagesDeliveredToday += 1;
         state.moneyEarnedToday += moneyEarned;
         state.experienceEarnedToday += experienceEarned;
-        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
 
         SaveState();
         RefreshSummaryIfOpen();
@@ -352,7 +344,7 @@ public class DayManager : MonoBehaviour
         if (state == null) return;
 
         state.moneyEarnedToday += Math.Abs(amountEarned);
-        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
 
         SaveState();
         RefreshSummaryIfOpen();
@@ -366,42 +358,68 @@ public class DayManager : MonoBehaviour
         if (state == null) return;
 
         state.moneySpentToday += Math.Abs(amountSpent);
-        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
 
         SaveState();
         RefreshSummaryIfOpen();
     }
 
-    public void OpenDaySummary()
+    public void RegisterFine(double amount)
     {
-        //debug.Log("[DayManager] OpenDaySummary called.");
+        if (amount <= 0)
+            return;
 
         if (state == null)
             LoadOrCreateState();
 
         if (state == null)
-        {
-            //debug.LogWarning("[DayManager] OpenDaySummary failed: state is null.");
             return;
-        }
+
+        state.finesReceivedToday += Math.Abs(amount);
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
+
+        SaveState();
+        RefreshSummaryIfOpen();
+    }
+
+    public void OnEndDayButtonPressed()
+    {
+        if (state == null)
+            LoadOrCreateState();
+
+        if (state == null)
+            return;
 
         if (state.isDayEnded == 0)
-        {
-            //debug.LogWarning("[DayManager] OpenDaySummary blocked: day has not ended yet.");
             return;
+
+        if (!hasAppliedEndOfDayBusinessCharge && endOfDayBusinessCharge > 0.0)
+        {
+            PlayerService.ApplyFine(endOfDayBusinessCharge, false);
+            RegisterFine(endOfDayBusinessCharge);
+            hasAppliedEndOfDayBusinessCharge = true;
         }
 
-        if (daySummaryPanel == null)
-        {
-            //debug.LogWarning("[DayManager] OpenDaySummary failed: daySummaryPanel is null.");
+        OpenDaySummary();
+    }
+
+    public void OpenDaySummary()
+    {
+        if (state == null)
+            LoadOrCreateState();
+
+        if (state == null)
             return;
-        }
+
+        if (state.isDayEnded == 0)
+            return;
+
+        if (daySummaryPanel == null)
+            return;
 
         daySummaryPanel.SetActive(true);
         PopulateSummary();
         SetSummaryMovementLock(true);
-
-        //debug.Log("[DayManager] Summary panel opened.");
     }
 
     public void CloseDaySummary()
@@ -410,7 +428,6 @@ public class DayManager : MonoBehaviour
         {
             daySummaryPanel.SetActive(false);
             SetSummaryMovementLock(false);
-            //debug.Log("[DayManager] Summary panel closed.");
         }
     }
 
@@ -419,16 +436,11 @@ public class DayManager : MonoBehaviour
         if (isTransitioningDay)
             return;
 
-        //debug.Log("[DayManager] StartNextDay called.");
-
         if (state == null)
             LoadOrCreateState();
 
         if (state == null)
-        {
-            //debug.LogWarning("[DayManager] StartNextDay failed: state is null.");
             return;
-        }
 
         StartCoroutine(StartNextDayRoutine());
     }
@@ -487,14 +499,24 @@ public class DayManager : MonoBehaviour
         state.moneySpentToday = 0.0;
         state.totalRevenueToday = 0.0;
         state.experienceEarnedToday = 0;
+        state.finesReceivedToday = 0.0;
 
+        var player = PlayerService.Get();
+        if (player != null)
+        {
+            player.finesToday = 0.0;
+
+            var db = Db;
+            if (db != null)
+                db.Update(player);
+        }
+
+        hasAppliedEndOfDayBusinessCharge = false;
         accumulatedSeconds = 0f;
         hasTriggeredEndOfDayRefresh = false;
 
         SaveState();
         CloseDaySummary();
-
-        //debug.Log("[DayManager] Starting Day " + state.dayNumber + ". Loading scene: " + warehouseSceneName);
     }
 
     private IEnumerator FadeCanvasGroup(CanvasGroup group, float from, float to, float duration)
@@ -528,7 +550,6 @@ public class DayManager : MonoBehaviour
 
     public void ForceEndDayNow()
     {
-        //debug.Log("[DayManager] ForceEndDayNow called.");
         EndWorkDayInternal();
     }
 
@@ -567,7 +588,7 @@ public class DayManager : MonoBehaviour
     {
         if (state == null) return;
 
-        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday;
+        state.totalRevenueToday = state.moneyEarnedToday - state.moneySpentToday - state.finesReceivedToday;
 
         if (summaryTitleText != null)
             summaryTitleText.text = $"Day {state.dayNumber} Summary";
@@ -580,6 +601,9 @@ public class DayManager : MonoBehaviour
 
         if (moneySpentText != null)
             moneySpentText.text = $"Money Spent: €{state.moneySpentToday:0.00}";
+
+        if (finesReceivedText != null)
+            finesReceivedText.text = $"Fines Received: €{state.finesReceivedToday:0.00}";
 
         if (totalRevenueText != null)
             totalRevenueText.text = $"Total Revenue: €{state.totalRevenueToday:0.00}";

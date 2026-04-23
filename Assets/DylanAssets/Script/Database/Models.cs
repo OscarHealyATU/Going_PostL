@@ -25,8 +25,9 @@ public class Player
     public float savedZ { get; set; }
     public float savedYaw { get; set; }
 
-    // NEW: the warehouse the player most recently interacted with
     public int lastWarehouseId { get; set; }
+
+    public double finesToday { get; set; }
 }
 
 [Table("VehicleType")]
@@ -151,6 +152,7 @@ public class DayState
     public double moneySpentToday { get; set; } = 0;
     public double totalRevenueToday { get; set; } = 0;
     public int experienceEarnedToday { get; set; } = 0;
+    public double finesReceivedToday { get; set; } = 0;
 }
 
 [Table("DeliveryZone")]

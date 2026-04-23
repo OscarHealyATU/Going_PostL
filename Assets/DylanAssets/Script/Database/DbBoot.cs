@@ -33,6 +33,7 @@ public class DbBoot : MonoBehaviour
         //debug.Log("DB path: " + GameDb.DbPath);
 
         EnsurePlayerSchema();
+        EnsureDayStateSchema();
         EnsurePlayerExists();
         EnsureDeliveryZonesSeeded();
         EnsureStartingZonesUnlocked();
@@ -63,16 +64,53 @@ public class DbBoot : MonoBehaviour
 
         try
         {
+            Db.Execute("ALTER TABLE Player ADD COLUMN finesToday REAL NOT NULL DEFAULT 0");
+            //debug.Log("[DbBoot] Added finesToday column to Player");
+        }
+        catch (Exception)
+        {
+        }
+
+        try
+        {
             var players = Db.Table<Player>().ToList();
 
             foreach (var player in players)
             {
+                bool changed = false;
+
                 if (player.inventorySlotCount <= 0)
                 {
                     player.inventorySlotCount = 3;
-                    Db.Update(player);
+                    changed = true;
                 }
+
+                if (player.finesToday < 0)
+                {
+                    player.finesToday = 0;
+                    changed = true;
+                }
+
+                if (changed)
+                    Db.Update(player);
             }
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    private void EnsureDayStateSchema()
+    {
+        if (Db == null)
+        {
+            return;
+        }
+
+        try
+        {
+            Db.Execute("ALTER TABLE DayState ADD COLUMN finesReceivedToday REAL NOT NULL DEFAULT 0");
+            //debug.Log("[DbBoot] Added finesReceivedToday column to DayState");
         }
         catch (Exception)
         {
@@ -93,11 +131,12 @@ public class DbBoot : MonoBehaviour
             Db.Insert(new Player
             {
                 name = "Player",
-                money = 100000,
+                money = 0.0,
                 totalExperience = 0,
                 createdAt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
 
                 inventorySlotCount = 3,
+                finesToday = 0,
 
                 returnValid = 0,
                 returnX = 0f,
@@ -117,11 +156,24 @@ public class DbBoot : MonoBehaviour
         }
         else
         {
+            bool changed = false;
+
             if (player.inventorySlotCount <= 0)
             {
                 player.inventorySlotCount = 3;
+                changed = true;
+            }
+
+            if (player.finesToday < 0)
+            {
+                player.finesToday = 0;
+                changed = true;
+            }
+
+            if (changed)
+            {
                 Db.Update(player);
-                //debug.Log("[DbBoot] Fixed Player inventorySlotCount to default 3");
+                //debug.Log("[DbBoot] Fixed Player defaults");
             }
 
             //debug.Log("[DbBoot] Player exists id=" + player.id);
@@ -377,7 +429,7 @@ public class DbBoot : MonoBehaviour
         //debug.Log($"[DbBoot] Registered starter warehouse in '{zoneName}' at tile ({tileX}, {tileZ})");
     }
 
-        private void EnsureVehicleSchema()
+    private void EnsureVehicleSchema()
     {
         if (Db == null)
         {

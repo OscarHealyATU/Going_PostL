@@ -21,6 +21,7 @@ public class DaySceneUI : MonoBehaviour
     [SerializeField] private TMP_Text packagesDeliveredText;
     [SerializeField] private TMP_Text moneyEarnedText;
     [SerializeField] private TMP_Text moneySpentText;
+    [SerializeField] private TMP_Text finesReceivedText;
     [SerializeField] private TMP_Text totalRevenueText;
     [SerializeField] private TMP_Text experienceEarnedText;
 
@@ -42,6 +43,7 @@ public class DaySceneUI : MonoBehaviour
     public TMP_Text PackagesDeliveredText => packagesDeliveredText;
     public TMP_Text MoneyEarnedText => moneyEarnedText;
     public TMP_Text MoneySpentText => moneySpentText;
+    public TMP_Text FinesReceivedText => finesReceivedText;
     public TMP_Text TotalRevenueText => totalRevenueText;
     public TMP_Text ExperienceEarnedText => experienceEarnedText;
 
