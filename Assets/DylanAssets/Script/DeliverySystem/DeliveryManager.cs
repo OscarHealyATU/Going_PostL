@@ -27,6 +27,15 @@ public class DeliveryManager : MonoBehaviour
     [Tooltip("Extra vertical offset for the spawned delivery point.")]
     [SerializeField] private float deliveryPointHeightOffset = 0f;
 
+    [Header("Delivery Complete Effect")]
+    [SerializeField] private ParticleSystem deliveryCompleteEffectPrefab;
+
+    [Tooltip("How long before the spawned effect is destroyed automatically.")]
+    [SerializeField] private float deliveryCompleteEffectLifetime = 3f;
+
+    [Tooltip("Optional vertical offset for the completion particle effect.")]
+    [SerializeField] private float deliveryCompleteEffectHeightOffset = 0.25f;
+
     [Header("Rewards")]
     [Tooltip("Base pay before zone multiplier. Usually your Zone 1 base value.")]
     [SerializeField] private int basePay = 100;
@@ -128,31 +137,19 @@ public class DeliveryManager : MonoBehaviour
 
     public void AddDelivery(string itemId, string itemName)
     {
-        //debug.Log($"AddDelivery called with itemId={itemId}, itemName={itemName}");
-
         if (DeliveryGridProvider.Instance == null)
-        {
-            //debug.LogWarning("DeliveryManager: DeliveryGridProvider missing.");
             return;
-        }
 
         int zoneId;
         Vector3 point;
 
         if (!TryGetRandomUnlockedDelivery(out zoneId, out point))
-        {
-            //debug.LogWarning("DeliveryManager: could not find any valid unlocked delivery zone with points.");
             return;
-        }
 
         int finalPay = DeliveryRewardService.GetFinalPay(basePay, zoneId);
         int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
 
-        //debug.Log($"AddDelivery: zone={zoneId}, point={point}, finalPay={finalPay}, finalXp={finalXp}");
-
         var job = DeliveryService.Create(itemId, itemName, point, zoneId);
-
-        //debug.Log($"Created delivery job #{job.id} for {itemName} at {point} in zone {zoneId}");
 
         if (currentJob == null)
             RefreshCurrentJob();
@@ -207,10 +204,7 @@ public class DeliveryManager : MonoBehaviour
         }
 
         if (deliveryPointPrefab == null)
-        {
-            //debug.LogWarning("DeliveryManager: deliveryPointPrefab is not assigned.");
             return;
-        }
 
         Vector3 gridCenter = DeliveryService.GetTargetPosition(currentJob);
         GetDeliveryPointPose(currentJob, gridCenter, out Vector3 spawnPosition, out Quaternion spawnRotation);
@@ -219,7 +213,6 @@ public class DeliveryManager : MonoBehaviour
         {
             activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            //debug.Log($"Spawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
@@ -229,7 +222,6 @@ public class DeliveryManager : MonoBehaviour
             Destroy(activeDeliveryPoint.gameObject);
             activeDeliveryPoint = Instantiate(deliveryPointPrefab, spawnPosition, spawnRotation);
             activeDeliveryPoint.Initialize(currentJob, player, completeRadius, playerTag);
-            //debug.Log($"Respawned delivery point for job #{currentJob.id} at {spawnPosition}");
             return;
         }
 
@@ -269,6 +261,20 @@ public class DeliveryManager : MonoBehaviour
         }
     }
 
+    private void PlayDeliveryCompleteEffect(Vector3 position)
+    {
+        if (deliveryCompleteEffectPrefab == null)
+            return;
+
+        Vector3 spawnPosition = position + Vector3.up * deliveryCompleteEffectHeightOffset;
+        ParticleSystem spawnedEffect = Instantiate(deliveryCompleteEffectPrefab, spawnPosition, Quaternion.identity);
+
+        spawnedEffect.Play();
+
+        if (deliveryCompleteEffectLifetime > 0f)
+            Destroy(spawnedEffect.gameObject, deliveryCompleteEffectLifetime);
+    }
+
     public bool TryCompleteDeliveryFromPoint(DeliveryPointInteractable point, DeliveryJob job)
     {
         if (currentJob == null)
@@ -278,30 +284,23 @@ public class DeliveryManager : MonoBehaviour
             return false;
 
         if (currentJob.id != job.id)
-        {
-            //debug.LogWarning("DeliveryManager: attempted to complete the wrong delivery job.");
             return false;
-        }
-
-        //debug.Log($"Completed delivery #{currentJob.id} ({currentJob.itemName})");
 
         if (InventoryManager.Instance != null)
         {
             bool removed = InventoryManager.Instance.RemoveFirstMatchingItem(currentJob.itemId);
-
-            //if (!removed)
-                //debug.LogWarning("Delivery completed, but matching item was not found in inventory: " + currentJob.itemId);
         }
 
         int zoneId = DeliveryService.GetZoneId(currentJob);
         int finalPay = DeliveryRewardService.GetFinalPay(basePay, zoneId);
         int finalXp = DeliveryRewardService.GetFinalXp(baseDeliveryExperience, zoneId);
 
+        Vector3 effectPosition = point.transform.position;
+
         DeliveryService.Complete(currentJob.id, finalPay, finalXp);
         PlayerService.RewardDelivery(finalPay, finalXp);
 
-        //debug.Log($"+€{finalPay} earned from delivery in zone {zoneId}");
-        //debug.Log($"+{finalXp} XP earned from delivery in zone {zoneId}");
+        PlayDeliveryCompleteEffect(effectPosition);
 
         if (activeDeliveryPoint != null)
         {
@@ -380,8 +379,6 @@ public class DeliveryManager : MonoBehaviour
 
         zoneId = 1;
         point = fallbackPoint;
-
-        //debug.LogWarning("DeliveryManager: falling back to any available delivery point.");
         return true;
     }
 
