@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: cefff8247986fd943837a3c79805b95e, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: b25fa3cfd123f6c4aafa9f65abd1c903, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 034ce00866fa6cd44a9cede588d3b5d6, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -12723,6 +12723,14 @@ PrefabInstance:
     - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: deliveryPointHeightOffset
       value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+      propertyPath: deliveryCompleteEffectPrefab
+      value: 
+      objectReference: {fileID: 807211727602228313, guid: d70388dd128fd2d4195769a9c64e3992, type: 3}
+    - target: {fileID: -6735138499977012503, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
+      propertyPath: deliveryCompleteEffectHeightOffset
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1197904319680628577, guid: 4879e71bcd501f045ab1a6c7650daa8d, type: 3}
       propertyPath: m_Name
