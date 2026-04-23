@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public class JaywalkerReaction : MonoBehaviour
 {
@@ -9,6 +11,11 @@ public class JaywalkerReaction : MonoBehaviour
     private float funMultiplier = 0.10f;
     private float upwardMotion = 0.8f;
     [SerializeField] private float minVehicleSpeed = 4f;
+    [Header("Fine Settings")]
+    [SerializeField] private float fine = 50f;
+    [SerializeField] private float fineCooldownSeconds = 2f;
+
+    private float lastFineTime = -999f;
 
     private Rigidbody playerRigidbody;
     private CharacterController charContrllr;
@@ -60,9 +67,46 @@ public class JaywalkerReaction : MonoBehaviour
         charContrllr.enabled = false; 
         playerRigidbody.linearVelocity = Vector3.zero;
         playerRigidbody.AddForce(impactUpward * impactForce, ForceMode.Impulse);
-
+        ApplyFine();
         StartCoroutine(ResetCharContrllr());
     }
+
+    private void ApplyFine()
+    {
+        if (Time.time - lastFineTime < fineCooldownSeconds) return;
+        lastFineTime = Time.time;
+
+
+        if (DbBoot.Instance == null || DbBoot.Instance.Db == null)
+        {
+            Debug.LogWarning("[JaywalkerReaction] DB not ready, skipping fine");
+            return;
+        }
+
+        var db = DbBoot.Instance.Db;
+        var player = db.Table<Player>().FirstOrDefault();
+        if (player == null) return;
+
+        float actualFine = Mathf.Min(fine, (float)player.money);
+        if (actualFine <= 0f)
+        {
+            Debug.Log("[JaywalkerReaction] Player has no money left");
+            return;
+        }
+
+        player.money -= actualFine;
+        db.Update(player);
+
+        db.Insert(new TransactionLog
+        {
+            playerId = player.id,
+            type = "fine_jaywalking",
+            amount = -actualFine,
+            description = "Hit by vehicle",
+            timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss")
+        });
+    }
+    
 
     private IEnumerator ResetCharContrllr()
     {
