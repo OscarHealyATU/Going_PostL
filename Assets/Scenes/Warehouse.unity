@@ -9991,7 +9991,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: fe2f9bb90eba2114fb819d4cf88ee3f6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3203bdae57f8f3549b4130ef69de5274, type: 2}
+      objectReference: {fileID: 2100000, guid: a9848df116732614cb57f6c163f443b3, type: 2}
     - target: {fileID: 919132149155446097, guid: fe2f9bb90eba2114fb819d4cf88ee3f6, type: 3}
       propertyPath: m_Name
       value: whiteboard
@@ -11951,7 +11951,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1604679255}
   m_HandleRect: {fileID: 1604679254}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -13916,7 +13916,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 445.0403, y: 400}
+  m_CellSize: {x: 422.24094, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -19837,7 +19837,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 225838375}
   m_HandleRect: {fileID: 225838374}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -28492,7 +28492,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 465.0403, y: 400}
+  m_CellSize: {x: 442.24094, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
