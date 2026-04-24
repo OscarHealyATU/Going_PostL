@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2111681664795666053}
   - component: {fileID: 3161356482793371729}
   - component: {fileID: 6448664059300047279}
+  - component: {fileID: 3818324088173239774}
   m_Layer: 7
   m_Name: BUILDING.149
   m_TagString: Ground
@@ -93,3 +94,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3818324088173239774
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950898866750094924}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.02905513, y: 0.018165426, z: 0.06514333}
+  m_Center: {x: 0.00012540538, y: 0.00020785625, z: 0.03239627}
