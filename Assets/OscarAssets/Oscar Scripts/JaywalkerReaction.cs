@@ -17,11 +17,15 @@ public class JaywalkerReaction : MonoBehaviour
 
     private Rigidbody playerRigidbody;
     private CharacterController charContrllr;
+    private PlayerMovementOutside playerMovement;
+
 
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();
         charContrllr = GetComponent<CharacterController>();
+         playerMovement = GetComponent<PlayerMovementOutside>();
+
     }
 
     void OnCollisionEnter(Collision collision)
@@ -61,6 +65,7 @@ public class JaywalkerReaction : MonoBehaviour
         float impactForce = vehicleMass * vehicleSpeed * funMultiplier;
 
         charContrllr.enabled = false;
+         if (playerMovement != null) playerMovement.canMove = false; 
         playerRigidbody.linearVelocity = Vector3.zero;
         playerRigidbody.AddForce(impactUpward * impactForce, ForceMode.Impulse);
 
@@ -108,5 +113,7 @@ public class JaywalkerReaction : MonoBehaviour
         yield return new WaitForSeconds(1f);
         playerRigidbody.linearVelocity = Vector3.zero;
         charContrllr.enabled = true;
+        if (playerMovement != null) playerMovement.canMove = true;
+
     }
 }
