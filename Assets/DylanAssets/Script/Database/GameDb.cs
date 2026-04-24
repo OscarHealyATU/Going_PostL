@@ -512,7 +512,7 @@ INSERT OR IGNORE INTO ItemType (key, name, category, stackable, baseValue) VALUE
         {
             id = 1,
             dayNumber = 1,
-            currentMinuteOfDay = 9 * 60,
+            currentMinuteOfDay = 16 * 60 + 55,
             isDayEnded = 0,
             packagesDeliveredToday = 0,
             moneyEarnedToday = 0.0,
