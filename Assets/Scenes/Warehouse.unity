@@ -13916,7 +13916,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 422.24094, y: 400}
+  m_CellSize: {x: 481.35486, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
@@ -16989,7 +16989,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -15.000061}
+  m_AnchoredPosition: {x: 0, y: -15}
   m_SizeDelta: {x: -60, y: -230}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1319160084
@@ -20891,7 +20891,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9595e658965ec944a401b6642abcefa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenuController
-  menuPanel: {fileID: 832115809}
+  menuPanel: {fileID: 0}
   playerObject: {fileID: 7418109017113357998}
   cameraObject: {fileID: 0}
   pauseTimeScale: 1
@@ -28435,7 +28435,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2091802858
@@ -28492,7 +28492,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 442.24094, y: 400}
+  m_CellSize: {x: 501.35486, y: 400}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
